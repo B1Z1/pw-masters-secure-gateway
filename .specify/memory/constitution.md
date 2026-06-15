@@ -1,50 +1,131 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+SYNC IMPACT REPORT
+==================
+Version change: TEMPLATE (unversioned) → 1.0.0
+Rationale: Initial ratification — first concrete fill of the constitution template.
+
+Modified principles: N/A (template placeholders replaced with concrete principles)
+Added principles:
+  - I. Privacy by Design
+  - II. Recall over Precision
+  - III. Reversibility within Session
+  - IV. Provider Agnosticism
+  - V. Synchronous Only
+  - VI. Polish First
+  - VII. Realistic Substitution
+  - VIII. No PII in Logs
+  - IX. Simplicity over Completeness
+Added sections:
+  - Technology Constraints
+  - Governance
+Removed sections: None (template placeholders [SECTION_2_NAME]/[SECTION_3_NAME] resolved
+  into Technology Constraints + Governance)
+
+Templates requiring updates:
+  - ✅ .specify/templates/plan-template.md — Constitution Check gate uses dynamic reference
+       ("[Gates determined based on constitution file]"); no hardcoded principles, stays aligned.
+  - ✅ .specify/templates/spec-template.md — no constitution references; no change needed.
+  - ✅ .specify/templates/tasks-template.md — no constitution references; no change needed.
+  - ✅ .specify/templates/checklist-template.md — no constitution references; no change needed.
+
+Follow-up TODOs: None — all placeholders resolved.
+-->
+
+# LLM Anonymization Gateway Constitution
+
+A secure gateway for data anonymization in communication with LLM models. The system sits
+between users and external LLM providers, detects personally identifiable information (PII),
+substitutes it with realistic synthetic data before transmission, and restores the original
+values in the response.
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Privacy by Design
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+Personally identifiable information (PII) MUST never leave the system in its original form.
+Every request to an external LLM provider MUST pass through the pseudonymization pipeline.
+This principle has NO exceptions — there is no passthrough mode that bypasses anonymization.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### II. Recall over Precision
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+In PII detection, recall (coverage) takes priority over precision (accuracy). It is better to
+mask a text fragment that is not PII than to let real personal data through. Detection
+thresholds MUST be set conservatively. Rationale: a false positive degrades output quality; a
+false negative leaks real personal data and is unacceptable.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### III. Reversibility within Session
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+The system performs pseudonymization, NOT anonymization — the original → fake mapping MUST be
+reversible within the session. Mapping keys MUST be stored exclusively on the system side
+(Redis, AES-256 encrypted) and MUST never be exposed to the provider or the client. Each
+session MUST expire after its TTL.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### IV. Provider Agnosticism
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+No system component may be tightly coupled to a specific LLM provider. All communication with
+providers MUST go through an adapter layer implementing the shared `LLMProvider` interface.
+Adding a new provider MUST NOT require modifying the pipeline. Rationale: provider lock-in is a
+maintenance and portability liability for a long-lived system.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### V. Synchronous Only
+
+The system supports only synchronous mode (request-response). Streaming (SSE) is deliberately
+out of scope. Every LLM response MUST be fully received before de-pseudonymization begins.
+Rationale: partial responses cannot be safely de-pseudonymized without risking mismatched or
+leaked mappings.
+
+### VI. Polish First
+
+Support for the Polish language and Polish PII formats (PESEL, NIP, REGON, NRB, Polish
+addresses) is the primary requirement. English is an extension, NOT the base. Custom
+recognizers for Polish entities are part of the system core, not an optional add-on.
+
+### VII. Realistic Substitution
+
+Substitute data generated by Faker (`pl_PL`) MUST be realistic and contextually consistent —
+correct gender for names, valid PESEL/NIP/REGON checksums, correct address format. Abstract
+tokens (e.g. `[PERSON_1]`) are FORBIDDEN as a masking strategy. Rationale: realistic
+substitutes preserve the semantic context the LLM needs to produce useful output.
+
+### VIII. No PII in Logs
+
+System logs MUST NOT contain original personal data. Only metadata may be logged: session_id,
+detected entity types (without values), processing times, error codes. Violating this principle
+is a CRITICAL defect.
+
+### IX. Simplicity over Completeness
+
+A working MVP is more important than full edge case coverage. If solving a problem (e.g., full
+grammatical inflection across all cases) significantly delays a working system, a simplified
+solution with a documented limitation is preferred. All limitations MUST be explicitly
+documented.
+
+## Technology Constraints
+
+The technology stack is fixed and MUST NOT be changed during implementation:
+
+- **Backend:** Python 3.12, FastAPI
+- **NER:** Microsoft Presidio + SpaCy `pl_core_news_lg`
+- **Fake data:** Faker `pl_PL`
+- **Mapping store:** Redis with AES-256 encryption
+- **Frontend:** React SPA
+- **Deployment:** Docker, Docker Compose
+- **LLM providers:** OpenAI, Anthropic, Ollama (adapter pattern)
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other practices for the project. Any implementation decision
+that deviates from the principles above requires:
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+1. An explicit justification in the code via a comment `# CONSTITUTION EXCEPTION: <reason>`.
+2. A corresponding entry in the system limitations documentation.
+
+These principles apply throughout the entire project lifecycle. All reviews and pull requests
+MUST verify compliance with the principles above.
+
+**Versioning policy** (semantic versioning):
+- **MAJOR**: Backward-incompatible governance or principle removals/redefinitions.
+- **MINOR**: New principle/section added or materially expanded guidance.
+- **PATCH**: Clarifications, wording, or non-semantic refinements.
+
+**Version**: 1.0.0 | **Ratified**: 2026-06-15 | **Last Amended**: 2026-06-15
