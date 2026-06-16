@@ -12,7 +12,7 @@ import asyncio
 from fastapi import APIRouter
 
 from .dependencies import get_redis_client
-from .detection import nlp
+from .pii_detection import nlp
 
 router = APIRouter()
 

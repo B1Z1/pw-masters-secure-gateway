@@ -38,13 +38,13 @@ async def client() -> AsyncClient:
 @pytest.fixture
 def model_ready(monkeypatch):
     """Report the spaCy model as loaded without actually loading it."""
-    monkeypatch.setattr("gateway_api.detection.nlp.is_model_ready", lambda: True)
+    monkeypatch.setattr("gateway_api.pii_detection.nlp.is_model_ready", lambda: True)
 
 
 @pytest.fixture
 def model_not_ready(monkeypatch):
     """Report the spaCy model as not loaded."""
-    monkeypatch.setattr("gateway_api.detection.nlp.is_model_ready", lambda: False)
+    monkeypatch.setattr("gateway_api.pii_detection.nlp.is_model_ready", lambda: False)
 
 
 @pytest.fixture
@@ -61,7 +61,7 @@ def patch_analyzer(monkeypatch):
                 return list(results)
 
         monkeypatch.setattr(
-            "gateway_api.detection.engine._get_analyzer", lambda: _FakeAnalyzer()
+            "gateway_api.pii_detection.engine._get_analyzer", lambda: _FakeAnalyzer()
         )
 
     return _patch
@@ -70,7 +70,7 @@ def patch_analyzer(monkeypatch):
 @pytest.fixture
 def thresholds_file(tmp_path, monkeypatch):
     """Write a temp threshold YAML and point the loader at it (live-reload aware)."""
-    from gateway_api.detection import thresholds as thr
+    from gateway_api.pii_detection import thresholds as thr
 
     def _make(content: str):
         path = tmp_path / "thresholds.yaml"
@@ -81,3 +81,59 @@ def thresholds_file(tmp_path, monkeypatch):
 
     yield _make
     thr._reset_cache_for_tests()
+
+
+# --- Substitution / mapping (Epic 3) fixtures ------------------------------
+
+_AES_KEY = b"0" * 32
+
+
+@pytest.fixture
+def enc_key() -> bytes:
+    """A valid 32-byte AES-256 key for tests."""
+    return _AES_KEY
+
+
+@pytest.fixture
+def fake_redis():
+    """A fresh in-memory async Redis (no server)."""
+    import fakeredis.aioredis
+
+    return fakeredis.aioredis.FakeRedis()
+
+
+@pytest.fixture
+def make_store(fake_redis, enc_key):
+    """Factory: a MappingStore backed by fakeredis + a seeded generator."""
+
+    def _make(seed: int = 1, ttl: int = 1800):
+        from gateway_api.pseudonym_generation import FakeDataGenerator
+        from gateway_api.pseudonym_vault.encryption import Encryptor
+        from gateway_api.pseudonym_vault.store import MappingStore
+
+        return MappingStore(
+            fake_redis, Encryptor(enc_key), enc_key, ttl, FakeDataGenerator(seed=seed)
+        )
+
+    return _make
+
+
+@pytest.fixture
+def make_entity():
+    """Factory for a DetectedEntity (offsets default to span the text)."""
+
+    def _make(entity_type, text, *, lemma=None, case=None, metadata=None, start=0):
+        from gateway_api.pii_detection.dto import DetectedEntity
+
+        return DetectedEntity(
+            entity_type=entity_type,
+            start=start,
+            end=start + len(text),
+            score=1.0,
+            text=text,
+            lemma=lemma,
+            case=case,
+            metadata=metadata or {},
+        )
+
+    return _make

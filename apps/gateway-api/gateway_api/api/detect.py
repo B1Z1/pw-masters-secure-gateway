@@ -11,9 +11,9 @@ from __future__ import annotations
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from ..detection import engine as _engine
-from ..detection import nlp as _nlp
-from ..detection.dto import DetectedEntity
+from ..pii_detection import engine as _engine
+from ..pii_detection import nlp as _nlp
+from ..pii_detection.dto import DetectedEntity
 
 router = APIRouter()
 

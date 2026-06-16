@@ -1,0 +1,179 @@
+openapi: 3.1.0
+info:
+  title: LLM Anonymization Gateway — Epic 3 substitution debug surface
+  version: 0.1.0
+  description: >
+    Two debug endpoints that validate the fake-data generator + reversible session
+    mapping store in isolation. NO LLM is called. Both routes REQUIRE Redis and are
+    therefore subject to Epic 1's Redis-availability gate (HTTP 503 when Redis is down);
+    they are NOT added to the gate's exempt set. `pseudonymize` additionally relies on
+    the Epic 2 detection model being loaded.
+
+paths:
+  /v1/pseudonymize:
+    post:
+      summary: Replace detected PII in Polish text with realistic fakes (forward)
+      description: >
+        Detect PII (reuse Epic 2 DetectionEngine), substitute each entity with a
+        realistic, consistent, session-scoped fake (case-correct for PERSON/LOCATION),
+        and return the rewritten text plus the replacement list and the session id.
+        Empty/whitespace text returns an empty result and an (empty) session, no error.
+      operationId: pseudonymize
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PseudonymizeRequest'
+      responses:
+        '200':
+          description: Text pseudonymized (or empty result for empty input).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PseudonymizeResponse'
+        '503':
+          description: Redis unavailable (Epic 1 gate) — or detection model not ready.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /v1/depseudonymize:
+    post:
+      summary: Restore original PII from fakes (reverse, inflection-aware)
+      description: >
+        Given text containing fakes from a session and that session id, replace each
+        fake form with its original — longest-first, word-boundary aware, case-aware for
+        PERSON/LOCATION, exact then bounded-fuzzy (edit distance <= 2) lookup. Unknown
+        session or empty text returns the text unchanged with no error.
+      operationId: depseudonymize
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepseudonymizeRequest'
+      responses:
+        '200':
+          description: Text restored (or unchanged for unknown/empty session).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepseudonymizeResponse'
+        '503':
+          description: Redis unavailable (Epic 1 gate).
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /v1/sessions/{session_id}/mappings:
+    get:
+      summary: List all original↔fake mappings held for a session (reviewer/debug)
+      description: >
+        Decrypts and returns every mapping currently stored for the session, for manual
+        inspection (FR-011). Debug surface for a trusted context: the pairs are returned to the
+        caller but never written to logs (Constitution VIII). Redis-gated.
+      operationId: listSessionMappings
+      parameters:
+        - in: path
+          name: session_id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: All currently-held mappings (empty list for an unknown/expired session).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionMappings'
+        '503':
+          description: Redis unavailable (Epic 1 gate).
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+components:
+  schemas:
+    PseudonymizeRequest:
+      type: object
+      required: [text]
+      properties:
+        text:
+          type: string
+          description: Polish text to pseudonymize (may be empty).
+        session_id:
+          type: [string, 'null']
+          description: Existing session; if absent/null a new session is created and returned.
+      example:
+        text: "Jan Kowalski, PESEL 90010112345, mieszka w Krakowie."
+        session_id: null
+
+    Replacement:
+      type: object
+      required: [entity_type, original, fake, start, end]
+      properties:
+        entity_type: { type: string, example: PERSON }
+        original: { type: string, example: "Jan Kowalski" }
+        fake: { type: string, example: "Marek Nowak" }
+        start: { type: integer, description: offset into the ORIGINAL text }
+        end: { type: integer }
+
+    PseudonymizeResponse:
+      type: object
+      required: [pseudonymized_text, entities_replaced, session_id]
+      properties:
+        pseudonymized_text:
+          type: string
+          example: "Marek Nowak, PESEL 84030512348, mieszka w Gdańsku."
+        entities_replaced:
+          type: array
+          items: { $ref: '#/components/schemas/Replacement' }
+        session_id:
+          type: string
+          example: "1f3c9a2e-..."
+
+    DepseudonymizeRequest:
+      type: object
+      required: [text, session_id]
+      properties:
+        text: { type: string }
+        session_id: { type: string }
+      example:
+        text: "Spotkanie z Markiem Nowakiem w Gdańsku."
+        session_id: "1f3c9a2e-..."
+
+    DepseudonymizeResponse:
+      type: object
+      required: [restored_text, session_id]
+      properties:
+        restored_text:
+          type: string
+          example: "Spotkanie z Janem Kowalskim w Krakowie."
+        session_id: { type: string }
+
+    SessionMappings:
+      type: object
+      required: [session_id, mappings]
+      properties:
+        session_id: { type: string }
+        mappings:
+          type: array
+          items:
+            type: object
+            required: [entity_type, original, fake]
+            properties:
+              entity_type: { type: string, example: PERSON }
+              original: { type: string, example: "Jan Kowalski" }
+              fake: { type: string, example: "Marek Nowak" }
+
+    Error:
+      type: object
+      properties:
+        detail: { type: string }
+
+# Notes
+# - No `score`/detection details leak here; that is /v1/detect (Epic 2).
+# - Logs for these routes carry session_id, entity types/counts, timings only —
+#   never original values or fake<->original pairs (Constitution VIII / FR-026).
+# - `start`/`end` in Replacement reference the ORIGINAL input span (pre-substitution),
+#   for traceability; the rewritten text may differ in length (case-inflected fakes).

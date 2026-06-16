@@ -1,10 +1,15 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: TEMPLATE (unversioned) → 1.0.0
-Rationale: Initial ratification — first concrete fill of the constitution template.
+Version change: 1.0.0 → 1.1.0  (initial ratification was TEMPLATE (unversioned) → 1.0.0 on 2026-06-15)
+Rationale (1.1.0): Amend Principle III to clarify encryption scope — only ORIGINAL personal data
+  requires AES-256; synthetic substitutes and non-reversible (keyed-HMAC) lookup indexes may be
+  stored in clear on the system side. Ratifies the EPIC 3 clarification (spec 003, session
+  2026-06-16, Q1) and resolves the /speckit-analyze finding C1. MINOR bump: materially expanded
+  guidance on an existing principle; none added or removed.
 
-Modified principles: N/A (template placeholders replaced with concrete principles)
+Modified principles (1.1.0): III. Reversibility within Session — encryption-scope clarification.
+Modified principles (1.0.0): N/A (template placeholders replaced with concrete principles)
 Added principles:
   - I. Privacy by Design
   - II. Recall over Precision
@@ -57,8 +62,11 @@ false negative leaks real personal data and is unacceptable.
 
 The system performs pseudonymization, NOT anonymization — the original → fake mapping MUST be
 reversible within the session. Mapping keys MUST be stored exclusively on the system side
-(Redis, AES-256 encrypted) and MUST never be exposed to the provider or the client. Each
-session MUST expire after its TTL.
+(Redis, AES-256 encrypted) and MUST never be exposed to the provider or the client. AES-256
+encryption applies to ORIGINAL personal data; synthetic substitute values and non-reversible
+lookup indexes (e.g. a keyed HMAC of a normalized original) are NOT personal data and MAY be
+stored in clear on the system side, provided the encryption key never leaves the system and the
+original PII stays unreadable without it. Each session MUST expire after its TTL.
 
 ### IV. Provider Agnosticism
 
@@ -128,4 +136,4 @@ MUST verify compliance with the principles above.
 - **MINOR**: New principle/section added or materially expanded guidance.
 - **PATCH**: Clarifications, wording, or non-semantic refinements.
 
-**Version**: 1.0.0 | **Ratified**: 2026-06-15 | **Last Amended**: 2026-06-15
+**Version**: 1.1.0 | **Ratified**: 2026-06-15 | **Last Amended**: 2026-06-16
