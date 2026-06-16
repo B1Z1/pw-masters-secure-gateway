@@ -1,0 +1,69 @@
+# Production / demo stack (F-01). Project & network: pw-masters-secure-gateway.
+# Startup ordering (FR-004): redis healthy -> gateway-api healthy -> gateway-ui.
+# Redis is NEVER published to the host here (SC-010, FR-003).
+name: pw-masters-secure-gateway
+
+services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    networks: [pw-masters-secure-gateway]
+    # No `ports:` mapping — unreachable from the host in the production stack.
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" ping | grep -q PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  gateway-api:
+    build:
+      context: ./apps/gateway-api
+      secrets:
+        - ca_cert
+    env_file: .env
+    ports:
+      - "8000:8000"
+    networks: [pw-masters-secure-gateway]
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 3s
+      start_period: 30s
+      retries: 5
+
+  gateway-ui:
+    build:
+      # See apps/gateway-ui/Dockerfile: an Nx build needs the workspace root,
+      # so the context is the repo root rather than ./apps/gateway-ui.
+      context: .
+      dockerfile: apps/gateway-ui/Dockerfile
+      secrets:
+        - ca_cert
+    ports:
+      - "3000:80"
+    networks: [pw-masters-secure-gateway]
+    depends_on:
+      gateway-api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:80/ || exit 1"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+
+networks:
+  pw-masters-secure-gateway:
+    name: pw-masters-secure-gateway
+    driver: bridge
+
+# Optional CA used only at BUILD time for corporate TLS-inspecting proxies.
+# Default is an empty placeholder (no-op). To build behind such a proxy:
+#   CA_CERT_FILE=/path/to/corp-ca.pem docker compose -f docker-compose.yml build
+secrets:
+  ca_cert:
+    file: ${CA_CERT_FILE:-.docker/empty.crt}

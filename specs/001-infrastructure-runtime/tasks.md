@@ -27,13 +27,13 @@ Nx monorepo (web app): backend at `apps/gateway-api/`, frontend at `apps/gateway
 
 **Purpose**: Greenfield Nx workspace + both project skeletons + environment scaffolding.
 
-- [ ] T001 Generate the Nx workspace into a temporary subfolder then move files (`nx.json`, `package.json`, `package-lock.json`, `tsconfig.base.json`, `.nx/`) up to the repo root, preserving `.git/`, `docs/`, `specs/`, `.specify/`, `.claude/`, `CLAUDE.md` (per [research.md](research.md) D1). Run `nx show projects` to verify.
-- [ ] T002 Install plugins as devDependencies in root `package.json`: `npm install --save-dev @nx/react @nxlv/python`
-- [ ] T003 [P] Generate the frontend app at `apps/gateway-ui/`: `nx g @nx/react:application gateway-ui --bundler=vite --style=css --unitTestRunner=vitest --directory=apps/gateway-ui --no-interactive`
-- [ ] T004 [P] Generate the backend app at `apps/gateway-api/`: `nx g @nxlv/python:uv-project gateway-api --projectType=application --packageName=gateway-api --moduleName=gateway_api --directory=apps/gateway-api --pyenvPythonVersion=3.12 --no-interactive`
-- [ ] T005 Configure caching in `nx.json` via `targetDefaults` (`build`, `test`, `lint` → `"cache": true`; leave `serve`/`dev` uncached) per [research.md](research.md) D2 — run after generators to avoid clobbering project-graph edits
-- [ ] T006 [P] Create `.env.example` at the repo root with all 9 variables and inline documentation exactly per [contracts/environment.md](contracts/environment.md) (placeholders only — never a real key)
-- [ ] T007 [P] Create/merge root `.gitignore` to ignore `.env`, `.nx/cache`, `dist/`, `node_modules/`, `.venv/`, `__pycache__/` (satisfies SC-009: `.env` never committed)
+- [X] T001 Generate the Nx workspace into a temporary subfolder then move files (`nx.json`, `package.json`, `package-lock.json`, `tsconfig.base.json`, `.nx/`) up to the repo root, preserving `.git/`, `docs/`, `specs/`, `.specify/`, `.claude/`, `CLAUDE.md` (per [research.md](research.md) D1). Run `nx show projects` to verify.
+- [X] T002 Install plugins as devDependencies in root `package.json`: `npm install --save-dev @nx/react @nxlv/python`
+- [X] T003 [P] Generate the frontend app at `apps/gateway-ui/`: `nx g @nx/react:application gateway-ui --bundler=vite --style=css --unitTestRunner=vitest --directory=apps/gateway-ui --no-interactive`
+- [X] T004 [P] Generate the backend app at `apps/gateway-api/`: `nx g @nxlv/python:uv-project gateway-api --projectType=application --packageName=gateway-api --moduleName=gateway_api --directory=apps/gateway-api --pyenvPythonVersion=3.12 --no-interactive`
+- [X] T005 Configure caching in `nx.json` via `targetDefaults` (`build`, `test`, `lint` → `"cache": true`; leave `serve`/`dev` uncached) per [research.md](research.md) D2 — run after generators to avoid clobbering project-graph edits
+- [X] T006 [P] Create `.env.example` at the repo root with all 9 variables and inline documentation exactly per [contracts/environment.md](contracts/environment.md) (placeholders only — never a real key)
+- [X] T007 [P] Create/merge root `.gitignore` to ignore `.env`, `.nx/cache`, `dist/`, `node_modules/`, `.venv/`, `__pycache__/` (satisfies SC-009: `.env` never committed)
 
 **Checkpoint**: `nx show projects` lists `gateway-api` and `gateway-ui`; `nx graph` renders.
 
@@ -45,13 +45,13 @@ Nx monorepo (web app): backend at `apps/gateway-api/`, frontend at `apps/gateway
 
 **⚠️ CRITICAL**: No user story can be containerized (US1), dev-served (US2), or validated (US3) until this phase is complete.
 
-- [ ] T008 Add runtime + dev dependencies to `apps/gateway-api/pyproject.toml`: `fastapi`, `uvicorn[standard]`, `pydantic-settings`, `redis`, `httpx`, `spacy`; dev group `pytest`, `pytest-asyncio`, `flake8`. Run `uv sync` to produce the lockfile
-- [ ] T009 Implement `apps/gateway-api/gateway_api/config.py`: `pydantic-settings` `Settings(BaseSettings)` with all fields from [data-model.md](data-model.md); a field validator for `redis_encryption_key` that base64-decodes and asserts exactly 32 bytes, raising `ValueError` otherwise (FR-019); LLM keys `Optional[str] = None` with no validation (FR-020)
-- [ ] T010 Implement `apps/gateway-api/gateway_api/dependencies.py`: a lazily-constructed async `redis.Redis` client built from `redis_url`, exposed via `get_redis_client()`; construction must NOT raise on missing/bad URL (FR-028, research D4)
-- [ ] T011 Implement `apps/gateway-api/gateway_api/health.py`: an `APIRouter` with `GET /health`; `check_redis()` doing `await client.ping()` under a 1s timeout (any exception → `"unavailable"`, FR-025); `check_spacy_model() -> str` stub returning `"ok"` with a `# TODO: wire real check in Epic 2` comment (FR-026); aggregate to `status` `ok`/`degraded` (FR-024); ALWAYS HTTP 200 (FR-022), schema per [contracts/health.openapi.yaml](contracts/health.openapi.yaml)
-- [ ] T012 Implement `apps/gateway-api/gateway_api/main.py`: create the FastAPI app, include the health router, and add the `redis_availability_gate` `@app.middleware("http")` that passes through `/health` and returns `JSONResponse(503)` on all other paths when Redis is unavailable (FR-027); also create `apps/gateway-api/gateway_api/__init__.py`
-- [ ] T013 [P] Create `apps/gateway-api/tests/conftest.py`: pytest fixtures — `httpx.AsyncClient` against the app, an `AsyncMock` Redis-ping patcher, and a valid-`Settings` env fixture
-- [ ] T014 Implement `apps/gateway-api/tests/test_health.py` with the 5 required cases: (1) `/health` 200 + `ok` when ping succeeds; (2) `/health` 200 + `degraded` when ping raises `ConnectionError`; (3) any non-health route → 503 when Redis unavailable; (4) `Settings()` with invalid `REDIS_ENCRYPTION_KEY` raises `ValueError`; (5) `Settings()` with empty `OPENAI_API_KEY` does NOT raise
+- [X] T008 Add runtime + dev dependencies to `apps/gateway-api/pyproject.toml`: `fastapi`, `uvicorn[standard]`, `pydantic-settings`, `redis`, `httpx`, `spacy`; dev group `pytest`, `pytest-asyncio`, `flake8`. Run `uv sync` to produce the lockfile
+- [X] T009 Implement `apps/gateway-api/gateway_api/config.py`: `pydantic-settings` `Settings(BaseSettings)` with all fields from [data-model.md](data-model.md); a field validator for `redis_encryption_key` that base64-decodes and asserts exactly 32 bytes, raising `ValueError` otherwise (FR-019); LLM keys `Optional[str] = None` with no validation (FR-020)
+- [X] T010 Implement `apps/gateway-api/gateway_api/dependencies.py`: a lazily-constructed async `redis.Redis` client built from `redis_url`, exposed via `get_redis_client()`; construction must NOT raise on missing/bad URL (FR-028, research D4)
+- [X] T011 Implement `apps/gateway-api/gateway_api/health.py`: an `APIRouter` with `GET /health`; `check_redis()` doing `await client.ping()` under a 1s timeout (any exception → `"unavailable"`, FR-025); `check_spacy_model() -> str` stub returning `"ok"` with a `# TODO: wire real check in Epic 2` comment (FR-026); aggregate to `status` `ok`/`degraded` (FR-024); ALWAYS HTTP 200 (FR-022), schema per [contracts/health.openapi.yaml](contracts/health.openapi.yaml)
+- [X] T012 Implement `apps/gateway-api/gateway_api/main.py`: create the FastAPI app, include the health router, and add the `redis_availability_gate` `@app.middleware("http")` that passes through `/health` and returns `JSONResponse(503)` on all other paths when Redis is unavailable (FR-027); also create `apps/gateway-api/gateway_api/__init__.py`
+- [X] T013 [P] Create `apps/gateway-api/tests/conftest.py`: pytest fixtures — `httpx.AsyncClient` against the app, an `AsyncMock` Redis-ping patcher, and a valid-`Settings` env fixture
+- [X] T014 Implement `apps/gateway-api/tests/test_health.py` with the 5 required cases: (1) `/health` 200 + `ok` when ping succeeds; (2) `/health` 200 + `degraded` when ping raises `ConnectionError`; (3) any non-health route → 503 when Redis unavailable; (4) `Settings()` with invalid `REDIS_ENCRYPTION_KEY` raises `ValueError`; (5) `Settings()` with empty `OPENAI_API_KEY` does NOT raise
 
 **Checkpoint**: `nx run gateway-api:test` is green; `uvicorn gateway_api.main:app` serves `GET /health` returning the documented JSON.
 
@@ -65,12 +65,12 @@ Nx monorepo (web app): backend at `apps/gateway-api/`, frontend at `apps/gateway
 
 ### Implementation for User Story 1
 
-- [ ] T015 [P] [US1] Create `apps/gateway-api/Dockerfile`: multi-stage — builder installs deps with `uv` and runs `python -m spacy download pl_core_news_lg`; slim Python 3.12 runtime copies only the venv + `gateway_api/`, runs as a non-root user, declares `HEALTHCHECK --start-period=30s` against `/health` (FR-031, FR-033; image size uncapped per R1)
-- [ ] T016 [P] [US1] Replace `apps/gateway-ui/src/App.tsx` with a minimal placeholder showing "LLM Gateway" and a button that fetches `/api/health` and renders backend status
-- [ ] T017 [P] [US1] Create `apps/gateway-ui/nginx.conf`: SPA fallback `try_files $uri $uri/ /index.html` and `location /api/ { proxy_pass http://gateway-api:8000/; }` (FR-005)
-- [ ] T018 [P] [US1] Create `apps/gateway-ui/Dockerfile`: two stages — `node:20-alpine` runs `npm ci && npm run build` → `nginx:1.25-alpine` serves `dist/` with `nginx.conf`
-- [ ] T019 [US1] Create `docker-compose.yml` (project & network `pw-masters-secure-gateway`): `redis` (`redis:7-alpine`, password `${REDIS_PASSWORD}`, `redis-cli ping` healthcheck, NO host port), `gateway-api` (build `./apps/gateway-api`, `env_file: .env`, `8000:8000`, `curl -f /health` healthcheck, `depends_on redis: service_healthy`), `gateway-ui` (build `./apps/gateway-ui`, `3000:80`, healthcheck returning HTTP 200 on `/` per FR-006, `depends_on gateway-api: service_healthy`) per [contracts/compose-services.md](contracts/compose-services.md)
-- [ ] T020 [US1] Verify [quickstart.md](quickstart.md) Scenario A end-to-end: build images, `docker compose -f docker-compose.yml up -d`, confirm all healthy < 60s, `/health` 200, SPA loads + health-ping works, `redis-cli -h localhost ping` refused (SC-001, SC-010); record actual `/health` response time against the running stack (real-latency check for SC-002, complementing the mocked check in T028); record built backend image size for reference (R1)
+- [X] T015 [P] [US1] Create `apps/gateway-api/Dockerfile`: multi-stage — builder installs deps with `uv` and runs `python -m spacy download pl_core_news_lg`; slim Python 3.12 runtime copies only the venv + `gateway_api/`, runs as a non-root user, declares `HEALTHCHECK --start-period=30s` against `/health` (FR-031, FR-033; image size uncapped per R1)
+- [X] T016 [P] [US1] Replace `apps/gateway-ui/src/App.tsx` with a minimal placeholder showing "LLM Gateway" and a button that fetches `/api/health` and renders backend status
+- [X] T017 [P] [US1] Create `apps/gateway-ui/nginx.conf`: SPA fallback `try_files $uri $uri/ /index.html` and `location /api/ { proxy_pass http://gateway-api:8000/; }` (FR-005)
+- [X] T018 [P] [US1] Create `apps/gateway-ui/Dockerfile`: two stages — `node:20-alpine` runs `npm ci && npm run build` → `nginx:1.25-alpine` serves `dist/` with `nginx.conf`
+- [X] T019 [US1] Create `docker-compose.yml` (project & network `pw-masters-secure-gateway`): `redis` (`redis:7-alpine`, password `${REDIS_PASSWORD}`, `redis-cli ping` healthcheck, NO host port), `gateway-api` (build `./apps/gateway-api`, `env_file: .env`, `8000:8000`, `curl -f /health` healthcheck, `depends_on redis: service_healthy`), `gateway-ui` (build `./apps/gateway-ui`, `3000:80`, healthcheck returning HTTP 200 on `/` per FR-006, `depends_on gateway-api: service_healthy`) per [contracts/compose-services.md](contracts/compose-services.md)
+- [X] T020 [US1] Verify [quickstart.md](quickstart.md) Scenario A end-to-end: build images, `docker compose -f docker-compose.yml up -d`, confirm all healthy < 60s, `/health` 200, SPA loads + health-ping works, `redis-cli -h localhost ping` refused (SC-001, SC-010); record actual `/health` response time against the running stack (real-latency check for SC-002, complementing the mocked check in T028); record built backend image size for reference (R1)
 
 **Checkpoint**: The full stack starts with one command and is demonstrable — MVP complete.
 
@@ -84,12 +84,12 @@ Nx monorepo (web app): backend at `apps/gateway-api/`, frontend at `apps/gateway
 
 ### Implementation for User Story 2
 
-- [ ] T021 [P] [US2] Configure backend targets in `apps/gateway-api/project.json`: `serve` (`uvicorn gateway_api.main:app --reload --port 8000`, cwd `apps/gateway-api`), `test` (`pytest tests/`, cached), `lint` (flake8) per [plan.md](plan.md)
-- [ ] T022 [P] [US2] Verify the frontend targets generated in `apps/gateway-ui/project.json` — use the default names produced by `@nx/react` + Vite (`serve` = the Vite dev server with HMR, plus `build`, `test` (vitest), `lint`); do not rename them
-- [ ] T023 [P] [US2] Add the dev proxy to `apps/gateway-ui/vite.config.ts`: `server.proxy` maps `/api` → `http://localhost:8000` with `rewrite: p => p.replace(/^\/api/, '')` (FR-012, research D8)
-- [ ] T024 [US2] Create `docker-compose.override.yml`: `redis` adds `ports: ["6379:6379"]` (FR-009); `gateway-api` bind-mounts `./apps/gateway-api/gateway_api:/app/gateway_api` and overrides `command` to `uvicorn ... --reload` (FR-010); `gateway-ui` gets `profiles: ["production-only"]` (FR-011) per [contracts/compose-services.md](contracts/compose-services.md)
-- [ ] T025 [US2] Write `README.md`: prerequisites (Docker, Node 20, Python 3.12, uv), quickstart (`cp .env.example .env` → fill → `docker compose up`), `REDIS_ENCRYPTION_KEY` generation one-liner, the three-terminal dev workflow, an Nx command reference (`nx run gateway-api:serve`, `nx run gateway-ui:serve`, `nx run-many --target=test`), and `/health` verification (FR-015)
-- [ ] T026 [US2] Verify [quickstart.md](quickstart.md) Scenario B: only-Redis Docker + native serve/dev hot reload confirmed; `docker compose up` (override merged) starts redis + gateway-api only, no `gateway-ui` (SC-005, SC-008)
+- [X] T021 [P] [US2] Configure backend targets in `apps/gateway-api/project.json`: `serve` (`uvicorn gateway_api.main:app --reload --port 8000`, cwd `apps/gateway-api`), `test` (`pytest tests/`, cached), `lint` (flake8) per [plan.md](plan.md)
+- [X] T022 [P] [US2] Verify the frontend targets generated in `apps/gateway-ui/project.json` — use the default names produced by `@nx/react` + Vite (`serve` = the Vite dev server with HMR, plus `build`, `test` (vitest), `lint`); do not rename them
+- [X] T023 [P] [US2] Add the dev proxy to `apps/gateway-ui/vite.config.ts`: `server.proxy` maps `/api` → `http://localhost:8000` with `rewrite: p => p.replace(/^\/api/, '')` (FR-012, research D8)
+- [X] T024 [US2] Create `docker-compose.override.yml`: `redis` adds `ports: ["6379:6379"]` (FR-009); `gateway-api` bind-mounts `./apps/gateway-api/gateway_api:/app/gateway_api` and overrides `command` to `uvicorn ... --reload` (FR-010); `gateway-ui` gets `profiles: ["production-only"]` (FR-011) per [contracts/compose-services.md](contracts/compose-services.md)
+- [X] T025 [US2] Write `README.md`: prerequisites (Docker, Node 20, Python 3.12, uv), quickstart (`cp .env.example .env` → fill → `docker compose up`), `REDIS_ENCRYPTION_KEY` generation one-liner, the three-terminal dev workflow, an Nx command reference (`nx run gateway-api:serve`, `nx run gateway-ui:serve`, `nx run-many --target=test`), and `/health` verification (FR-015)
+- [X] T026 [US2] Verify [quickstart.md](quickstart.md) Scenario B: only-Redis Docker + native serve/dev hot reload confirmed; `docker compose up` (override merged) starts redis + gateway-api only, no `gateway-ui` (SC-005, SC-008)
 
 **Checkpoint**: Developers get a sub-second inner loop; US1 and US2 both work independently.
 
@@ -105,10 +105,10 @@ Nx monorepo (web app): backend at `apps/gateway-api/`, frontend at `apps/gateway
 
 ### Implementation for User Story 3
 
-- [ ] T027 [US3] Add logging hygiene in `apps/gateway-api/gateway_api/main.py` (and a small `logging` setup if needed): emit only operational metadata (status, timings, error categories); guarantee `REDIS_ENCRYPTION_KEY`, `REDIS_PASSWORD`, and API keys are never logged or echoed in error/health bodies (FR-030)
-- [ ] T028 [P] [US3] Add `apps/gateway-api/tests/test_observability.py`: assert no secret value appears in captured logs during startup/requests, and a sanity check that `/health` responds well under 500ms with a mocked Redis (SC-002, FR-030)
-- [ ] T029 [US3] Validate [quickstart.md](quickstart.md) Scenario C against the running stack: stop `redis` → `/health` stays 200 + `degraded`, a non-health route returns 503, `gateway-api` stays Up (no crash), and restarting `redis` returns `/health` to `ok` with no backend restart (SC-004)
-- [ ] T030 [US3] Validate [quickstart.md](quickstart.md) Scenario D: starting the backend with an invalid `REDIS_ENCRYPTION_KEY` exits non-zero within 5s before binding a port; empty `OPENAI_API_KEY`/`ANTHROPIC_API_KEY` produce no startup error (SC-003, FR-019, FR-020)
+- [X] T027 [US3] Add logging hygiene in `apps/gateway-api/gateway_api/main.py` (and a small `logging` setup if needed): emit only operational metadata (status, timings, error categories); guarantee `REDIS_ENCRYPTION_KEY`, `REDIS_PASSWORD`, and API keys are never logged or echoed in error/health bodies (FR-030)
+- [X] T028 [P] [US3] Add `apps/gateway-api/tests/test_observability.py`: assert no secret value appears in captured logs during startup/requests, and a sanity check that `/health` responds well under 500ms with a mocked Redis (SC-002, FR-030)
+- [X] T029 [US3] Validate [quickstart.md](quickstart.md) Scenario C against the running stack: stop `redis` → `/health` stays 200 + `degraded`, a non-health route returns 503, `gateway-api` stays Up (no crash), and restarting `redis` returns `/health` to `ok` with no backend restart (SC-004)
+- [X] T030 [US3] Validate [quickstart.md](quickstart.md) Scenario D: starting the backend with an invalid `REDIS_ENCRYPTION_KEY` exits non-zero within 5s before binding a port; empty `OPENAI_API_KEY`/`ANTHROPIC_API_KEY` produce no startup error (SC-003, FR-019, FR-020)
 
 **Checkpoint**: All runtime guarantees demonstrably hold; all three user stories are independently functional.
 
@@ -118,9 +118,9 @@ Nx monorepo (web app): backend at `apps/gateway-api/`, frontend at `apps/gateway
 
 **Purpose**: Final validation and cleanup spanning the whole stack.
 
-- [ ] T031 [P] Run [quickstart.md](quickstart.md) Scenario F: `nx run-many --target=test` runs pytest (gateway-api) + vitest (gateway-ui), both green (SC-007)
-- [ ] T032 [P] Record the measured backend image size in `README.md` (reference only — R1, no gate)
-- [ ] T033 Remove `@nx/react` generator boilerplate not used by the placeholder UI and confirm `git status` shows no `.env` tracked (SC-009)
+- [X] T031 [P] Run [quickstart.md](quickstart.md) Scenario F: `nx run-many --target=test` runs pytest (gateway-api) + vitest (gateway-ui), both green (SC-007)
+- [X] T032 [P] Record the measured backend image size in `README.md` (reference only — R1, no gate)
+- [X] T033 Remove `@nx/react` generator boilerplate not used by the placeholder UI and confirm `git status` shows no `.env` tracked (SC-009)
 
 ---
 
