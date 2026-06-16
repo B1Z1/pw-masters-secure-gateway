@@ -23,6 +23,12 @@ services:
       secrets:
         - ca_cert
     env_file: .env
+    environment:
+      # In-network override: inside Docker the backend reaches Redis by the
+      # service name `redis`, not `localhost`. This takes precedence over the
+      # REDIS_URL in `.env` (which is the source of truth for NATIVE dev), so
+      # the same `.env` works in both worlds without ever editing the host.
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
     ports:
       - "8000:8000"
     networks: [pw-masters-secure-gateway]

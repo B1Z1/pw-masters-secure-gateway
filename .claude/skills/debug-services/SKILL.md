@@ -22,8 +22,10 @@ npm run docker:ps                        # service status / health
 ```
 
 Read `/health`:
+
 - `{"status":"ok",...}` → backend & deps fine.
-- `{"status":"degraded","dependencies":{"redis":"unavailable",...}}` → Redis is down/unreachable. **Non-health routes will return 503** by design (the `redis_availability_gate` middleware). Fix Redis, not the backend.
+- `{"status":"degraded","dependencies":{"redis":"unavailable",...}}` → Redis is down/unreachable. **Non-health routes
+  will return 503** by design (the `redis_availability_gate` middleware). Fix Redis, not the backend.
 - `spacy_model` is a stub that always returns `"ok"` in Epic 1 — ignore it as a cause.
 - No response / connection refused → backend isn't running or crashed at startup (see §3 fail-fast).
 
@@ -60,6 +62,7 @@ nx run gateway-ui:serve            # Terminal 3: Vite HMR :4200 (proxies /api ->
 ```
 
 Common native-dev issues:
+
 - **`/health` shows `redis: unavailable`** → in `.env` the host must be `localhost`, not `redis`
   (the `redis` name only resolves inside Docker): `REDIS_URL=redis://:changeme@localhost:6379/0`.
 - **Port already in use** → `lsof -i :8000` / `lsof -i :4200` / `lsof -i :6379`, then kill the stale process.
@@ -112,11 +115,11 @@ a corporate TLS-inspecting proxy"). Behind the proxy, `uv` on the host needs
 
 ## Symptom → likely cause
 
-| Symptom | Look at |
-|---|---|
-| Non-health route → 503 | Redis down/unreachable (§0, §1, §2) — by-design gate, not a bug |
-| `/health` 200 but `degraded` | Redis dependency only; backend itself is healthy |
-| Backend exits on start | Fail-fast config (§3): bad `REDIS_ENCRYPTION_KEY` or missing `REDIS_PASSWORD` |
+| Symptom                                       | Look at                                                                        |
+|-----------------------------------------------|--------------------------------------------------------------------------------|
+| Non-health route → 503                        | Redis down/unreachable (§0, §1, §2) — by-design gate, not a bug                |
+| `/health` 200 but `degraded`                  | Redis dependency only; backend itself is healthy                               |
+| Backend exits on start                        | Fail-fast config (§3): bad `REDIS_ENCRYPTION_KEY` or missing `REDIS_PASSWORD`  |
 | `gateway-ui` missing from `docker compose up` | Expected in dev — it's behind the `production-only` profile; use the prod file |
-| Native `/health` always degraded | `.env` `REDIS_URL` host should be `localhost` (§2) |
-| Build cert error | Corporate proxy CA (§5) |
+| Native `/health` always degraded              | `.env` `REDIS_URL` host should be `localhost` (§2)                             |
+| Build cert error                              | Corporate proxy CA (§5)                                                        |

@@ -53,4 +53,5 @@ async def get_health() -> dict:
         "spacy_model": check_spacy_model(),
     }
     status = "ok" if all(v == "ok" for v in dependencies.values()) else "degraded"
+
     return {"status": status, "dependencies": dependencies}

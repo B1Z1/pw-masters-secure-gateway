@@ -55,9 +55,16 @@
     }
   ],
   "targetDefaults": {
-    "build": { "cache": true },
-    "test": { "cache": true, "inputs": ["default", "^default"] },
-    "lint": { "cache": true }
+    "build": {
+      "cache": true
+    },
+    "test": {
+      "cache": true,
+      "inputs": ["default", "^default"]
+    },
+    "lint": {
+      "cache": true
+    }
   },
   "generators": {
     "@nx/react": {
@@ -75,5 +82,6 @@
         "linter": "none"
       }
     }
-  }
+  },
+  "analytics": true
 }
