@@ -36,6 +36,13 @@ class Settings(BaseSettings):
     redis_encryption_key: str
     redis_session_ttl: int = 3600
 
+    # --- Detection thresholds (Epic 2) ---
+    # Optional path to the per-type threshold YAML. The threshold *values* are
+    # read live from this file by detection/thresholds.py (NOT via this cached
+    # Settings object) so changes apply without a restart (FR-020). Absent → the
+    # shipped default_thresholds.yaml is used.
+    detection_thresholds_path: str | None = None
+
     # --- LLM providers (optional at startup; error only on first use — FR-020) ---
     openai_api_key: str | None = None
     anthropic_api_key: str | None = None

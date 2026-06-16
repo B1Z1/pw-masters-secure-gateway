@@ -1,0 +1,17 @@
+# Per-entity-type minimum confidence thresholds (contracts/thresholds.md, FR-019..FR-022).
+# Read LIVE by detection/thresholds.py — edit and the next /v1/detect request uses
+# the new values, no restart. Recall over precision: defaults are deliberately low.
+# 0.0 = "paranoid" (surface everything that type produced); 1.0 = disabled
+# (scores are clamped to <= 0.99, so nothing passes). Contains no secrets/PII.
+default: 0.30
+thresholds:
+  PESEL: 0.25
+  NIP: 0.25
+  REGON: 0.25
+  POLISH_BANK_ACCOUNT: 0.25
+  POLISH_ADDRESS: 0.35
+  DATE_TIME: 0.30
+  PERSON: 0.40
+  LOCATION: 0.40
+  EMAIL_ADDRESS: 0.40
+  PHONE_NUMBER: 0.40

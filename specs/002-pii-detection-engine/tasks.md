@@ -26,9 +26,9 @@ Backend app `apps/gateway-api/`: source in `gateway_api/`, tests in `tests/`. Ne
 
 **Purpose**: Dependencies and package skeleton.
 
-- [ ] T001 Add `presidio-analyzer` and `pyyaml` to `apps/gateway-api/pyproject.toml` `[project].dependencies`, then lock + sync (`nx run gateway-api:install` or `cd apps/gateway-api && uv lock && uv sync`)
-- [ ] T002 [P] Create detection package skeleton: `apps/gateway-api/gateway_api/detection/__init__.py`, `apps/gateway-api/gateway_api/detection/recognizers/__init__.py`, `apps/gateway-api/gateway_api/api/__init__.py`
-- [ ] T003 [P] Create test package dir `apps/gateway-api/tests/detection/__init__.py`
+- [x] T001 Add `presidio-analyzer` and `pyyaml` to `apps/gateway-api/pyproject.toml` `[project].dependencies`, then lock + sync (`nx run gateway-api:install` or `cd apps/gateway-api && uv lock && uv sync`)
+- [x] T002 [P] Create detection package skeleton: `apps/gateway-api/gateway_api/detection/__init__.py`, `apps/gateway-api/gateway_api/detection/recognizers/__init__.py`, `apps/gateway-api/gateway_api/api/__init__.py`
+- [x] T003 [P] Create test package dir `apps/gateway-api/tests/detection/__init__.py`
 
 ---
 
@@ -38,14 +38,14 @@ Backend app `apps/gateway-api/`: source in `gateway_api/`, tests in `tests/`. Ne
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T004 [P] Define `DetectedEntity` pydantic DTO (`entity_type, start, end, score, text, metadata`) in `apps/gateway-api/gateway_api/detection/dto.py` (data-model §1)
-- [ ] T005 [P] Scoring constants (`S_VALID=0.80, S_INVALID=0.30`, base bands) + `clamp_score()` to `[0.0, 0.99]` in `apps/gateway-api/gateway_api/detection/scoring.py` (data-model §5, research D6)
-- [ ] T006 [P] Normalization helpers (strip spaces/dashes for validation; preserve the original span/offsets) in `apps/gateway-api/gateway_api/detection/normalization.py` (research D, FR-003/FR-013)
-- [ ] T007 [P] spaCy NLP engine provider with **NKJP→Presidio label mapping** (`persName`→PERSON, `placeName`/`geogName`→LOCATION, `date`/`time`→DATE_TIME), process-singleton model loader that **lazily loads on first `detect()`** (so US1 is demoable before US5 wires eager startup load), and `is_model_ready()` in `apps/gateway-api/gateway_api/detection/nlp.py` (research D1/D2/D8)
-- [ ] T008 Threshold loader with **mtime live-reload** + per-type/default post-filter, plus shipped `apps/gateway-api/gateway_api/detection/default_thresholds.yaml` in `apps/gateway-api/gateway_api/detection/thresholds.py` (contracts/thresholds.md, research D5)
-- [ ] T009 [P] Add optional `DETECTION_THRESHOLDS_PATH` setting in `apps/gateway-api/gateway_api/config.py` (override path for T008)
-- [ ] T010 `DetectionEngine` core in `apps/gateway-api/gateway_api/detection/engine.py`: build `AnalyzerEngine` (nlp + empty custom registry hook), `detect(text)` = analyze → map to `DetectedEntity` (`text=input[start:end]`) → clamp → threshold post-filter; export from `detection/__init__.py` (depends: T004, T005, T007, T008)
-- [ ] T011 Detection test fixtures in `apps/gateway-api/tests/conftest.py`: engine fixture, `is_model_ready` monkeypatch, temp threshold-file factory, and a Redis-available patch helper (so US1 endpoint tests aren't 503'd by the Epic 1 gate)
+- [x] T004 [P] Define `DetectedEntity` pydantic DTO (`entity_type, start, end, score, text, metadata`) in `apps/gateway-api/gateway_api/detection/dto.py` (data-model §1)
+- [x] T005 [P] Scoring constants (`S_VALID=0.80, S_INVALID=0.30`, base bands) + `clamp_score()` to `[0.0, 0.99]` in `apps/gateway-api/gateway_api/detection/scoring.py` (data-model §5, research D6)
+- [x] T006 [P] Normalization helpers (strip spaces/dashes for validation; preserve the original span/offsets) in `apps/gateway-api/gateway_api/detection/normalization.py` (research D, FR-003/FR-013)
+- [x] T007 [P] spaCy NLP engine provider with **NKJP→Presidio label mapping** (`persName`→PERSON, `placeName`/`geogName`→LOCATION, `date`/`time`→DATE_TIME), process-singleton model loader that **lazily loads on first `detect()`** (so US1 is demoable before US5 wires eager startup load), and `is_model_ready()` in `apps/gateway-api/gateway_api/detection/nlp.py` (research D1/D2/D8)
+- [x] T008 Threshold loader with **mtime live-reload** + per-type/default post-filter, plus shipped `apps/gateway-api/gateway_api/detection/default_thresholds.yaml` in `apps/gateway-api/gateway_api/detection/thresholds.py` (contracts/thresholds.md, research D5)
+- [x] T009 [P] Add optional `DETECTION_THRESHOLDS_PATH` setting in `apps/gateway-api/gateway_api/config.py` (override path for T008)
+- [x] T010 `DetectionEngine` core in `apps/gateway-api/gateway_api/detection/engine.py`: build `AnalyzerEngine` (nlp + empty custom registry hook), `detect(text)` = analyze → map to `DetectedEntity` (`text=input[start:end]`) → clamp → threshold post-filter; export from `detection/__init__.py` (depends: T004, T005, T007, T008)
+- [x] T011 Detection test fixtures in `apps/gateway-api/tests/conftest.py`: engine fixture, `is_model_ready` monkeypatch, temp threshold-file factory, and a Redis-available patch helper (so US1 endpoint tests aren't 503'd by the Epic 1 gate)
 
 **Checkpoint**: Engine skeleton importable; `detect("")` returns `[]`. User stories can begin.
 
@@ -59,17 +59,17 @@ Backend app `apps/gateway-api/`: source in `gateway_api/`, tests in `tests/`. Ne
 
 ### Tests for User Story 1 ⚠️
 
-- [ ] T012 [P] [US1] API tests for `POST /v1/detect` (entity shape; `text==input[start:end]`; empty input → `[]`; no input text/values in logs; **`detect()` makes no Redis/network I/O** — assert via patched Redis client / no outbound calls, FR-006) in `apps/gateway-api/tests/test_detect_api.py` (uses Redis-available patch from T011)
-- [ ] T013 [P] [US1] Polish date recognizer tests (numeric `12.01.2024`/`12-01-2024`; worded `12 stycznia 2024 r.`; `kind` metadata) in `apps/gateway-api/tests/detection/test_date_pl.py`
-- [ ] T014 [P] [US1] Engine detect/offset tests (PERSON/LOCATION/EMAIL/PHONE detected; offsets exact) in `apps/gateway-api/tests/detection/test_engine.py`
+- [x] T012 [P] [US1] API tests for `POST /v1/detect` (entity shape; `text==input[start:end]`; empty input → `[]`; no input text/values in logs; **`detect()` makes no Redis/network I/O** — assert via patched Redis client / no outbound calls, FR-006) in `apps/gateway-api/tests/test_detect_api.py` (uses Redis-available patch from T011)
+- [x] T013 [P] [US1] Polish date recognizer tests (numeric `12.01.2024`/`12-01-2024`; worded `12 stycznia 2024 r.`; `kind` metadata) in `apps/gateway-api/tests/detection/test_date_pl.py`
+- [x] T014 [P] [US1] Engine detect/offset tests (PERSON/LOCATION/EMAIL/PHONE detected; offsets exact) in `apps/gateway-api/tests/detection/test_engine.py`
 
 ### Implementation for User Story 1
 
-- [ ] T015 [P] [US1] `DateRecognizer` (numeric + worded genitive months + optional `r.`; `kind` metadata; context words `data`/`dnia`) in `apps/gateway-api/gateway_api/detection/recognizers/date_pl.py` (contracts/recognizers.md)
-- [ ] T016 [US1] `build_registry()` configuring base recognizers — Email, `PhoneRecognizer(supported_regions=["PL"])` — and registering `DateRecognizer`, in `apps/gateway-api/gateway_api/detection/recognizers/__init__.py` (depends: T007, T015)
-- [ ] T017 [US1] Wire `build_registry()` into `DetectionEngine`; finalize `RecognizerResult`→`DetectedEntity` mapping incl. metadata passthrough in `apps/gateway-api/gateway_api/detection/engine.py` (depends: T010, T016)
-- [ ] T018 [US1] Thin `POST /v1/detect` router over `DetectionEngine.detect()`; empty/whitespace → `[]` in `apps/gateway-api/gateway_api/api/detect.py` (depends: T017; contracts/detect.openapi.yaml)
-- [ ] T019 [US1] Register detect router in `apps/gateway-api/gateway_api/main.py`; add request logging of entity types/counts/scores/timings only — never text or values (Constitution VIII) (depends: T018)
+- [x] T015 [P] [US1] `DateRecognizer` (numeric + worded genitive months + optional `r.`; `kind` metadata; context words `data`/`dnia`) in `apps/gateway-api/gateway_api/detection/recognizers/date_pl.py` (contracts/recognizers.md)
+- [x] T016 [US1] `build_registry()` configuring base recognizers — Email, `PhoneRecognizer(supported_regions=["PL"])` — and registering `DateRecognizer`, in `apps/gateway-api/gateway_api/detection/recognizers/__init__.py` (depends: T007, T015)
+- [x] T017 [US1] Wire `build_registry()` into `DetectionEngine`; finalize `RecognizerResult`→`DetectedEntity` mapping incl. metadata passthrough in `apps/gateway-api/gateway_api/detection/engine.py` (depends: T010, T016)
+- [x] T018 [US1] Thin `POST /v1/detect` router over `DetectionEngine.detect()`; empty/whitespace → `[]` in `apps/gateway-api/gateway_api/api/detect.py` (depends: T017; contracts/detect.openapi.yaml)
+- [x] T019 [US1] Register detect router in `apps/gateway-api/gateway_api/main.py`; add request logging of entity types/counts/scores/timings only — never text or values (Constitution VIII) (depends: T018)
 
 **Checkpoint**: MVP — engine detects names/places/email/phone/dates end-to-end via the API.
 
@@ -83,23 +83,23 @@ Backend app `apps/gateway-api/`: source in `gateway_api/`, tests in `tests/`. Ne
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T020 [P] [US2] Pure checksum tests (PESEL control sum + gender + post-2000 date; NIP incl. leading-zero & `control==10` invalid; REGON-9; REGON-14; ISO-7064 mod-97) in `apps/gateway-api/tests/detection/test_checksums.py`
-- [ ] T021 [P] [US2] PESEL recognizer tests (valid; bad-checksum kept at low score; separators; post-2000; labelled vs unlabelled) in `apps/gateway-api/tests/detection/test_pesel.py`
-- [ ] T022 [P] [US2] NIP recognizer tests (valid; leading-zero accepted; bad-checksum kept; separators) in `apps/gateway-api/tests/detection/test_nip.py`
-- [ ] T023 [P] [US2] REGON recognizer tests (9 vs 14 variant metadata; bad-checksum kept) in `apps/gateway-api/tests/detection/test_regon.py`
-- [ ] T024 [P] [US2] Bank account tests (PL-prefixed IBAN vs continuous NRB; mod-97; low confidence in non-banking context) in `apps/gateway-api/tests/detection/test_bank_account.py`
-- [ ] T025 [P] [US2] Address tests (with/without street; multi-line; `ul. Kowalskiego` stays address; postal code) in `apps/gateway-api/tests/detection/test_address.py`
+- [x] T020 [P] [US2] Pure checksum tests (PESEL control sum + gender + post-2000 date; NIP incl. leading-zero & `control==10` invalid; REGON-9; REGON-14; ISO-7064 mod-97) in `apps/gateway-api/tests/detection/test_checksums.py`
+- [x] T021 [P] [US2] PESEL recognizer tests (valid; bad-checksum kept at low score; separators; post-2000; labelled vs unlabelled) in `apps/gateway-api/tests/detection/test_pesel.py`
+- [x] T022 [P] [US2] NIP recognizer tests (valid; leading-zero accepted; bad-checksum kept; separators) in `apps/gateway-api/tests/detection/test_nip.py`
+- [x] T023 [P] [US2] REGON recognizer tests (9 vs 14 variant metadata; bad-checksum kept) in `apps/gateway-api/tests/detection/test_regon.py`
+- [x] T024 [P] [US2] Bank account tests (PL-prefixed IBAN vs continuous NRB; mod-97; low confidence in non-banking context) in `apps/gateway-api/tests/detection/test_bank_account.py`
+- [x] T025 [P] [US2] Address tests (with/without street; multi-line; `ul. Kowalskiego` stays address; postal code) in `apps/gateway-api/tests/detection/test_address.py`
 
 ### Implementation for User Story 2
 
-- [ ] T026 [P] [US2] Pure checksum/derivation functions (PESEL ctrl+gender+birth-date/century; NIP; REGON-9; REGON-14; mod-97) in `apps/gateway-api/gateway_api/detection/checksums.py` (research "checksum algorithms")
-- [ ] T027 [US2] `ChecksumPatternRecognizer` base — explicit valid/invalid **score bands** (keep invalid, do NOT drop), metadata via `recognition_metadata` — in `apps/gateway-api/gateway_api/detection/recognizers/_checksum_base.py` (depends: T005, T006, T026; research D3)
-- [ ] T028 [P] [US2] `PeselRecognizer` (11-digit regex+separators; gender/birth_date/checksum_valid/normalized metadata; context `PESEL`) in `apps/gateway-api/gateway_api/detection/recognizers/pesel.py` (depends: T027)
-- [ ] T029 [P] [US2] `NipRecognizer` in `apps/gateway-api/gateway_api/detection/recognizers/nip.py` (depends: T027)
-- [ ] T030 [P] [US2] `RegonRecognizer` (9 & 14; `variant` metadata) in `apps/gateway-api/gateway_api/detection/recognizers/regon.py` (depends: T027)
-- [ ] T031 [P] [US2] `PolishBankAccountRecognizer` (NRB/IBAN; `format`/`mod97_valid` metadata; context `nr rachunku`/`IBAN`) in `apps/gateway-api/gateway_api/detection/recognizers/bank_account.py` (depends: T027)
-- [ ] T032 [P] [US2] `PolishAddressRecognizer` (street+building/flat+`XX-XXX`+city, multi-line; street-less variant; `has_street`/`postal_code` metadata) in `apps/gateway-api/gateway_api/detection/recognizers/address.py` (depends: T006)
-- [ ] T033 [US2] Register the five custom recognizers in `build_registry()` in `apps/gateway-api/gateway_api/detection/recognizers/__init__.py` (depends: T028, T029, T030, T031, T032)
+- [x] T026 [P] [US2] Pure checksum/derivation functions (PESEL ctrl+gender+birth-date/century; NIP; REGON-9; REGON-14; mod-97) in `apps/gateway-api/gateway_api/detection/checksums.py` (research "checksum algorithms")
+- [x] T027 [US2] `ChecksumPatternRecognizer` base — explicit valid/invalid **score bands** (keep invalid, do NOT drop), metadata via `recognition_metadata` — in `apps/gateway-api/gateway_api/detection/recognizers/_checksum_base.py` (depends: T005, T006, T026; research D3)
+- [x] T028 [P] [US2] `PeselRecognizer` (11-digit regex+separators; gender/birth_date/checksum_valid/normalized metadata; context `PESEL`) in `apps/gateway-api/gateway_api/detection/recognizers/pesel.py` (depends: T027)
+- [x] T029 [P] [US2] `NipRecognizer` in `apps/gateway-api/gateway_api/detection/recognizers/nip.py` (depends: T027)
+- [x] T030 [P] [US2] `RegonRecognizer` (9 & 14; `variant` metadata) in `apps/gateway-api/gateway_api/detection/recognizers/regon.py` (depends: T027)
+- [x] T031 [P] [US2] `PolishBankAccountRecognizer` (NRB/IBAN; `format`/`mod97_valid` metadata; context `nr rachunku`/`IBAN`) in `apps/gateway-api/gateway_api/detection/recognizers/bank_account.py` (depends: T027)
+- [x] T032 [P] [US2] `PolishAddressRecognizer` (street+building/flat+`XX-XXX`+city, multi-line; street-less variant; `has_street`/`postal_code` metadata) in `apps/gateway-api/gateway_api/detection/recognizers/address.py` (depends: T006)
+- [x] T033 [US2] Register the five custom recognizers in `build_registry()` in `apps/gateway-api/gateway_api/detection/recognizers/__init__.py` (depends: T028, T029, T030, T031, T032)
 
 **Checkpoint**: All ten entity types detected; identifiers validated with metadata.
 
@@ -113,14 +113,14 @@ Backend app `apps/gateway-api/`: source in `gateway_api/`, tests in `tests/`. Ne
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T034 [P] [US3] Scoring-band tests (valid/invalid × labelled/unlabelled; clamp ≤0.99; determinism repeat-run) in `apps/gateway-api/tests/detection/test_scoring.py`
-- [ ] T035 [P] [US3] Threshold tests (per-type post-filter; paranoid `0`=all; disable `1`=none; mtime live-reload without restart) in `apps/gateway-api/tests/detection/test_thresholds.py`
+- [x] T034 [P] [US3] Scoring-band tests (valid/invalid × labelled/unlabelled; clamp ≤0.99; determinism repeat-run) in `apps/gateway-api/tests/detection/test_scoring.py`
+- [x] T035 [P] [US3] Threshold tests (per-type post-filter; paranoid `0`=all; disable `1`=none; mtime live-reload without restart) in `apps/gateway-api/tests/detection/test_thresholds.py`
 
 ### Implementation for User Story 3
 
-- [ ] T036 [US3] Wire `LemmaContextAwareEnhancer(context_similarity_factor=0.20, min_score_with_context_similarity=0.0)` into the `AnalyzerEngine`; ensure each recognizer's context words feed it in `apps/gateway-api/gateway_api/detection/engine.py` (depends: T017; research D6)
-- [ ] T037 [US3] Apply the explicit band rules + clamp uniformly to base and custom results; document the band table in module docstring — **including the actual fixed default scores Presidio assigns to EMAIL_ADDRESS and PHONE_NUMBER** so every band is explicit (FR-015/FR-016) — in `apps/gateway-api/gateway_api/detection/scoring.py` (depends: T005)
-- [ ] T038 [US3] Harden threshold post-filter: per-type + `default` fallback, `0`/`1` extremes, out-of-range clamp, missing-file fallback to shipped defaults in `apps/gateway-api/gateway_api/detection/thresholds.py` (depends: T008)
+- [x] T036 [US3] Wire `LemmaContextAwareEnhancer(context_similarity_factor=0.20, min_score_with_context_similarity=0.0)` into the `AnalyzerEngine`; ensure each recognizer's context words feed it in `apps/gateway-api/gateway_api/detection/engine.py` (depends: T017; research D6)
+- [x] T037 [US3] Apply the explicit band rules + clamp uniformly to base and custom results; document the band table in module docstring — **including the actual fixed default scores Presidio assigns to EMAIL_ADDRESS and PHONE_NUMBER** so every band is explicit (FR-015/FR-016) — in `apps/gateway-api/gateway_api/detection/scoring.py` (depends: T005)
+- [x] T038 [US3] Harden threshold post-filter: per-type + `default` fallback, `0`/`1` extremes, out-of-range clamp, missing-file fallback to shipped defaults in `apps/gateway-api/gateway_api/detection/thresholds.py` (depends: T008)
 
 **Checkpoint**: Scoring is explainable and deterministic; thresholds tune recall without restart.
 
@@ -134,12 +134,12 @@ Backend app `apps/gateway-api/`: source in `gateway_api/`, tests in `tests/`. Ne
 
 ### Tests for User Story 4 ⚠️
 
-- [ ] T039 [P] [US4] Overlap tests (NIP⊂PESEL→PESEL; REGON-9⊂REGON-14→14; city⊂address→no LOCATION; `ul. Kowalskiego` not PERSON; adjacent names kept) in `apps/gateway-api/tests/detection/test_overlap.py`
+- [x] T039 [P] [US4] Overlap tests (NIP⊂PESEL→PESEL; REGON-9⊂REGON-14→14; city⊂address→no LOCATION; `ul. Kowalskiego` not PERSON; adjacent names kept) in `apps/gateway-api/tests/detection/test_overlap.py`
 
 ### Implementation for User Story 4
 
-- [ ] T040 [US4] Deterministic overlap-resolution pass (sort by span length desc then start; drop fully-contained; merge near-duplicates — **including same-type `DATE_TIME` duplicates from the spaCy `date` label and the custom `DateRecognizer`**) in `apps/gateway-api/gateway_api/detection/engine.py` (depends: T017; research D4)
-- [ ] T041 [US4] ADDRESS-subsumes-contained-LOCATION rule within the overlap pass in `apps/gateway-api/gateway_api/detection/engine.py` (depends: T040; FR-024/FR-025)
+- [x] T040 [US4] Deterministic overlap-resolution pass (sort by span length desc then start; drop fully-contained; merge near-duplicates — **including same-type `DATE_TIME` duplicates from the spaCy `date` label and the custom `DateRecognizer`**) in `apps/gateway-api/gateway_api/detection/engine.py` (depends: T017; research D4)
+- [x] T041 [US4] ADDRESS-subsumes-contained-LOCATION rule within the overlap pass in `apps/gateway-api/gateway_api/detection/engine.py` (depends: T040; FR-024/FR-025)
 
 **Checkpoint**: Output is a single best entity per region; no contained duplicates.
 
@@ -153,15 +153,15 @@ Backend app `apps/gateway-api/`: source in `gateway_api/`, tests in `tests/`. Ne
 
 ### Tests for User Story 5 ⚠️
 
-- [ ] T042 [P] [US5] Health tests: `spacy_model` `ok` when ready / `unavailable`+`degraded` when not, `/health` still 200 in `apps/gateway-api/tests/test_health.py`
-- [ ] T043 [P] [US5] Gating tests: `/v1/detect` 503 when model not ready (FR-030); served (200) when Redis down (FR-031) in `apps/gateway-api/tests/test_detect_gating.py`
+- [x] T042 [P] [US5] Health tests: `spacy_model` `ok` when ready / `unavailable`+`degraded` when not, `/health` still 200 in `apps/gateway-api/tests/test_health.py`
+- [x] T043 [P] [US5] Gating tests: `/v1/detect` 503 when model not ready (FR-030); served (200) when Redis down (FR-031) in `apps/gateway-api/tests/test_detect_gating.py`
 
 ### Implementation for User Story 5
 
-- [ ] T044 [US5] Lifespan eager **background** model load at startup (worker thread; set ready flag on success, leave false + log on failure; never crash) in `apps/gateway-api/gateway_api/main.py` (depends: T007; research D8)
-- [ ] T045 [US5] Replace Epic 1 stub: `check_spacy_model()` → `is_model_ready()` (`ok`/`unavailable`) in `apps/gateway-api/gateway_api/health.py` (depends: T007; contracts/health-readiness.md)
-- [ ] T046 [US5] Model-readiness 503 dependency on `POST /v1/detect` (FR-030) in `apps/gateway-api/gateway_api/api/detect.py` (depends: T018, T007)
-- [ ] T047 [US5] Exempt `/v1/detect` from the Redis-availability gate (add to the `/health` exemption) in `apps/gateway-api/gateway_api/main.py` (depends: T019; FR-031)
+- [x] T044 [US5] Lifespan eager **background** model load at startup (worker thread; set ready flag on success, leave false + log on failure; never crash) in `apps/gateway-api/gateway_api/main.py` (depends: T007; research D8)
+- [x] T045 [US5] Replace Epic 1 stub: `check_spacy_model()` → `is_model_ready()` (`ok`/`unavailable`) in `apps/gateway-api/gateway_api/health.py` (depends: T007; contracts/health-readiness.md)
+- [x] T046 [US5] Model-readiness 503 dependency on `POST /v1/detect` (FR-030) in `apps/gateway-api/gateway_api/api/detect.py` (depends: T018, T007)
+- [x] T047 [US5] Exempt `/v1/detect` from the Redis-availability gate (add to the `/health` exemption) in `apps/gateway-api/gateway_api/main.py` (depends: T019; FR-031)
 
 **Checkpoint**: Readiness honestly reported; detect gated on the model, not on Redis.
 
@@ -169,10 +169,10 @@ Backend app `apps/gateway-api/`: source in `gateway_api/`, tests in `tests/`. Ne
 
 ## Phase 8: Polish & Cross-Cutting Concerns
 
-- [ ] T048 [P] Document Constitution-IX limitations (worded-date gaps; `pl_core_news_lg` rare/foreign/inflected-name weakness; intentional over-detection) in `apps/gateway-api/README.md`
-- [ ] T049 Audit all detection log statements (engine, route, lifespan) for no-PII compliance — only types/counts/scores/timings (Constitution VIII) across `gateway_api/detection/engine.py`, `gateway_api/api/detect.py`, `gateway_api/main.py`
-- [ ] T050 Run the quickstart validation scenarios V1–V6 in `specs/002-pii-detection-engine/quickstart.md` against a running backend
-- [ ] T051 [P] Lint + format: `nx run gateway-api:lint` and `nx run gateway-api:format`
+- [x] T048 [P] Document Constitution-IX limitations (worded-date gaps; `pl_core_news_lg` rare/foreign/inflected-name weakness; intentional over-detection) in `apps/gateway-api/README.md`
+- [x] T049 Audit all detection log statements (engine, route, lifespan) for no-PII compliance — only types/counts/scores/timings (Constitution VIII) across `gateway_api/detection/engine.py`, `gateway_api/api/detect.py`, `gateway_api/main.py`
+- [x] T050 Run the quickstart validation scenarios V1–V6 in `specs/002-pii-detection-engine/quickstart.md` against a running backend
+- [x] T051 [P] Lint + format: `nx run gateway-api:lint` and `nx run gateway-api:format`
 
 ---
 
