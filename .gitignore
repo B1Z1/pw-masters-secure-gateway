@@ -59,4 +59,5 @@ htmlcov/
 
 # Documents
 docs/*
+!docs/adr
 !docs/product-backlog.md
