@@ -56,7 +56,18 @@ clear as the reverse index and forward field names are a keyed HMAC (Constitutio
   any PESEL-encoded birth date; the two are not kept consistent with each other.
 - **Inflection covers common patterns only**: adjectival `-ski/-ska`, consonant-ending masculine
   (incl. fleeting-e and k/g softening), `-a`-ending feminine, and common city patterns. Rare,
-  foreign, or indeclinable names fall back to the base form. Soft-consonant stems are approximate.
+  foreign, or indeclinable names fall back to the base form. Soft-consonant and multi-word/hyphenated
+  city names (e.g. "Stalowa Wola", "Skarżysko-Kamienna") inflect approximately. Restoration is always
+  literal (the exact original surface is captured per occurrence), so reversibility holds regardless.
+- **Foreign / diacritic names** (e.g. "Müller", "Nguyen", "François"): detected and reversible, but
+  cross-case **consistency depends on spaCy lemmatisation**, which usually does not reduce a foreign
+  oblique form to its base — so the same foreign person seen in different cases may receive different
+  fakes, and an oblique foreign name is occasionally mistyped (e.g. PERSON vs LOCATION). Rare *Polish*
+  surnames (e.g. "Brzęczyszczykiewicz") work well — they follow the consonant-ending pattern.
+- **Hyphenated / double-barrelled surnames** (e.g. "Kowalczyk-Wąsowicz"): spaCy detects them
+  inconsistently (whole token in one place, split parts in another), which the whole-name coreference
+  cannot bridge; substitution of such a name can be inconsistent and may not round-trip cleanly. A
+  detection/tokenisation limitation surfaced at the Epic 2 boundary.
 - **Addresses are atomic**: a postal address is replaced and restored as one block and is never
   internally inflected; only standalone cities (LOCATION) are case-inflected.
 - **Redis restart loses the session**: durability is out of scope — a restart drops all mappings;

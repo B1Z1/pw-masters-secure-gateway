@@ -58,16 +58,37 @@ class MappingStore:
 
         cached = await self._redis.hget(hkey, fwd)
         if cached is not None:
-            fake_base = self._open(cached)
-            await self.extend_ttl(session_id)
-            return await self._render(hkey, fake_base, case)
+            fake_form = await self._render(hkey, self._open(cached), case)
+        else:
+            reused = (
+                await self._try_coreference(hkey, entity, mkey, fwd, case)
+                if is_name
+                else None
+            )
+            fake_form = (
+                reused
+                if reused is not None
+                else await self._generate_and_store(hkey, entity, mkey, fwd, case)
+            )
 
         if is_name:
-            reused = await self._try_coreference(hkey, entity, mkey, fwd, case)
-            if reused is not None:
-                return reused
-
-        return await self._generate_and_store(hkey, entity, mkey, fwd, case)
+            # Record the EXACT original surface for the form actually inserted,
+            # so restore is literal (no gender-blind re-declension). Pre-written
+            # rev entries (lemma-based) remain as a fallback for unseen forms.
+            await self._redis.hset(
+                hkey,
+                REV + fake_form,
+                self._seal(
+                    {
+                        "orig_base": entity.text,
+                        "case": entity.case,
+                        "entity_type": entity.entity_type,
+                        "exact": True,
+                    }
+                ),
+            )
+        await self.extend_ttl(session_id)
+        return fake_form
 
     async def get_original(self, session_id: str, fake_form: str) -> dict | None:
         """Return ``{orig_base, case, entity_type}`` for a fake form, or None."""
@@ -164,6 +185,8 @@ class MappingStore:
 
     def _restore_surface(self, rec: dict) -> str:
         ob = rec["orig_base"]
+        if rec.get("exact"):
+            return ob  # exact original surface captured at substitution time
         case = rec.get("case")
         if rec["entity_type"] in _NAME_TYPES and case and case != "nom":
             kind = "city" if rec["entity_type"] == "LOCATION" else "person"
@@ -213,6 +236,8 @@ class MappingStore:
             return None  # 0 → new; ≥2 ambiguous → new person (clarification Q2)
         matched = matches[0]
         fake_base = aligned_fake(mkey, matched["lemma"], matched["fake_base"])
+        if fake_base is None:
+            return None  # can't align (e.g. hyphen-split) → mint a fresh distinct fake
         forms = all_forms(fake_base, classify(fake_base, entity.metadata.get("gender")))
         await self._write_mapping(
             hkey, entity, mkey, fwd, fake_base, forms, register_coref=True

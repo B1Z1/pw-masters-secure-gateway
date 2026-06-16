@@ -20,18 +20,20 @@ def lemma_overlap(candidate_lemma: str, stored_lemma: str) -> bool:
     return cs <= ss or ss <= cs
 
 
-def aligned_fake(candidate_lemma: str, stored_lemma: str, fake_base: str) -> str:
+def aligned_fake(candidate_lemma: str, stored_lemma: str, fake_base: str) -> str | None:
     """Project a shorter mention onto the matching token(s) of the stored fake.
 
     "Kowalski" against stored ("jan kowalski" → fake "Marek Nowak") → "Nowak".
-    Falls back to the whole fake when alignment is not possible.
+    Returns ``None`` when no token aligns (e.g. a hyphen-split surname): the caller
+    must then mint a fresh DISTINCT fake rather than reuse the full name's fake,
+    which would collide and break reversibility.
     """
     stored_tokens = stored_lemma.lower().split()
     fake_tokens = fake_base.split()
     cand_tokens = candidate_lemma.lower().split()
     idxs = [stored_tokens.index(t) for t in cand_tokens if t in stored_tokens]
     picked = [fake_tokens[i] for i in idxs if i < len(fake_tokens)]
-    return " ".join(picked) if picked else fake_base
+    return " ".join(picked) if picked else None
 
 
 def bounded_levenshtein(a: str, b: str, max_dist: int = 2) -> int | None:

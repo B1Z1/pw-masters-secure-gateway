@@ -181,3 +181,14 @@ async def test_listing_includes_entity_seen_only_in_oblique_case(
     assert any(
         m["entity_type"] == "LOCATION" and m["original"] == "Kraków" for m in listed
     )
+
+
+async def test_round_trip_exact_for_female_consonant_surname(make_store, make_entity):
+    # "Anną Nowak" (instrumental; a woman's consonant surname does NOT decline)
+    # must restore to exactly "Anną Nowak" — not the gender-blind "Anną Nowakiem".
+    store = make_store(seed=3)
+    fake = await store.get_or_create(
+        "s", make_entity("PERSON", "Anną Nowak", lemma="Anna Nowak", case="ins")
+    )
+    restored = await store.restore_text("s", f"Spotkanie z {fake}.")
+    assert restored == "Spotkanie z Anną Nowak."
