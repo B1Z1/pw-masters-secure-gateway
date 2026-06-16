@@ -43,8 +43,9 @@ Levenshtein ≤ 2 over `rev:` field names (research D8). Refresh TTL. (Caller re
 matched form's case for PERSON/LOCATION.)
 
 ### `async get_all_mappings(session_id) -> list[dict]`
-One `HGETALL` + decrypt → `[{entity_type, original, fake, forms}]` for reviewer inspection (FR-011).
-Refresh TTL. (This is an in-process return value for the reviewer surface — never written to logs.)
+One `HGETALL` + decrypt → `[{entity_type, original, fake, forms}]` for reviewer inspection (FR-011),
+exposed at runtime via the `GET /v1/sessions/{id}/mappings` debug endpoint. Refresh TTL. (The pairs are
+returned to the caller but never written to logs.)
 
 ### `async delete_session(session_id) -> None`
 One `DEL session:{session_id}` — removes all mappings at once (FR-010). Idempotent.

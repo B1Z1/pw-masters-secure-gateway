@@ -86,7 +86,7 @@ small Epic-2 extensions (DTO fields, engine enrichment, checksum generation help
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-Constitution v1.0.0. This is the epic that exercises the **substitution** and **reversibility**
+Constitution v1.1.0. This is the epic that exercises the **substitution** and **reversibility**
 principles directly (Epic 2 left them N/A).
 
 | Principle | Applicability to Epic 3 | Status |
@@ -107,12 +107,11 @@ coupling ✅. New libraries (`faker`, `cryptography`, dev-only `fakeredis`) are 
 mandated stack** — no deviations. `cryptography.AESGCM` is the AES-256 mechanism; **Fernet (AES-128) is
 rejected** as it would violate "AES-256".
 
-**Spec-clarified interpretation (not a deviation)**: Constitution III says mapping data is "AES-256
-encrypted". Per spec clarification Q1, **synthetic fakes are not personal data**, so only original PII is
-encrypted; fakes are stored in clear as the reverse index and forward field names are a keyed HMAC of the
-normalized original. No real PII is ever readable without the key, so Privacy-by-Design intent holds.
-Recorded explicitly here so the gate is unambiguous; this is an interpretation of "personal data", **not**
-a `# CONSTITUTION EXCEPTION`.
+**Encryption scope (ratified in Constitution v1.1.0)**: Per spec clarification Q1, **synthetic fakes are
+not personal data**, so only original PII is AES-256-encrypted; fakes are stored in clear as the reverse
+index and forward field names are a keyed HMAC of the normalized original. No real PII is ever readable
+without the key. Principle III now states this explicitly (amended 2026-06-16, resolving analysis finding
+C1), so this is a **ratified rule** — not a `# CONSTITUTION EXCEPTION` and not a silent reinterpretation.
 
 **Gate result: PASS.** Complexity Tracking is empty. Three design points refine the user-supplied approach
 for security/correctness — keyed HMAC field names (D4), pure-Python bounded fuzzy match (D8), and the

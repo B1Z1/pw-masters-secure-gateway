@@ -66,6 +66,32 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/Error' }
 
+  /v1/sessions/{session_id}/mappings:
+    get:
+      summary: List all original↔fake mappings held for a session (reviewer/debug)
+      description: >
+        Decrypts and returns every mapping currently stored for the session, for manual
+        inspection (FR-011). Debug surface for a trusted context: the pairs are returned to the
+        caller but never written to logs (Constitution VIII). Redis-gated.
+      operationId: listSessionMappings
+      parameters:
+        - in: path
+          name: session_id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: All currently-held mappings (empty list for an unknown/expired session).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionMappings'
+        '503':
+          description: Redis unavailable (Epic 1 gate).
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
 components:
   schemas:
     PseudonymizeRequest:
@@ -124,6 +150,21 @@ components:
           type: string
           example: "Spotkanie z Janem Kowalskim w Krakowie."
         session_id: { type: string }
+
+    SessionMappings:
+      type: object
+      required: [session_id, mappings]
+      properties:
+        session_id: { type: string }
+        mappings:
+          type: array
+          items:
+            type: object
+            required: [entity_type, original, fake]
+            properties:
+              entity_type: { type: string, example: PERSON }
+              original: { type: string, example: "Jan Kowalski" }
+              fake: { type: string, example: "Marek Nowak" }
 
     Error:
       type: object
