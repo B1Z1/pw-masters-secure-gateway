@@ -71,8 +71,8 @@ text ─▶ AnalyzerEngine.analyze(pl)
 | Layer | Files | Responsibility |
 |-------|-------|----------------|
 | HTTP | `main.py`, `api/detect.py`, `health.py` | Routing, the Redis gate (with `/v1/detect` exemption), model-readiness 503, health readiness, startup model load |
-| Engine | `detection/engine.py` | Build/own the `AnalyzerEngine`; orchestrate analyze → DTO → overlap → threshold; the single `detect()` entry point |
-| NLP | `detection/nlp.py` | Singleton spaCy `NlpEngine` + NKJP→Presidio label mapping + `is_model_ready()` |
+| Engine | `pii_detection/engine.py` | Build/own the `AnalyzerEngine`; orchestrate analyze → DTO → overlap → threshold; the single `detect()` entry point |
+| NLP | `pii_detection/nlp.py` | Singleton spaCy `NlpEngine` + NKJP→Presidio label mapping + `is_model_ready()` |
 | Recognizers | `recognizers/__init__.py` + per-recognizer modules + `_checksum_base.py` | Produce candidate spans; checksum-driven scoring; context words; metadata |
 | Pure logic | `checksums.py`, `normalization.py`, `scoring.py`, `dto.py`, `thresholds.py`, `default_thresholds.yaml` | No Presidio import — checksum math, separator stripping, score bands/clamp, the output DTO, threshold loading/filtering |
 | Config | `config.py` | Optional `DETECTION_THRESHOLDS_PATH` (path only; values read live, not via cached Settings) |
@@ -305,6 +305,6 @@ spaCy/Presidio dependency to `nlp.py`, the recognizers, and `engine.py`.
 
 - Spec & design: `specs/002-pii-detection-engine/{spec,plan,research,data-model}.md`, `contracts/`
 - Constitution: `.specify/memory/constitution.md` (principles II, VI, VIII, IX especially)
-- Code: `apps/gateway-api/gateway_api/detection/`, `gateway_api/api/detect.py`
+- Code: `apps/gateway-api/gateway_api/pii_detection/`, `gateway_api/api/detect.py`
 - Presidio docs verified during design: `PatternRecognizer` scoring, `LemmaContextAwareEnhancer`,
   `NlpEngineProvider`, `ConflictResolutionStrategy` (anonymizer)
