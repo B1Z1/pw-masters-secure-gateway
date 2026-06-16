@@ -1,0 +1,19 @@
+# Dev-mode overrides — auto-merged by Compose on `docker compose up`
+# (FR-008–FR-013). True production pins the base file only:
+#   docker compose -f docker-compose.yml up
+services:
+  redis:
+    # Expose Redis on the host so a natively-running backend can reach it (FR-009).
+    ports:
+      - "6379:6379"
+
+  gateway-api:
+    # Live source mount + hot-reload; no image rebuild during development (FR-010).
+    volumes:
+      - ./apps/gateway-api/gateway_api:/app/gateway_api
+    command:
+      ["uvicorn", "gateway_api.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+
+  gateway-ui:
+    # Excluded from the default `docker compose up`; dev uses Vite HMR natively (FR-011).
+    profiles: ["production-only"]

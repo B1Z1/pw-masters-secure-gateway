@@ -1,0 +1,9 @@
+{
+  "name": "gateway-ui",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/gateway-ui/src",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project gateway-ui --web",
+  "targets": {}
+}

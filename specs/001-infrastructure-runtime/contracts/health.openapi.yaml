@@ -1,0 +1,114 @@
+openapi: 3.1.0
+info:
+  title: Gateway API — Infrastructure Surface (Epic 1)
+  version: 0.1.0
+  description: >
+    The only HTTP contract delivered in Epic 1: the health endpoint and the
+    cross-cutting Redis-availability gate applied to every non-health route.
+    Domain endpoints (/v1/anonymize, /v1/chat/completions, ...) arrive in later epics.
+servers:
+  - url: http://localhost:8000
+    description: Local backend (native dev or container)
+
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Liveness + dependency status. ALWAYS returns HTTP 200.
+      description: >
+        Reports the backend and its tracked dependencies. The HTTP status is
+        always 200 — even when overall status is "degraded" — so that
+        orchestrators/load balancers do not restart a container that is running
+        correctly but has a transient dependency failure (FR-022). This route is
+        exempt from the Redis-availability gate (FR-027).
+      responses:
+        '200':
+          description: Always returned, regardless of dependency health.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatusReport'
+              examples:
+                allHealthy:
+                  summary: All dependencies available
+                  value:
+                    status: ok
+                    dependencies:
+                      redis: ok
+                      spacy_model: ok
+                redisDown:
+                  summary: Redis unavailable → degraded (still HTTP 200)
+                  value:
+                    status: degraded
+                    dependencies:
+                      redis: unavailable
+                      spacy_model: ok
+      x-performance:
+        budget_ms: 500   # SC-002: responds in < 500ms
+        redis_ping_timeout_ms: 1000  # FR-025
+
+  /{anyNonHealthPath}:
+    description: >
+      Contract for ALL non-health routes (none implemented in Epic 1, but the
+      gate is in force for routes added later). When Redis is unavailable, the
+      Redis-availability middleware short-circuits with 503 before routing
+      (FR-027). When Redis is available, the request proceeds to its handler.
+    parameters:
+      - name: anyNonHealthPath
+        in: path
+        required: true
+        schema: { type: string }
+        description: Any path other than "/health".
+    get:
+      operationId: nonHealthGate
+      summary: Subject to the Redis-availability gate.
+      responses:
+        '503':
+          description: >
+            Returned for any non-health route while Redis is unavailable
+            (missing REDIS_URL or unreachable at runtime). The process does NOT
+            crash (FR-028).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailable'
+              example:
+                detail: "Redis unavailable"
+        '404':
+          description: No such route exists in Epic 1 (Redis available, but route undefined).
+
+components:
+  schemas:
+    HealthStatusReport:
+      type: object
+      additionalProperties: false
+      required: [status, dependencies]
+      properties:
+        status:
+          type: string
+          enum: [ok, degraded]
+          description: >
+            Aggregated overall status. "degraded" if ANY dependency is
+            "unavailable", otherwise "ok" (FR-024).
+        dependencies:
+          type: object
+          additionalProperties: false
+          required: [redis, spacy_model]
+          properties:
+            redis:
+              type: string
+              enum: [ok, unavailable]
+              description: From `await redis.ping()` bounded to 1s; any exception → "unavailable" (FR-025).
+            spacy_model:
+              type: string
+              enum: [ok, unavailable]
+              description: >
+                Epic 1 stub — always "ok" (FR-026). Epic 2 replaces the check
+                body to return real status; schema unchanged.
+    ServiceUnavailable:
+      type: object
+      required: [detail]
+      properties:
+        detail:
+          type: string
+          description: Human-readable reason (no secrets/PII — FR-030).
