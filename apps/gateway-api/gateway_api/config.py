@@ -34,7 +34,9 @@ class Settings(BaseSettings):
     redis_url: str | None = None
     redis_password: str
     redis_encryption_key: str
-    redis_session_ttl: int = 3600
+    # Epic 3 (FR-009, clarification 2026-06-16): default session TTL = 30 minutes
+    # (sliding — refreshed on every mapping-store operation).
+    redis_session_ttl: int = 1800
 
     # --- Detection thresholds (Epic 2) ---
     # Optional path to the per-type threshold YAML. The threshold *values* are

@@ -20,6 +20,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from .api.detect import router as detect_router
+from .api.pseudonymize import router as pseudonymize_router
 from .config import get_settings
 from .pii_detection import nlp as detection_nlp
 from .health import check_redis
@@ -65,6 +66,9 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="LLM Anonymization Gateway", version="0.1.0", lifespan=lifespan)
 app.include_router(health_router)
 app.include_router(detect_router)
+# Epic 3 substitution routes — NOT gate-exempt: they require Redis, so the Epic 1
+# middleware 503s them when Redis is down (unlike the stateless /v1/detect).
+app.include_router(pseudonymize_router)
 
 
 @app.middleware("http")

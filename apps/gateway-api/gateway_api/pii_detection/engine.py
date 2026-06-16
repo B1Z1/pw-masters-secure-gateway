@@ -15,7 +15,7 @@ import time
 from threading import Lock
 
 from .dto import DetectedEntity
-from .nlp import get_nlp_engine
+from .nlp import get_doc, get_nlp_engine
 from .recognizers import ALL_ENTITIES, build_registry
 from .scoring import (
     CONTEXT_MIN_SCORE,
@@ -101,6 +101,34 @@ def _subsumed_by(e: DetectedEntity, k: DetectedEntity) -> bool:
     return (k.end - k.start) >= (e.end - e.start)
 
 
+_NAME_TYPES = frozenset({"PERSON", "LOCATION"})
+
+
+def _enrich_morphology(entities: list[DetectedEntity], text: str) -> None:
+    """Fill ``lemma`` + ``case`` for kept PERSON/LOCATION entities (research D1).
+
+    Maps each name span back to spaCy tokens (lemma + ``token.morph`` Case). Other
+    types are left untouched. Failure (no model / no span) leaves the fields None —
+    substitution then falls back to the base form (documented limitation).
+    """
+    targets = [e for e in entities if e.entity_type in _NAME_TYPES]
+    if not targets:
+        return
+    try:
+        doc = get_doc(text)
+    except Exception:  # noqa: BLE001 — model unavailable → leave lemma/case None (D8)
+        return
+    if doc is None:
+        return
+    for e in targets:
+        span = doc.char_span(e.start, e.end, alignment_mode="expand")
+        if span is None or len(span) == 0:
+            continue
+        e.lemma = " ".join(t.lemma_ for t in span).strip() or None
+        case_vals = span.root.morph.get("Case")
+        e.case = case_vals[0].lower() if case_vals else None
+
+
 class DetectionEngine:
     """Wraps the Presidio analyzer; the only detection entry point (FR-006)."""
 
@@ -114,6 +142,7 @@ class DetectionEngine:
         entities = [_result_to_dto(r, text) for r in raw]
         entities = resolve_overlaps(entities)
         entities = apply_thresholds(entities)
+        _enrich_morphology(entities, text)
         entities.sort(key=lambda e: (e.start, e.end))
         duration_ms = (time.perf_counter() - start) * 1000
         # No PII: only types/counts/scores/timing (Constitution VIII).

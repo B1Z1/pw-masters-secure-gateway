@@ -80,3 +80,18 @@ def ensure_loaded() -> bool:
 def is_model_ready() -> bool:
     """O(1) readiness flag (FR-028/FR-030)."""
     return _ready
+
+
+def get_doc(text: str):
+    """Run the loaded spaCy pipeline over ``text`` and return the Doc (research D1).
+
+    Reuses the singleton NlpEngine's spaCy ``Language`` (no second model load) so
+    Epic 3 can read per-token lemma + morphological Case for PERSON/LOCATION.
+    Returns ``None`` if the pipeline is unavailable.
+    """
+    nlp = getattr(get_nlp_engine(), "nlp", None)
+    if isinstance(nlp, dict):
+        nlp = nlp.get(LANGUAGE) or (next(iter(nlp.values()), None))
+    if nlp is None:
+        return None
+    return nlp(text)

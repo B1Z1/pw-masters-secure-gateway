@@ -20,3 +20,8 @@ class DetectedEntity(BaseModel):
     score: float
     text: str
     metadata: dict = Field(default_factory=dict)
+    # Epic 3 (data-model §1): base form + grammatical case from spaCy, filled for
+    # PERSON/LOCATION only; None for every other type. Enables case-aware
+    # substitution without coupling the rest of the system to spaCy.
+    lemma: str | None = None
+    case: str | None = None

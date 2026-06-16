@@ -38,3 +38,26 @@ substituted, stored, logged, or sent to an LLM (later epics).
 - **`tldextract` network probe**: Presidio's email recognizer may attempt a one-time TLD
   public-suffix-list fetch; in an offline/egress-restricted environment it falls back to a
   bundled snapshot (non-fatal).
+
+## Substitution & reversible mapping (Epic 3)
+
+Realistic Polish fakes (`gateway_api/pseudonym_generation/`, Faker `pl_PL`) + a reversible,
+AES-256-GCM-encrypted session store (`gateway_api/pseudonym_vault/`, one Redis HASH per session,
+sliding 30-min TTL). Debug surface (no LLM): `POST /v1/pseudonymize`, `POST /v1/depseudonymize`,
+`GET /v1/sessions/{id}/mappings`. Only original PII is encrypted; synthetic fakes are stored in
+clear as the reverse index and forward field names are a keyed HMAC (Constitution v1.1.0).
+
+### Known limitations (Constitution IX — documented, not solved)
+
+- **No name ↔ PESEL gender association**: a fake person's gender is chosen at random; it is not
+  tied to a nearby PESEL's gender. (A fake PESEL *does* preserve the gender of the PESEL it
+  replaces — only the PERSON name is independent.)
+- **No cross-field date-of-birth coherence**: a fake date is shifted ±10 years independently of
+  any PESEL-encoded birth date; the two are not kept consistent with each other.
+- **Inflection covers common patterns only**: adjectival `-ski/-ska`, consonant-ending masculine
+  (incl. fleeting-e and k/g softening), `-a`-ending feminine, and common city patterns. Rare,
+  foreign, or indeclinable names fall back to the base form. Soft-consonant stems are approximate.
+- **Addresses are atomic**: a postal address is replaced and restored as one block and is never
+  internally inflected; only standalone cities (LOCATION) are case-inflected.
+- **Redis restart loses the session**: durability is out of scope — a restart drops all mappings;
+  starting a new session is the expected recovery.

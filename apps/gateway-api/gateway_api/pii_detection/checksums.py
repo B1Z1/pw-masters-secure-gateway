@@ -107,3 +107,64 @@ def nrb_is_valid(d: str) -> bool:
         return False
     rearranged = d[2:] + "2521" + d[:2]
     return int(rearranged) % 97 == 1
+
+
+# --- Generation helpers (Epic 3) --------------------------------------------
+# Reuse the weight tuples above so generation and validation share one source of
+# truth. Each returns a control digit / check digits that make the value pass the
+# corresponding ``*_is_valid`` check.
+
+
+def pesel_control_digit(d10: str) -> int:
+    """Control digit (11th) for the first 10 PESEL digits."""
+    total = sum(int(c) * w for c, w in zip(d10, PESEL_WEIGHTS, strict=False))
+    return (10 - (total % 10)) % 10
+
+
+def nip_control_digit(d9: str) -> int:
+    """NIP control digit for 9 digits. May be 10 (invalid) — caller must re-roll."""
+    return sum(int(c) * w for c, w in zip(d9, NIP_WEIGHTS, strict=False)) % 11
+
+
+def regon9_control_digit(d8: str) -> int:
+    """REGON-9 control digit for the first 8 digits."""
+    return _regon_control(d8, REGON9_WEIGHTS)
+
+
+def regon14_control_digit(d13: str) -> int:
+    """REGON-14 control digit for the first 13 digits."""
+    return _regon_control(d13, REGON14_WEIGHTS)
+
+
+def nrb_check_digits(bban24: str) -> str:
+    """Two leading NRB check digits so the 26-digit account passes mod-97."""
+    base = int(bban24 + "2521" + "00") % 97
+    return f"{(1 - base) % 97:02d}"
+
+
+def make_pesel(year: int, month: int, day: int, gender: str, rng) -> str:
+    """Build a valid PESEL encoding the given birth date + gender (research D6).
+
+    Century encoded in the month offset (post-2000 → +20, etc.). The gender digit
+    (index 9) parity: even = female, odd = male.
+    """
+    if 2000 <= year <= 2099:
+        mm = month + 20
+    elif 2100 <= year <= 2199:
+        mm = month + 40
+    elif 2200 <= year <= 2299:
+        mm = month + 60
+    elif 1800 <= year <= 1899:
+        mm = month + 80
+    else:  # 1900-1999
+        mm = month
+    d6 = f"{year % 100:02d}{mm:02d}{day:02d}"
+    serial = f"{rng.randint(0, 999):03d}"
+    g = rng.randint(0, 9)
+    if gender == "female":
+        if g % 2 == 1:
+            g = (g - 1) % 10
+    elif g % 2 == 0:
+        g = (g + 1) % 10
+    d10 = d6 + serial + str(g)
+    return d10 + str(pesel_control_digit(d10))
