@@ -56,3 +56,7 @@ htmlcov/
 
 # Nx Python plugin reports
 /reports
+
+# Documents
+docs/document_pdf.pdf
+docs/project-overview.md
