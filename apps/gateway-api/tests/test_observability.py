@@ -26,9 +26,7 @@ SECRETS = [
 
 
 async def test_no_secrets_in_logs(client, monkeypatch, caplog):
-    monkeypatch.setattr(
-        "gateway_api.health.get_redis_client", lambda: _mock_redis_ok()
-    )
+    monkeypatch.setattr("gateway_api.health.get_redis_client", lambda: _mock_redis_ok())
     with caplog.at_level(logging.DEBUG):
         # Re-emit the startup config line and exercise a request.
         import gateway_api.main as main  # noqa: F401  (import triggers startup log)
@@ -41,9 +39,7 @@ async def test_no_secrets_in_logs(client, monkeypatch, caplog):
 
 
 async def test_health_latency_under_budget(client, monkeypatch):
-    monkeypatch.setattr(
-        "gateway_api.health.get_redis_client", lambda: _mock_redis_ok()
-    )
+    monkeypatch.setattr("gateway_api.health.get_redis_client", lambda: _mock_redis_ok())
     start = time.perf_counter()
     resp = await client.get("/health")
     elapsed_ms = (time.perf_counter() - start) * 1000

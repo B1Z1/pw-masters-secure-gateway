@@ -21,8 +21,8 @@ def _mock_redis(ping_result=None, ping_error=None) -> AsyncMock:
     return client
 
 
-# 1. /health -> 200 + "ok" when Redis ping succeeds.
-async def test_health_ok_when_redis_up(client, monkeypatch):
+# 1. /health -> 200 + "ok" when Redis ping succeeds AND the model is loaded.
+async def test_health_ok_when_redis_up(client, monkeypatch, model_ready):
     monkeypatch.setattr(
         "gateway_api.health.get_redis_client", lambda: _mock_redis(ping_result=True)
     )
@@ -34,7 +34,7 @@ async def test_health_ok_when_redis_up(client, monkeypatch):
 
 
 # 2. /health -> 200 + "degraded" when Redis ping raises ConnectionError.
-async def test_health_degraded_when_redis_down(client, monkeypatch):
+async def test_health_degraded_when_redis_down(client, monkeypatch, model_ready):
     monkeypatch.setattr(
         "gateway_api.health.get_redis_client",
         lambda: _mock_redis(ping_error=RedisConnectionError("down")),
@@ -45,6 +45,21 @@ async def test_health_degraded_when_redis_down(client, monkeypatch):
     assert body["status"] == "degraded"
     assert body["dependencies"]["redis"] == "unavailable"
     assert body["dependencies"]["spacy_model"] == "ok"
+
+
+# 2b. /health -> 200 + "degraded" when the spaCy model is not loaded (Epic 2, FR-028).
+async def test_health_degraded_when_model_not_loaded(
+    client, monkeypatch, model_not_ready
+):
+    monkeypatch.setattr(
+        "gateway_api.health.get_redis_client", lambda: _mock_redis(ping_result=True)
+    )
+    resp = await client.get("/health")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["status"] == "degraded"
+    assert body["dependencies"]["redis"] == "ok"
+    assert body["dependencies"]["spacy_model"] == "unavailable"
 
 
 # 3. Any non-health route -> 503 when Redis is unavailable.

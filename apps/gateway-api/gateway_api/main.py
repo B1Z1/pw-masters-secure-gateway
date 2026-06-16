@@ -12,14 +12,22 @@ Configuration is validated at import time (fail-fast), so an invalid
 from __future__ import annotations
 
 import logging
+import threading
 import time
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
+from .api.detect import router as detect_router
 from .config import get_settings
+from .detection import nlp as detection_nlp
 from .health import check_redis
 from .health import router as health_router
+
+# Routes exempt from the Redis-availability gate. /health (FR-022) and the
+# stateless detection endpoint (/v1/detect — FR-031) never depend on Redis.
+_GATE_EXEMPT_PATHS = frozenset({"/health", "/v1/detect"})
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("gateway_api")
@@ -39,8 +47,24 @@ logger.info(
     settings.redis_session_ttl,
 )
 
-app = FastAPI(title="LLM Anonymization Gateway", version="0.1.0")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Eagerly load the spaCy model in the background at startup (research D8).
+
+    Runs in a worker thread so /health stays reachable and the event loop is not
+    blocked during the multi-second load. ``ensure_loaded`` never raises; on
+    failure the model stays unavailable (health degraded, /v1/detect 503).
+    """
+    threading.Thread(
+        target=detection_nlp.ensure_loaded, name="spacy-model-load", daemon=True
+    ).start()
+    yield
+
+
+app = FastAPI(title="LLM Anonymization Gateway", version="0.1.0", lifespan=lifespan)
 app.include_router(health_router)
+app.include_router(detect_router)
 
 
 @app.middleware("http")
@@ -53,7 +77,7 @@ async def redis_availability_gate(request: Request, call_next):
     start = time.perf_counter()
     path = request.url.path
 
-    if path == "/health":
+    if path in _GATE_EXEMPT_PATHS:
         response = await call_next(request)
     elif await check_redis() != "ok":
         response = JSONResponse(

@@ -12,6 +12,7 @@ import asyncio
 from fastapi import APIRouter
 
 from .dependencies import get_redis_client
+from .detection import nlp
 
 router = APIRouter()
 
@@ -35,14 +36,13 @@ async def check_redis() -> str:
 
 
 def check_spacy_model() -> str:
-    """SpaCy model liveness.
+    """SpaCy model readiness (Epic 2 — FR-028, contracts/health-readiness.md).
 
-    Epic 1 stub — always reports ``"ok"`` (FR-026, research D7).
-    # TODO: wire real check in Epic 2 (NER engine: load/verify pl_core_news_lg).
-    Epic 2 replaces only this function body; the endpoint, aggregation rule and
-    response schema stay unchanged.
+    Real check: ``"ok"`` once ``pl_core_news_lg`` is loaded, else ``"unavailable"``.
+    An O(1) flag read (never an inference) so the /health latency budget holds.
+    The endpoint, aggregation rule and response schema are unchanged from Epic 1.
     """
-    return "ok"
+    return "ok" if nlp.is_model_ready() else "unavailable"
 
 
 @router.get("/health")

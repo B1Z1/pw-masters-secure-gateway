@@ -1,1 +1,3 @@
-{"feature_directory":"specs/001-infrastructure-runtime"}
+{
+  "feature_directory": "specs/002-pii-detection-engine"
+}
