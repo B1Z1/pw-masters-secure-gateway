@@ -1,0 +1,153 @@
+openapi: 3.1.0
+info:
+  title: Gateway API — Detection Surface (Epic 2)
+  version: 0.2.0
+  description: >
+    The PII detection debug endpoint added in Epic 2. Accepts a Polish text
+    string and returns the detected PII entities (type, offsets, score, exact
+    matched text, metadata). Detection ONLY — no substitution, no storage, no
+    LLM. This route is EXEMPT from the Epic 1 Redis-availability gate (detection
+    is stateless — spec FR-031) and is instead gated on language-model readiness
+    (spec FR-030): it returns 503 while the model is not loaded and never returns
+    partial, model-less results.
+servers:
+  - url: http://localhost:8000
+    description: Local backend (native dev or container)
+
+paths:
+  /v1/detect:
+    post:
+      operationId: detectEntities
+      summary: Detect PII entities in a Polish text string.
+      description: >
+        Runs the DetectionEngine over the supplied text and returns the entities
+        that meet their per-type confidence threshold. No value is substituted,
+        stored, logged, or sent anywhere. Empty/whitespace input returns an empty
+        list (FR-001). Requires the spaCy model to be loaded (FR-030).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DetectRequest'
+            examples:
+              labelledPesel:
+                summary: A labelled, valid PESEL
+                value:
+                  text: "PESEL: 44051401359, kontakt: jan@example.pl"
+      responses:
+        '200':
+          description: >
+            Detection succeeded (model ready). Returns 0..n entities. HTTP 200 is
+            returned even for an empty result list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetectResponse'
+              examples:
+                mixed:
+                  summary: PESEL (valid, labelled) + email
+                  value:
+                    entities:
+                      - entity_type: PESEL
+                        start: 7
+                        end: 18
+                        score: 0.99
+                        text: "44051401359"
+                        metadata:
+                          gender: female
+                          birth_date: "1944-05-14"
+                          checksum_valid: true
+                          normalized: "44051401359"
+                      - entity_type: EMAIL_ADDRESS
+                        start: 29
+                        end: 44
+                        score: 0.8
+                        text: "jan@example.pl"
+                        metadata: {}
+                empty:
+                  summary: Empty input → empty list (FR-001)
+                  value:
+                    entities: []
+        '422':
+          description: Request body malformed (missing/!string `text`). Standard FastAPI validation error.
+        '503':
+          description: >
+            The language model is not loaded/ready (FR-030). The endpoint refuses
+            and does NOT return partial regex/checksum-only results. `/health`
+            separately reports the model as unavailable / overall "degraded".
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailable'
+              example:
+                detail: "Detection model not ready"
+      x-gating:
+        redis_gate_exempt: true   # FR-031 — detection has no Redis dependency
+        gated_on: spacy_model     # FR-030 — 503 until model ready
+
+components:
+  schemas:
+    DetectRequest:
+      type: object
+      additionalProperties: false
+      required: [text]
+      properties:
+        text:
+          type: string
+          description: The Polish text to scan. May be empty (→ empty result).
+
+    DetectResponse:
+      type: object
+      additionalProperties: false
+      required: [entities]
+      properties:
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/DetectedEntity'
+
+    DetectedEntity:
+      type: object
+      additionalProperties: false
+      required: [entity_type, start, end, score, text, metadata]
+      properties:
+        entity_type:
+          type: string
+          description: >
+            One of PERSON, LOCATION, EMAIL_ADDRESS, PHONE_NUMBER, DATE_TIME,
+            PESEL, NIP, REGON, POLISH_BANK_ACCOUNT, POLISH_ADDRESS.
+          enum: [PERSON, LOCATION, EMAIL_ADDRESS, PHONE_NUMBER, DATE_TIME,
+                 PESEL, NIP, REGON, POLISH_BANK_ACCOUNT, POLISH_ADDRESS]
+        start:
+          type: integer
+          minimum: 0
+          description: Inclusive start offset into the original input.
+        end:
+          type: integer
+          minimum: 0
+          description: Exclusive end offset into the original input (> start).
+        score:
+          type: number
+          minimum: 0.0
+          maximum: 0.99
+          description: Deterministic confidence, clamped to ≤ 0.99 (research D6).
+        text:
+          type: string
+          description: Exactly original[start:end], separators included (FR-003).
+        metadata:
+          type: object
+          description: >
+            Type-specific, emit-only. PESEL→{gender,birth_date,checksum_valid,
+            normalized}; REGON→{variant,checksum_valid,normalized};
+            NIP→{checksum_valid,normalized}; POLISH_BANK_ACCOUNT→{format,
+            mod97_valid,normalized}; POLISH_ADDRESS→{has_street,postal_code};
+            DATE_TIME→{kind}; others → {}.
+
+    ServiceUnavailable:
+      type: object
+      required: [detail]
+      properties:
+        detail:
+          type: string
+          description: Human-readable reason (no secrets/PII — Constitution VIII).

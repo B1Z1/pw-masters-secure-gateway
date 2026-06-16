@@ -9,11 +9,15 @@ Built as a master's thesis project. Use case: analysis of Polish civil law contr
 <!-- SPECKIT START -->
 Active feature: **002-pii-detection-engine** (EPIC 2 — PII Detection Engine for Polish civil-law
 contracts). For technologies, project structure, shell commands, and design decisions, read the
-current artifacts:
+current plan and its artifacts:
 
-- Spec: `specs/002-pii-detection-engine/spec.md`
+- Plan: `specs/002-pii-detection-engine/plan.md`
+- Spec: `specs/002-pii-detection-engine/spec.md` (+ Clarifications session 2026-06-16)
+- Research & decisions (Presidio/spaCy PL wiring, scoring bands, checksums, overlap): `specs/002-pii-detection-engine/research.md`
+- Data model (DetectedEntity DTO, metadata, thresholds): `specs/002-pii-detection-engine/data-model.md`
+- Contracts: `specs/002-pii-detection-engine/contracts/` (detect.openapi, recognizers, thresholds, health-readiness)
+- Quickstart / validation: `specs/002-pii-detection-engine/quickstart.md`
 - Requirements checklist: `specs/002-pii-detection-engine/checklists/requirements.md`
-- Plan: `specs/002-pii-detection-engine/plan.md` — *pending; run `/speckit-plan`*
 
 EPIC 2 adds a Polish-only PII **detection** layer on top of the EPIC 1 runtime: given a text string it
 returns detected entities (PERSON, LOCATION, EMAIL, PHONE, DATE_TIME, PESEL, NIP, REGON, bank account,
