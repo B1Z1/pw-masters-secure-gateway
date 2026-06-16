@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import os
 
-from gateway_api.detection.dto import DetectedEntity
-from gateway_api.detection.thresholds import apply_thresholds, load_thresholds
+from gateway_api.pii_detection.dto import DetectedEntity
+from gateway_api.pii_detection.thresholds import apply_thresholds, load_thresholds
 
 
 def _ent(entity_type: str, score: float) -> DetectedEntity:

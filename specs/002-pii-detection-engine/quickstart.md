@@ -24,7 +24,7 @@ run from the repo root unless noted.
 nx run gateway-api:test           # → uv run pytest tests/
 ```
 
-Expected: all `tests/detection/*` pass — checksums (PESEL/NIP/REGON/mod-97), each recognizer
+Expected: all `tests/pii_detection/*` pass — checksums (PESEL/NIP/REGON/mod-97), each recognizer
 (positive / negative / edge), scoring bands, threshold post-filter, and the engine overlap/offset tests.
 Engine/API tests that need the model skip automatically if `pl_core_news_lg` is absent.
 
@@ -74,7 +74,7 @@ not dropped.
 ### V3 — Scoring & thresholds (US3, SC-005/SC-006/SC-007)
 
 - **Deterministic**: run V2 twice → identical entities and scores (SC-005).
-- **Paranoid / disable**: edit `apps/gateway-api/gateway_api/detection/default_thresholds.yaml` (or the
+- **Paranoid / disable**: edit `apps/gateway-api/gateway_api/pii_detection/default_thresholds.yaml` (or the
   file at `DETECTION_THRESHOLDS_PATH`): set `PESEL: 0.0` → every candidate surfaces; set `PESEL: 1.0` →
   no PESEL returned (SC-006). Re-run the curl **without restarting** the server → change is live (SC-007).
 - **Context**: same identifier with vs. without a nearby label → labelled scores higher (FR-017).

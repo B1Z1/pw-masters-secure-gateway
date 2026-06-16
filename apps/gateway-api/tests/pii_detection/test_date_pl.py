@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from gateway_api.detection.recognizers.date_pl import DateRecognizer
-from gateway_api.detection.scoring import S_DATE_NUMERIC, S_DATE_WORDED
+from gateway_api.pii_detection.recognizers.date_pl import DateRecognizer
+from gateway_api.pii_detection.scoring import S_DATE_NUMERIC, S_DATE_WORDED
 
 REC = DateRecognizer()
 

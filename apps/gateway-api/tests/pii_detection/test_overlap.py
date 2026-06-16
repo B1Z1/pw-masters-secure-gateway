@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from gateway_api.detection.dto import DetectedEntity
-from gateway_api.detection.engine import resolve_overlaps
+from gateway_api.pii_detection.dto import DetectedEntity
+from gateway_api.pii_detection.engine import resolve_overlaps
 
 
 def _e(entity_type, start, end, score=0.8):

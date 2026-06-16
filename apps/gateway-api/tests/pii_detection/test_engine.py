@@ -10,7 +10,7 @@ from __future__ import annotations
 import pytest
 from presidio_analyzer import RecognizerResult
 
-from gateway_api.detection.engine import DetectionEngine
+from gateway_api.pii_detection.engine import DetectionEngine
 
 try:  # the Polish model is baked into the Docker image; optional for native dev
     import pl_core_news_lg  # noqa: F401

@@ -6,7 +6,7 @@ does not load spaCy) — guards the recognizer wiring and entity coverage.
 
 from __future__ import annotations
 
-from gateway_api.detection.recognizers import ALL_ENTITIES, build_registry
+from gateway_api.pii_detection.recognizers import ALL_ENTITIES, build_registry
 
 
 def test_registry_contains_all_recognizers():

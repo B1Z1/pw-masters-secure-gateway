@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from gateway_api.detection import scoring
+from gateway_api.pii_detection import scoring
 
 
 def test_clamp_ceiling():

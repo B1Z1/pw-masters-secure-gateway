@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from gateway_api.detection.recognizers.regon import RegonRecognizer
-from gateway_api.detection.scoring import S_INVALID, S_VALID
+from gateway_api.pii_detection.recognizers.regon import RegonRecognizer
+from gateway_api.pii_detection.scoring import S_INVALID, S_VALID
 
 REC = RegonRecognizer()
 

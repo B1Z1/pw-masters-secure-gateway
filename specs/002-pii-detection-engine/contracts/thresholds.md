@@ -7,7 +7,7 @@ env-based `Settings` (spec clarification), read **live** so changes take effect 
 
 ## File
 
-- **Shipped default**: `apps/gateway-api/gateway_api/detection/default_thresholds.yaml`.
+- **Shipped default**: `apps/gateway-api/gateway_api/pii_detection/default_thresholds.yaml`.
 - **Override**: set `DETECTION_THRESHOLDS_PATH` (new optional setting in `config.py`) to an absolute path.
 - **Reload**: `thresholds.py` caches the parsed table keyed on the file's modification time (mtime); on
   the next request after the file changes, the new values apply. No process restart, no env change.

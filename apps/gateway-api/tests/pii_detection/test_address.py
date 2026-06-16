@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from gateway_api.detection.recognizers.address import PolishAddressRecognizer
-from gateway_api.detection.scoring import S_ADDRESS_NO_STREET, S_ADDRESS_WITH_STREET
+from gateway_api.pii_detection.recognizers.address import PolishAddressRecognizer
+from gateway_api.pii_detection.scoring import S_ADDRESS_NO_STREET, S_ADDRESS_WITH_STREET
 
 REC = PolishAddressRecognizer()
 

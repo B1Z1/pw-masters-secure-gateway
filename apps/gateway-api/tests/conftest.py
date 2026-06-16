@@ -38,13 +38,13 @@ async def client() -> AsyncClient:
 @pytest.fixture
 def model_ready(monkeypatch):
     """Report the spaCy model as loaded without actually loading it."""
-    monkeypatch.setattr("gateway_api.detection.nlp.is_model_ready", lambda: True)
+    monkeypatch.setattr("gateway_api.pii_detection.nlp.is_model_ready", lambda: True)
 
 
 @pytest.fixture
 def model_not_ready(monkeypatch):
     """Report the spaCy model as not loaded."""
-    monkeypatch.setattr("gateway_api.detection.nlp.is_model_ready", lambda: False)
+    monkeypatch.setattr("gateway_api.pii_detection.nlp.is_model_ready", lambda: False)
 
 
 @pytest.fixture
@@ -61,7 +61,7 @@ def patch_analyzer(monkeypatch):
                 return list(results)
 
         monkeypatch.setattr(
-            "gateway_api.detection.engine._get_analyzer", lambda: _FakeAnalyzer()
+            "gateway_api.pii_detection.engine._get_analyzer", lambda: _FakeAnalyzer()
         )
 
     return _patch
@@ -70,7 +70,7 @@ def patch_analyzer(monkeypatch):
 @pytest.fixture
 def thresholds_file(tmp_path, monkeypatch):
     """Write a temp threshold YAML and point the loader at it (live-reload aware)."""
-    from gateway_api.detection import thresholds as thr
+    from gateway_api.pii_detection import thresholds as thr
 
     def _make(content: str):
         path = tmp_path / "thresholds.yaml"

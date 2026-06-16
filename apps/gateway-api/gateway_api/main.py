@@ -21,7 +21,7 @@ from fastapi.responses import JSONResponse
 
 from .api.detect import router as detect_router
 from .config import get_settings
-from .detection import nlp as detection_nlp
+from .pii_detection import nlp as detection_nlp
 from .health import check_redis
 from .health import router as health_router
 

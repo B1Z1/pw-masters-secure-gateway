@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from gateway_api.detection.checksums import (
+from gateway_api.pii_detection.checksums import (
     nip_is_valid,
     nrb_is_valid,
     pesel_birth_date,

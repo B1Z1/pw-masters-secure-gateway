@@ -24,7 +24,7 @@ Two integration points touch Epic 1: a thin **`POST /v1/detect`** debug endpoint
 
 **Target Platform**: Linux container (Docker Compose) and native macOS/Linux dev (uvicorn). Same as Epic 1.
 
-**Project Type**: Web-service backend within an Nx integrated monorepo; the detection layer is a self-contained Python package under `gateway_api/detection/` with one thin FastAPI route.
+**Project Type**: Web-service backend within an Nx integrated monorepo; the detection layer is a self-contained Python package under `gateway_api/pii_detection/` with one thin FastAPI route.
 
 **Performance Goals**: No detection latency/throughput SLA in this epic (spec: out of scope). Hard constraint preserved from Epic 1: `GET /health` < 500 ms — satisfied because the model-readiness check is an O(1) flag read, never an inference. Model load is heavy and happens **once** (eager background load at startup), never per request.
 
@@ -88,7 +88,7 @@ apps/gateway-api/
 │   ├── config.py                          # *add DETECTION_THRESHOLDS_PATH setting (optional, with default)*
 │   ├── health.py                          # *check_spacy_model() → real readiness flag (FR-028)*
 │   ├── dependencies.py                    # (unchanged)
-│   ├── detection/                         # ── new detection package ──
+│   ├── pii_detection/                         # ── new detection package ──
 │   │   ├── __init__.py                    # exports DetectionEngine, DetectedEntity
 │   │   ├── dto.py                         # **DetectedEntity (pydantic model)**
 │   │   ├── nlp.py                         # **spaCy NlpEngine provider + PL label mapping + lazy singleton + is_model_ready()**
@@ -114,7 +114,7 @@ apps/gateway-api/
     ├── conftest.py                        # *add detection fixtures (engine, model-ready monkeypatch, tmp threshold file)*
     ├── test_health.py                     # *extend: spacy_model real readiness ok/unavailable*
     ├── test_detect_api.py                 # **endpoint: shape, empty input, model-down 503, redis-down still serves, no-PII-in-logs**
-    └── detection/
+    └── pii_detection/
         ├── test_checksums.py              # **pure checksum/gender/date unit tests**
         ├── test_pesel.py  test_nip.py  test_regon.py
         ├── test_bank_account.py  test_address.py  test_date_pl.py
@@ -123,13 +123,13 @@ apps/gateway-api/
         └── test_engine.py                 # **DTO mapping, offsets/normalization, overlap (NIP⊂PESEL, REGON9⊂14, ADDRESS⊃LOCATION)**
 ```
 
-**Structure Decision**: Keep the detection layer as a cohesive `gateway_api/detection/` package (one module per recognizer, pure checksum logic isolated in `checksums.py` for fast model-free unit tests), with a single thin FastAPI route under `gateway_api/api/`. No shared `libs/` is introduced — the engine is internal to `gateway-api` and exposed only via `DetectionEngine.detect()` and `POST /v1/detect`. This matches Epic 1's "no shared libs yet" decision and keeps the engine independently unit-testable per the spec's quality bar.
+**Structure Decision**: Keep the detection layer as a cohesive `gateway_api/pii_detection/` package (one module per recognizer, pure checksum logic isolated in `checksums.py` for fast model-free unit tests), with a single thin FastAPI route under `gateway_api/api/`. No shared `libs/` is introduced — the engine is internal to `gateway-api` and exposed only via `DetectionEngine.detect()` and `POST /v1/detect`. This matches Epic 1's "no shared libs yet" decision and keeps the engine independently unit-testable per the spec's quality bar.
 
 ## Implementation Phases
 
 These phases drive the eventual `tasks.md` (`/speckit-tasks`). Each is independently verifiable; later phases depend on earlier ones.
 
-- **Phase 0 — Dependencies & NLP engine**: add `presidio-analyzer` + `pyyaml` to `pyproject.toml`, `uv lock`/`sync`; build `detection/nlp.py` — `NlpEngineProvider` spaCy config for `pl` with the **NKJP→Presidio label mapping** (`persName`→PERSON, `placeName`/`geogName`→LOCATION, `date`/`time`→DATE_TIME), a process-singleton model loader, and `is_model_ready()`. *Verify*: a tiny script/test loads the engine and `analyze("Jan Kowalski mieszka w Warszawie", language="pl")` yields PERSON + LOCATION.
+- **Phase 0 — Dependencies & NLP engine**: add `presidio-analyzer` + `pyyaml` to `pyproject.toml`, `uv lock`/`sync`; build `pii_detection/nlp.py` — `NlpEngineProvider` spaCy config for `pl` with the **NKJP→Presidio label mapping** (`persName`→PERSON, `placeName`/`geogName`→LOCATION, `date`/`time`→DATE_TIME), a process-singleton model loader, and `is_model_ready()`. *Verify*: a tiny script/test loads the engine and `analyze("Jan Kowalski mieszka w Warszawie", language="pl")` yields PERSON + LOCATION.
 - **Phase 1 — Checksums & normalization (pure, model-free)**: `checksums.py` (PESEL control sum + gender + birth-date/century; NIP; REGON-9; REGON-14; IBAN/NRB mod-97) and `normalization.py` (strip spaces/dashes, keep original span). *Verify*: `test_checksums.py` green — positive, bad-checksum, post-2000 PESEL, NIP leading-zero, REGON 9 vs 14.
 - **Phase 2 — DTO, scoring & thresholds**: `dto.py` (`DetectedEntity`), `scoring.py` (band constants + clamp to ≤0.99), `thresholds.py` (load `default_thresholds.yaml`, env override path, mtime live-reload, post-filter). *Verify*: `test_scoring.py`, `test_thresholds.py` — bands, paranoid=0, disable=1, reload without restart.
 - **Phase 3 — Custom recognizers**: `_checksum_base.py` (explicit-band `ChecksumPatternRecognizer`, research D3) then `pesel/nip/regon/bank_account/address/date_pl.py`, each declaring context words for the enhancer. *Verify*: per-recognizer test modules (positive/negative/edge: separators, labelled vs unlabelled, IBAN vs continuous NRB, address without street).
