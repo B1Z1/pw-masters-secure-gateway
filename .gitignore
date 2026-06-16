@@ -58,5 +58,5 @@ htmlcov/
 /reports
 
 # Documents
-docs/document_pdf.pdf
-docs/project-overview.md
+docs/*
+!docs/product-backlog.md
