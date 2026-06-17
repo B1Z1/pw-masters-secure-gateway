@@ -148,5 +148,6 @@ change. The full method→module mapping is in [data-model.md](data-model.md).
 - **Phase 1 — [contracts/preserved-interfaces.md](contracts/preserved-interfaces.md)**: the frozen
   public API + Redis/encryption wire formats that the refactor must not change.
 - **Phase 1 — [quickstart.md](quickstart.md)**: how to validate the refactor (ruff, full pytest,
-  leftover-abbreviation grep, `/memory` rule-load check, end-to-end round-trip).
+  leftover-abbreviation grep, `/memory` rule-load check, end-to-end round-trip, and a final full-stack
+  startup smoke test via `/debug-services` — FR-011/SC-008).
 - **Phase 1 — agent context**: CLAUDE.md SPECKIT section updated to point at this plan.

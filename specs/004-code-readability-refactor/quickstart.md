@@ -109,8 +109,27 @@ with Polish text containing PII, then `POST /v1/depseudonymize` with the returne
 **Expected**: the restored text equals the original (case-aware for PERSON/LOCATION) — identical to
 pre-refactor behavior. Confirms the facade orchestration is wired correctly across the new modules.
 
+## 8. All services start cleanly (full-stack smoke test) — final gate
+
+Confirm the refactor didn't break startup of any service. **Preferred**: run the `/debug-services`
+skill — it knows this project's exact commands for the three services (Redis, gateway-api,
+gateway-ui) and the `/health` checks. Representative manual equivalent (from repo root):
+
+```bash
+docker compose up -d --build            # see /debug-services for authoritative commands
+docker compose ps                        # every service Up / healthy
+curl -fsS http://localhost:8000/health   # aggregate health: expect healthy, not degraded
+```
+
+**Expected**: all services start without errors and aggregate `/health` reports healthy (no degraded
+status, no unavailable service) — SC-008 / FR-011. Any startup failure or degraded status is a
+refactor regression; invoke `/debug-services` to diagnose.
+
+> Note: image builds in this environment require the Netskope CA — pass
+> `CA_CERT_FILE=~/.certs/netskope-ca.pem` to the build.
+
 ---
 
 **Done when**: steps 1–3 pass (behavior + structure), step 4 is clean (readability), steps 5–6 are
-reviewed (self-documentation + rule), and step 7 round-trips (end-to-end). Detailed task breakdown:
-run `/speckit-tasks`.
+reviewed (self-documentation + rule), step 7 round-trips (end-to-end), and step 8 confirms all
+services start healthy. Detailed task breakdown: run `/speckit-tasks`.

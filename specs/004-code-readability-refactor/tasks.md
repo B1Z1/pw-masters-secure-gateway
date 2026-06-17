@@ -127,11 +127,12 @@ baseline. Constructor `MappingStore(redis, encryptor, key_bytes, ttl, generator)
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-**Purpose**: Final readability sweep and end-to-end confirmation.
+**Purpose**: Final readability sweep, end-to-end confirmation, and full-stack startup verification.
 
 - [ ] T025 [P] Remove comments that merely restate WHAT the code does; keep WHY/rationale comments (research refs, constitution notes) across all refactored modules (SC-005).
 - [ ] T026 [P] End-to-end round-trip per quickstart §7 (requires Redis + `REDIS_ENCRYPTION_KEY`): `POST /v1/pseudonymize` then `POST /v1/depseudonymize` on a Polish-PII example from `specs/003-fake-data-generator/quickstart.md`; restored text equals original.
 - [ ] T027 Final full verification against [contracts/preserved-interfaces.md](contracts/preserved-interfaces.md): `uv run ruff check` + `ruff format --check` + full `uv run pytest tests/` (baseline match); confirm routes, `MappingStore`/`Encryptor` signatures, Redis field layout, and AES-GCM envelope unchanged. Also sanity-check SC-007: a reader can locate a given vault concern (e.g. "where are originals restored?" → `original_restoration.py`) from file names alone in under a minute.
+- [ ] T028 Full-stack startup smoke test (final gate — FR-011/SC-008) per quickstart §8: bring up all services and confirm a clean, healthy boot using the `/debug-services` skill (authoritative for this project's commands) — Redis + gateway-api + gateway-ui all Up/healthy and aggregate `/health` reports healthy (not degraded). Treat any startup failure or degraded status as a refactor regression.
 
 ---
 
@@ -204,4 +205,4 @@ US1 (role-named files) → US2 (self-documenting identifiers + auto-loaded agent
 - Constitution III/VIII are guarded throughout by `test_encrypted_at_rest_no_pii_in_names_or_values`
   and the unchanged Redis/encryption formats — re-run it after US3.
 - Commit after each task or logical group; keep `MappingStore`/`Encryptor` class names fixed.
-- Total: 27 tasks (Setup 1, Foundational 1, US1 7, US2 8, US3 7, Polish 3).
+- Total: 28 tasks (Setup 1, Foundational 1, US1 7, US2 8, US3 7, Polish 4).

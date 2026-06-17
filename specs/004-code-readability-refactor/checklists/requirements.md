@@ -39,3 +39,6 @@
 - The spec deliberately mentions concrete file/symbol names from the existing codebase as *evidence
   of the readability problem*, not as implementation direction; this is acceptable for a refactor
   spec whose subject is the existing code.
+- Amendment 2026-06-17: added FR-011 / SC-008 (final full-stack startup smoke test — all services
+  healthy on a clean boot, validated via `/debug-services`), plus a "startup regression" edge case
+  and assumption. No new `[NEEDS CLARIFICATION]` markers; all checklist items still pass.

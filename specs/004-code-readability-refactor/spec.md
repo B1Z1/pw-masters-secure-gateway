@@ -119,6 +119,9 @@ plus all tests behave exactly as before.
 - **Idiomatic exceptions**: Where an abbreviation is a widely-accepted idiom (e.g. a short loop
   index, well-known acronyms like PII/NIP/PESEL/HMAC/TTL), it is retained intentionally rather than
   expanded into something less clear.
+- **Startup regression**: If, after the refactor, any service fails to start or the running stack
+  reports a degraded/unhealthy status, that is a refactor regression and MUST block completion —
+  caught by the final full-stack startup smoke test.
 
 ## Requirements *(mandatory)*
 
@@ -158,6 +161,9 @@ plus all tests behave exactly as before.
   codebase** (all packages: `pseudonym_vault/`, `pii_detection/`, `pseudonym_generation/`, `api/`,
   and the top-level modules), not only the `pseudonym_vault` package where the example problems were
   first noticed.
+- **FR-011**: After the refactor, all application services MUST start successfully on a clean boot and
+  the system MUST report a healthy aggregate status — no startup errors, no service stuck
+  unavailable, and no degraded health gate — confirming the refactor introduced no startup regression.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -189,6 +195,9 @@ plus all tests behave exactly as before.
   snippet, independently of the author, produces naming consistent with the refactored code.
 - **SC-007**: A new reader can locate the code responsible for a given vault concern (e.g.
   "where are originals restored?") in under one minute using file names alone.
+- **SC-008**: On a clean start of the full application stack, 100% of services reach a healthy state
+  and the system's aggregate health check reports healthy (not degraded), with no service failing to
+  start — verified as the final acceptance step.
 
 ## Assumptions
 
@@ -204,5 +213,9 @@ plus all tests behave exactly as before.
   review, not by an automated linter, unless added as a later follow-up. It lives in `.claude/rules/`
   because Claude Code auto-loads every `.md` there into context at session start (confirmed against
   the official Claude Code memory docs), with optional `paths` frontmatter for file-scoped loading.
+- Final acceptance includes a full-stack startup smoke test — all services (Redis, backend API,
+  frontend UI) healthy on a clean boot — validated via the project's service-debugging workflow
+  (the `/debug-services` skill; see plan and quickstart). The requirement itself (FR-011) is
+  tool-agnostic.
 - The refactor scope is the entire `gateway_api` backend (all packages); the `gateway-ui` frontend is
   out of scope for this feature.
