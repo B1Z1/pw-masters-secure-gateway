@@ -480,17 +480,34 @@ Kowalskim" itd. Wszystkie formy muszą mapować się na ten sam fake w odpowiedn
 
 ---
 
-## EPIC 4 — Pipeline pseudonimizacji i de-pseudonimizacji
+## EPIC 4 — Pipeline anonimizacji i pierwszy round-trip end-to-end z LLM (pionowy plaster)
 
-Główny orchestrator systemu. Łączy NER, fake generator i mapping store w jeden flow.
+Główny orchestrator systemu. Łączy NER (Epic 2), fake generator i mapping store (Epic 3) w jeden flow i **po raz
+pierwszy domyka pełny round-trip z realnym LLM**: inbound (pseudonimizacja) → LLM → outbound (de-pseudonimizacja).
+
+> **Uwaga o zakresie (decyzja: ścieżka B).** Logika podmiany inbound/outbound oraz reużywalny store powstały już w
+> Epic 3 (`specs/003-fake-data-generator` — endpointy debugowe `/v1/pseudonymize` i `/v1/depseudonymize`, bez LLM).
+> Epic 4 **nie pisze tego od zera** — wyciąga orkiestrację z handlerów debugowych do reużywalnej klasy
+> `AnonymizationPipeline`, dodaje **fuzzy matching na outbound** (którego realna ścieżka restore jeszcze nie używa) i
+> wpina **jeden** adapter LLM (Ollama), aby udowodnić działający pipeline end-to-end. Pełny zestaw providerów + router
+> (Epic 5) oraz pełna powierzchnia API, middleware i zarządzanie sesjami (Epic 6) pozostają osobno. Świadomie
+> rezygnujemy ze streamingu/SSE.
 
 ---
 
-### F-15 · Pipeline inbound (pseudonimizacja zapytania)
+### F-15 · Pipeline inbound (pseudonimizacja zapytania + re-pseudonimizacja historii)
 
 **Opis:**
-Klasa `AnonymizationPipeline` przetwarza wiadomość użytkownika przed wysłaniem do LLM. Wykrywa PII, zastępuje fake
-danymi, zachowuje mapowanie w Redis.
+Klasa `AnonymizationPipeline` przetwarza wiadomości użytkownika przed wysłaniem do LLM. Wykrywa PII, zastępuje fake
+danymi, zachowuje mapowanie w Redis. Logika podmiany istnieje już w Epic 3 (inline w `/v1/pseudonymize`) — Epic 4
+**ekstrahuje ją do klasy** orchestratora, tak by pipeline z LLM (i przyszły Epic 6) mógł ją wołać programowo.
+
+**Re-pseudonimizacja historii (multi-turn):**
+W trybie chatowym do LLM wysyłana jest cała tablica `messages`. Wiadomości asystenta z poprzednich tur są w UI już
+zde-pseudonimizowane (zawierają oryginały), więc pipeline **pseudonimizuje każdą wiadomość w `messages` co turę**, a
+nie tylko ostatnią. Granica zaufania: hop klient→gateway jest zaufany, ochronie podlega wyłącznie hop gateway→LLM —
+oryginały nigdy nie docierają do LLM. Dzięki spójności mapowania w sesji re-przetwarzanie jest deterministyczne i tanie
+(te same oryginały → te same fake z cache).
 
 **Flow:**
 
@@ -544,25 +561,36 @@ danymi, zachowuje mapowanie w Redis.
 - Nakładające się encje po sortowaniu — Presidio filtruje overlaps przed zwrotem wyników; pipeline zakłada brak nakładań
 - Pusta lista encji — tekst przechodzi bez zmian, sesja tworzona ale pusta
 - Tekst tylko w języku angielskim — NER nadal działa (Presidio jest multilingual), ale skuteczność niższa
+- Pusta tablica `messages` lub wiadomość z pustą treścią — passthrough bez błędu (spójne z F-23/Epic 6)
+- Re-pseudonimizacja idempotentna: ponowne przetworzenie tej samej historii zwraca te same fake (spójność z Epic 3)
 
 ---
 
-### F-16 · Pipeline outbound (de-pseudonimizacja odpowiedzi)
+### F-16 · Pipeline outbound (de-pseudonimizacja odpowiedzi) + fuzzy matching
 
 **Opis:**
-Po otrzymaniu odpowiedzi od LLM — podmień fake dane z powrotem na oryginalne. Lookup odbywa się przez Redis (rev
-mapping) oraz słownik form fleksyjnych.
+Po otrzymaniu odpowiedzi od LLM — podmień fake dane z powrotem na oryginalne. Ścieżka exact + odmiana istnieje już w
+Epic 3 (`MappingStore.restore_text`: longest-first, word-boundary, case-aware przez tablicę form). Epic 4 dodaje
+**brakujący fallback fuzzy** dla przypadku, gdy realny LLM odmieni fake w formie, której nie przewidziała tablica form.
+Klocek `bounded_levenshtein` istnieje w Epic 3, ale jest podpięty tylko do `get_original` (wołanego wyłącznie w
+testach) — Epic 4 **wpina fuzzy do realnej ścieżki restore tekstu**.
 
 **Flow:**
 
 ```
 1. INPUT: tekst odpowiedzi LLM (zawiera fake dane)
 2. Pobierz wszystkie mapowania dla session_id: List[(fake, original)]
-3. Dla każdego mapowania (sortowane od najdłuższego fake do najkrótszego — unika partial replace):
-   a. Exact match: replace all occurrences of fake → original
-   b. Fuzzy match (jeśli exact nie trafił): Levenshtein distance ≤ 2
-      — obsługuje przypadek gdy LLM lekko odmienił fake imię
-4. OUTPUT: tekst z przywróconymi oryginalnymi danymi
+3. Exact: dla każdego mapowania (sortowane od najdłuższego fake — unika partial replace)
+   exact + word-boundary replace fake → original (z odmianą oryginału do formy fake; Epic 3)
+4. Fuzzy (fallback, tylko na tokenach których exact NIE ruszył; nigdy nie dotyka już przywróconego fragmentu):
+   - tylko encje PERSON i LOCATION; strukturalne ID (PESEL/NIP/REGON/konto), e-mail, telefon — EXACT-ONLY (twardo)
+   - token-level, word-boundary; min. długość tokenu ≥ 4
+   - kotwica-prefiks: wymagany wspólny prefiks (≈ ≥ 60% długości krótszego tokenu) PRZED akceptacją matcha
+     — wykorzystuje fakt, że polska fleksja zmienia końcówkę, nie rdzeń
+   - bounded Levenshtein (≤ 2, próg zależny od długości) jako ostateczny filtr dystansu
+   - deterministyczny best-match; przy nierozstrzygalnym remisie — pomiń (nie zgaduj)
+   - po trafieniu fuzzy oryginał przywracany w FORMIE BAZOWEJ (mianownik) — udokumentowane ograniczenie
+5. OUTPUT: tekst z przywróconymi oryginalnymi danymi
 ```
 
 **Input:**
@@ -579,65 +607,63 @@ mapping) oraz słownik form fleksyjnych.
 
 **Edge cases:**
 
-- LLM zmienił formę gramatyczną fake imienia w sposób nieprzewidziany — fuzzy matching wyłapuje jeśli różnica ≤ 2 znaki
+- LLM zmienił formę gramatyczną fake imienia w sposób nieprzewidziany — fuzzy (kotwica-prefiks + Levenshtein ≤ 2)
+  wyłapuje, oryginał wraca w formie bazowej
 - Fake wartość pojawia się jako część innego słowa (np. fake miasto "Radom" w słowie "radomski") — replace używa word
   boundary (`\b`) dla tokenów alfanumerycznych
 - Wiele różnych fake wartości które są podobne do siebie — sortowanie od najdłuższej zapobiega partial replace (
   najpierw "Wiśniewski Jan", potem "Wiśniewski", potem "Jan")
 - LLM nie użył fake danych w odpowiedzi (np. odpowiedź ogólna bez nazw) — de-pseudonimizacja nie zmienia nic, zwraca
   tekst bez zmian
+- **LLM "wymyśla" nowe PII** (zahalucynowane nazwisko, którego nie było w inpucie → brak mapowania) — zostaje nietknięte;
+  ryzyko, że przypadkiem trafi w fuzzy, tnie kotwica-prefiks. Akceptowane ograniczenie, nie próbujemy go rozwiązywać.
+- **Strukturalne ID nigdy nie idą przez fuzzy** — edycja o 1 znak na PESEL/NIP/koncie daje inny, poprawnie wyglądający
+  numer; te typy są wyłącznie exact-match
+- Fuzzy false-positive (legalne słowo ≤ 2 edycje od fake) — minimalizowany przez kotwicę-prefiks, min. długość i zakres
+  tylko PERSON/LOCATION; świadomy trade-off recall↔precision opisany w pracy
 
 ---
 
-### F-17 · Tryb standalone (anonimizacja bez LLM)
+> **Uwaga:** dawny F-17 (`POST /v1/anonymize`, anonimizacja bez LLM) został **usunięty jako redundantny** — dokładnie
+> to robi już `POST /v1/pseudonymize` z Epic 3 (różnił się tylko kształtem response). Standalone debug bez LLM
+> realizujemy istniejącym `/v1/pseudonymize`. Zamiast tego Epic 4 dostarcza minimalny round-trip Z LLM (F-17 poniżej).
+
+### F-17 · Port `LLMProvider` + adapter Ollama + minimalny `/v1/chat/completions` (round-trip z LLM)
 
 **Opis:**
-Endpoint `POST /v1/anonymize` uruchamia tylko pipeline inbound bez wysyłania do LLM. Użyteczny do testowania silnika, do
-ręcznej weryfikacji co system wykrywa oraz jako niezależne API do anonimizacji tekstu.
+Najmniejszy działający plaster end-to-end z realnym LLM. Trzy elementy:
 
-**Request:**
+1. **Port `LLMProvider`** — abstrakcyjny interfejs (`async def complete(messages) -> str`, `async def health_check()`).
+   Definiowany tu, bo pipeline go potrzebuje; pełna abstrakcja i opis edge case'ów providerów = Epic 5 (F-18).
+2. **Adapter Ollama** — jedyny konkretny adapter w tym epicu (lokalny LLM, REST `POST {OLLAMA_BASE_URL}/api/chat`, bez
+   zewnętrznego SDK). Wybrany dla reprodukowalności: zero kosztów i kluczy API, działa offline → demo na obronie nie
+   zależy od sieci. Pełny zestaw (OpenAI, Anthropic) + router = Epic 5.
+3. **Echo/stub provider** — deterministyczny provider bez sieci (np. zwraca pseudonimizowany input), do szybkich i
+   powtarzalnych testów round-trip pipeline'u bez odpalania Ollama.
 
-```json
-{
-  "text": "Jan Kowalski, PESEL 90010112345",
-  "session_id": "optional-abc-123",
-  "language": "pl"
-}
+**Endpoint `POST /v1/chat/completions` (happy-path):**
+Przyjmuje `messages` (format zgodny z OpenAI) + opcjonalny `session_id`. Flow: pipeline inbound (pseudonimizuje całą
+historię, F-15) → `LLMProvider.complete()` → pipeline outbound (de-pseudonimizuje odpowiedź, F-16). Zwraca odpowiedź
+asystenta + `session_id`. Pełna powierzchnia (`anonymization_meta`, `finish_reason`, pełna walidacja) = Epic 6 (F-23).
+
+**Flow:**
+
 ```
-
-**Response:**
-
-```json
-{
-  "original_text": "Jan Kowalski, PESEL 90010112345",
-  "anonymized_text": "Piotr Wiśniewski, PESEL 85030567890",
-  "session_id": "abc-123",
-  "entities": [
-    {
-      "type": "PERSON",
-      "original": "Jan Kowalski",
-      "replacement": "Piotr Wiśniewski",
-      "start": 0,
-      "end": 12,
-      "score": 0.85
-    },
-    {
-      "type": "PESEL",
-      "original": "90010112345",
-      "replacement": "85030567890",
-      "start": 21,
-      "end": 32,
-      "score": 0.99
-    }
-  ]
-}
+1. INPUT: { messages: [...], session_id? }
+2. inbound: AnonymizationPipeline pseudonimizuje treść każdej wiadomości (F-15)
+3. LLM: LLMProvider.complete(pseudonymized_messages) → odpowiedź z fake danymi
+4. outbound: AnonymizationPipeline de-pseudonimizuje odpowiedź (F-16, exact + fuzzy)
+5. OUTPUT: { choices: [...], session_id }
 ```
 
 **Edge cases:**
 
-- Brak `session_id` w request — system generuje nowy UUID i zwraca go w response
-- Ten sam `session_id` co istniejąca sesja chatowa — mapowania są współdzielone (intencjonalne)
-- Pusty tekst — zwraca `{"anonymized_text": "", "entities": []}` bez błędu
+- Brak `session_id` — generowany UUID, zwracany w response
+- Pusta `messages` lub ostatnia wiadomość bez `role: user` — błąd 400
+- Ollama niedostępna (`health_check` False) / model niepobrany — 503 z czytelnym komunikatem, `session_id` zachowany
+- Timeout LLM (`OLLAMA_TIMEOUT`) — 504, `session_id` zachowany (można ponowić); mapowania w Redis już zapisane
+- Żadne oryginalne PII nie trafia do logów ani do requestu wychodzącego do LLM (Constitution VIII)
+- Streaming/SSE — świadomie poza zakresem (dalsze kierunki rozwoju)
 
 ---
 
@@ -645,6 +671,10 @@ ręcznej weryfikacji co system wykrywa oraz jako niezależne API do anonimizacji
 
 Warstwa abstrakcji pozwalająca na komunikację z różnymi dostawcami LLM przez jeden interfejs. System nie wie nic o
 konkretnym dostawcy — router wybiera adapter na podstawie konfiguracji.
+
+> **Relacja do Epic 4:** port `LLMProvider` i pierwszy adapter (Ollama) powstają już w Epic 4 jako część pionowego
+> plastra. Epic 5 **generalizuje**: formalizuje abstrakcję (F-18), dokłada adaptery OpenAI (F-19) i Anthropic (F-20),
+> domyka edge case'y Ollama (F-21) i wprowadza router wyboru po `model` (F-22).
 
 ---
 
@@ -757,6 +787,10 @@ Klasa `LLMRouter` wybiera odpowiedni adapter na podstawie parametru `model` w re
 ## EPIC 6 — API Gateway (FastAPI)
 
 Warstwa HTTP łącząca frontend z pipeline'em. Kompatybilna z formatem OpenAI API tam gdzie to ma sens.
+
+> **Relacja do Epic 4:** minimalny happy-path `/v1/chat/completions` powstaje już w Epic 4 (F-17) jako dowód round-tripu.
+> Epic 6 **hartuje** tę powierzchnię: pełny kontrakt response (`anonymization_meta`, `finish_reason`), pełna walidacja
+> (F-23), middleware logów i metryk (F-24) oraz zarządzanie sesjami (F-25).
 
 ---
 
