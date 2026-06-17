@@ -7,33 +7,30 @@ the original values in the response.
 Built as a master's thesis project. Use case: analysis of Polish civil law contracts.
 
 <!-- SPECKIT START -->
-Active feature: **003-fake-data-generator** (EPIC 3 — Realistic fake-data generator and reversible
-session mapping store for Polish civil-law contracts). For technologies, project structure, shell
-commands, and design decisions, read the current plan and its artifacts:
+Active feature: **004-code-readability-refactor** — a behavior-preserving readability refactor of the
+`apps/gateway-api` backend: role-revealing file names in `gateway_api/pseudonym_vault/` (e.g.
+`store.py`→`mapping_store.py`, `encryption.py`→`aes_gcm_encryption.py`), full intention-revealing
+identifiers across `gateway_api`, decomposition of the oversized `store.py`/`MappingStore` into a
+thin facade + focused collaborators (encrypted-JSON codec, Redis session repository, coreference
+resolver, unique-fake factory, original-surface restorer), and an auto-loaded agent naming rule at
+`.claude/rules/python-naming-conventions.md`. No behavior/API/wire-format change — the existing test
+suite plus the Redis field layout and AES-256-GCM envelope are the regression contract. For design
+and decisions, read the plan and its artifacts:
 
-- Plan: `specs/003-fake-data-generator/plan.md`
-- Spec: `specs/003-fake-data-generator/spec.md` (+ Clarifications session 2026-06-16)
-- Research & decisions (lemma/Case via spaCy, suffix-table inflection, AES-256-GCM, HMAC field names, hash-per-session store, coreference, fuzzy restore, collisions): `specs/003-fake-data-generator/research.md`
-- Data model (FakeValue, Session/meta, Mapping hash layout, DetectedEntity lemma/case delta, encryption envelope): `specs/003-fake-data-generator/data-model.md`
-- Contracts: `specs/003-fake-data-generator/contracts/` (pseudonymize.openapi, mapping-store, generators, inflection, encryption)
-- Quickstart / validation: `specs/003-fake-data-generator/quickstart.md`
-- Requirements checklist: `specs/003-fake-data-generator/checklists/requirements.md`
+- Plan: `specs/004-code-readability-refactor/plan.md`
+- Spec: `specs/004-code-readability-refactor/spec.md` (+ Clarifications session 2026-06-17: rule lives in `.claude/rules/`; refactor scope = whole `gateway_api`)
+- Research (vault file renames, by-domain decomposition of store.py, rule location/enforcement): `specs/004-code-readability-refactor/research.md`
+- Data model (module responsibility model, store.py method-migration map, identifier rename catalog): `specs/004-code-readability-refactor/data-model.md`
+- Contract (frozen public API + Redis/encryption wire formats): `specs/004-code-readability-refactor/contracts/preserved-interfaces.md`
+- Quickstart / validation: `specs/004-code-readability-refactor/quickstart.md`
+- Requirements checklist: `specs/004-code-readability-refactor/checklists/requirements.md`
 
-EPIC 3 adds the **substitution + reversible-mapping** layer between Epic 2 detection and the Epic 4 LLM
-proxy. Three new packages: `gateway_api/pseudonym_generation/` (Faker `pl_PL` builders → checksum-valid PESEL/NIP/
-REGON/bank, valid phone, ±10y dates, gender-consistent names; pure suffix-table Polish inflection for
-PERSON/LOCATION), `gateway_api/pseudonym_vault/` (one AES-256-GCM-encrypted Redis HASH per session, sliding 30-min
-TTL, explicit clear, reviewer listing; originals encrypted, fakes clear as the reverse index, forward
-field names a keyed HMAC), and two debug routes `POST /v1/pseudonymize` + `/v1/depseudonymize` (reuse
-DetectionEngine, NO LLM). Epic 2's `DetectedEntity` gains `lemma`/`case` (from spaCy) for case-aware
-substitution. Same original → same fake within a session; ambiguous surname-only → new person; these
-routes REQUIRE Redis (Epic 1 gate applies). Previous detection epic (EPIC 2) remains in force:
-`specs/002-pii-detection-engine/`.
+Prior epics remain in force and are the code under review: EPIC 3 substitution + reversible mapping
+(`specs/003-fake-data-generator/` — Faker `pl_PL` builders, AES-256-GCM-encrypted Redis HASH per
+session, debug routes `POST /v1/pseudonymize` + `/v1/depseudonymize`, NO LLM), EPIC 2 detection
+(`specs/002-pii-detection-engine/`), EPIC 1 infrastructure (`specs/001-infrastructure-runtime/`).
 
-Foundational infrastructure (EPIC 1, still in force):
-
-- Plan: `specs/001-infrastructure-runtime/plan.md` (also: spec, research, data-model, contracts, quickstart)
-- Stack: Nx integrated monorepo; backend `apps/gateway-api` (Python 3.12, FastAPI, `pydantic-settings`,
-  async redis, uv); frontend `apps/gateway-ui` (React 18 + TypeScript + Vite, nginx in prod); Redis 7;
-  Docker Compose (network `pw-masters-secure-gateway`).
+Stack: Nx integrated monorepo; backend `apps/gateway-api` (Python 3.12, FastAPI, `pydantic-settings`,
+async redis, uv); frontend `apps/gateway-ui` (React 18 + TypeScript + Vite, nginx in prod); Redis 7;
+Docker Compose (network `pw-masters-secure-gateway`).
 <!-- SPECKIT END -->
