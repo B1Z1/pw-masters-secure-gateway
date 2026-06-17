@@ -1,0 +1,509 @@
+{
+  "info": {
+    "_postman_id": "86f4d23d-6fa8-413e-acb0-2c79591652e6",
+    "name": "PW Masters — Secure Gateway API",
+    "description": "All gateway-api endpoints.\n\n**Base URL** is the collection variable `baseUrl` (default `http://localhost:8000`). Edit it under the collection's Variables tab if your stack runs elsewhere.\n\n**Suggested order** (the scripts chain state automatically):\n1. `GET /health` — confirm `status: ok` and `spacy_model: ok`.\n2. `POST /v1/detect` — see what PII the engine finds (no substitution).\n3. `POST /v1/pseudonymize (new session)` — substitutes PII; its test script stores `session_id` → `{{sessionId}}` and `pseudonymized_text` → `{{pseudonymizedText}}`.\n4. `POST /v1/pseudonymize (same session — extra turn)` — reuses `{{sessionId}}`; shows cross-turn consistency + inflection.\n5. `POST /v1/depseudonymize` — restores the originals from `{{pseudonymizedText}}` + `{{sessionId}}`.\n6. `GET /v1/sessions/{id}/mappings` — reviewer listing of all original↔fake pairs for `{{sessionId}}`.\n\nNotes: `/v1/pseudonymize`, `/v1/depseudonymize` and the listing route REQUIRE Redis (they 503 if Redis is down); `/v1/detect` and `/health` do not.\n7. `POST /v1/chat/completions` (Epic 4) — the full vertical slice: pseudonymize every message → real LLM (Ollama) → de-pseudonymize the answer. Captures `chatSessionId`. REQUIRES Redis + the spaCy model + a reachable Ollama model (see `dev/ollama/`). The chat round-trip also requires Redis (it 503s if Redis is down).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "9129903"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /health",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('has status + dependencies', () => {",
+                  "  pm.expect(j).to.have.property('status');",
+                  "  pm.expect(j).to.have.property('dependencies');",
+                  "});",
+                  "console.log('health:', JSON.stringify(j));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Liveness + per-dependency status (redis, spacy_model). Always HTTP 200; `status` is `degraded` if any dependency is unavailable."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Detection (Epic 2)",
+      "item": [
+        {
+          "name": "POST /v1/detect",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK (model loaded)', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('returns entities array', () => pm.expect(j.entities).to.be.an('array'));",
+                  "console.log('detected', (j.entities||[]).map(e => e.entity_type + '@' + e.start + '-' + e.end));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Jan Kowalski, e-mail jan.kowalski@example.pl, tel. +48 601 234 567, PESEL 90010112345, NIP 123-456-32-18, konto PL61109010140000071219812874, mieszka w Krakowie, dnia 12 stycznia 2024 r.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/detect",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "detect"
+              ]
+            },
+            "description": "Detection only — returns entities (type, start/end, score, text, metadata). No substitution, no storage, no LLM. Returns 503 if the spaCy model is not loaded. Exempt from the Redis gate."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pseudonymization (Epic 3)",
+      "item": [
+        {
+          "name": "POST /v1/pseudonymize (new session)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.collectionVariables.set('sessionId', j.session_id);",
+                  "pm.collectionVariables.set('pseudonymizedText', j.pseudonymized_text);",
+                  "pm.test('session_id returned', () => pm.expect(j.session_id).to.be.a('string').and.not.empty);",
+                  "pm.test('text was rewritten', () => pm.expect(j.pseudonymized_text).to.be.a('string'));",
+                  "console.log('session', j.session_id);",
+                  "console.log('pseudonymized:', j.pseudonymized_text);",
+                  "(j.entities_replaced||[]).forEach(r => console.log('  ', r.entity_type, ':', r.original, '->', r.fake));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Jan Kowalski, PESEL 90010112345, mieszka w Krakowie. Sprawę prowadzi Anna Nowak.\",\n  \"session_id\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/pseudonymize",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "pseudonymize"
+              ]
+            },
+            "description": "Detect PII (reuse Epic 2) and replace each entity with a realistic, session-consistent, checksum-valid fake (case-correct for PERSON/LOCATION). `session_id: null` starts a new session; the returned id is captured into `{{sessionId}}` and the rewritten text into `{{pseudonymizedText}}`. REQUIRES Redis (503 if down) and the spaCy model (503 if not ready). No LLM."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /v1/pseudonymize (same session — extra turn)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.collectionVariables.set('sessionId', j.session_id);",
+                  "pm.collectionVariables.set('pseudonymizedText', j.pseudonymized_text);",
+                  "console.log('pseudonymized:', j.pseudonymized_text);",
+                  "(j.entities_replaced||[]).forEach(r => console.log('  ', r.entity_type, ':', r.original, '->', r.fake));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Pismo skierowano do Jana Kowalskiego z Krakowa. Kowalski potwierdził odbiór.\",\n  \"session_id\": \"{{sessionId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/pseudonymize",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "pseudonymize"
+              ]
+            },
+            "description": "Reuses `{{sessionId}}` to show cross-turn consistency: the inflected 'Jana Kowalskiego' and bare surname 'Kowalski' resolve to the SAME fake person as turn 1, each rendered in the right grammatical case. Run the 'new session' request first."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /v1/depseudonymize (restore)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('restored_text present', () => pm.expect(j.restored_text).to.be.a('string'));",
+                  "console.log('restored:', j.restored_text);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"{{pseudonymizedText}}\",\n  \"session_id\": \"{{sessionId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/depseudonymize",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "depseudonymize"
+              ]
+            },
+            "description": "Reverse direction: replaces the fakes in `{{pseudonymizedText}}` with the originals for `{{sessionId}}`, inflection-aware. Run a pseudonymize request first so the variables are populated. REQUIRES Redis."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /v1/sessions/{id}/mappings (reviewer listing)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('mappings array', () => pm.expect(j.mappings).to.be.an('array'));",
+                  "(j.mappings||[]).forEach(m => console.log('  ', m.entity_type, ':', m.original, '<->', m.fake));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/sessions/{{sessionId}}/mappings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "sessions",
+                "{{sessionId}}",
+                "mappings"
+              ]
+            },
+            "description": "Debug/reviewer surface: decrypts and returns all original↔fake pairs currently held for `{{sessionId}}`. The pairs are returned to the caller but never logged. REQUIRES Redis."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Chat (Epic 4)",
+      "item": [
+        {
+          "name": "POST /v1/chat/completions (round-trip)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.collectionVariables.set('chatSessionId', j.session_id);",
+                  "pm.test('session_id returned', () => pm.expect(j.session_id).to.be.a('string').and.not.empty);",
+                  "pm.test('assistant answer present', () => pm.expect(j.choices[0].message.content).to.be.a('string'));",
+                  "console.log('session', j.session_id);",
+                  "console.log('answer:', j.choices[0].message.content);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Najemcą jest Jan Kowalski z Krakowa, PESEL 90010112345. Przepisz to zdanie dokładnie, bez żadnych zmian ani komentarzy.\"\n    }\n  ],\n  \"session_id\": null,\n  \"model\": \"qwen2.5:3b\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/chat/completions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "chat",
+                "completions"
+              ]
+            },
+            "description": "EPIC 4 end-to-end: pseudonymizes EVERY message → calls the real LLM (Ollama) with synthetic data only → restores the originals in the answer. `session_id: null` starts a new session (captured into `{{chatSessionId}}`). The optional `model` overrides `DEFAULT_MODEL` per request. REQUIRES Redis + the spaCy model + a reachable Ollama model (see `dev/ollama/`). Synchronous — no streaming."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /v1/chat/completions (multi-turn — same session)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('answer present', () => pm.expect(j.choices[0].message.content).to.be.a('string'));",
+                  "console.log('answer:', j.choices[0].message.content);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Kim jest najemca Jan Kowalski z Krakowa?\"\n    },\n    {\n      \"role\": \"assistant\",\n      \"content\": \"Najemcą jest Jan Kowalski z Krakowa.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Powtórz dokładnie imię, nazwisko i miasto najemcy.\"\n    }\n  ],\n  \"session_id\": \"{{chatSessionId}}\",\n  \"model\": \"qwen2.5:3b\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/chat/completions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "chat",
+                "completions"
+              ]
+            },
+            "description": "Re-uses `{{chatSessionId}}`. The WHOLE messages array is pseudonymized every turn — including the earlier assistant message that already holds original PII — so no original reaches the LLM, and each original maps to the SAME fake as before (session consistency). Run the round-trip request first."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /v1/chat/completions (empty → 400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
+                  "const j = pm.response.json();",
+                  "pm.test('error body preserves session_id', () => pm.expect(j).to.have.property('session_id'));",
+                  "console.log('detail:', j.detail);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": []\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/chat/completions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "chat",
+                "completions"
+              ]
+            },
+            "description": "Validation: an empty `messages` array returns 400 BEFORE any LLM call; the error body still carries `session_id`."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /v1/chat/completions (last not user → 400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
+                  "const j = pm.response.json();",
+                  "pm.test('error body preserves session_id', () => pm.expect(j).to.have.property('session_id'));",
+                  "console.log('detail:', j.detail);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"hej\"\n    },\n    {\n      \"role\": \"assistant\",\n      \"content\": \"cześć\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/chat/completions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "chat",
+                "completions"
+              ]
+            },
+            "description": "Validation: the last message must be a `user` turn, otherwise 400 BEFORE any LLM call; the error body still carries `session_id`."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "sessionId",
+      "value": ""
+    },
+    {
+      "key": "pseudonymizedText",
+      "value": ""
+    },
+    {
+      "key": "chatSessionId",
+      "value": ""
+    }
+  ]
+}

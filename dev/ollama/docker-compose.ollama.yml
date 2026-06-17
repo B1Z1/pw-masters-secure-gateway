@@ -1,0 +1,66 @@
+# Optional, opt-in self-hosted LLM backend for Epic 4 (local dev / demo).
+#
+# The CORE stack (docker-compose.yml) stays LLM-agnostic — it reaches whatever
+# OLLAMA_BASE_URL points at. This companion file adds an in-network `ollama`
+# service and overrides the gateway to use it. It is NEVER part of the core
+# stack: in real production the operator points the gateway at a hosted API
+# (OPENAI_API_KEY / ANTHROPIC_API_KEY) or at their own model server.
+#
+# Use additively (same project name + network as the core file):
+#   docker compose -f docker-compose.yml -f dev/ollama/docker-compose.ollama.yml up
+#
+# macOS note: Docker on a Mac has NO GPU (Metal) access, so this runs CPU-only
+# and is slow. For a fast demo on a Mac, run Ollama natively on the host instead
+# and leave OLLAMA_BASE_URL=http://host.docker.internal:11434 (the .env default).
+name: pw-masters-secure-gateway
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    # Persist pulled models across restarts so you only download them once.
+    volumes:
+      - ollama-models:/root/.ollama
+      # Behind a TLS-inspecting proxy (e.g. Netskope), bind a CA file so Ollama
+      # can pull models. Default is a harmless no-op (/dev/null, unreferenced).
+      - ${OLLAMA_CA_FILE:-/dev/null}:/etc/ssl/proxy-ca.pem:ro
+    environment:
+      # Ollama is a Go binary and honours SSL_CERT_FILE. Empty by default (direct
+      # internet → system roots). Behind a proxy set OLLAMA_SSL_CERT_FILE to the
+      # in-container path above AND OLLAMA_CA_FILE to the host CA, e.g.:
+      #   OLLAMA_CA_FILE=~/.certs/netskope-ca.pem \
+      #   OLLAMA_SSL_CERT_FILE=/etc/ssl/proxy-ca.pem docker compose ... up -d ollama
+      SSL_CERT_FILE: ${OLLAMA_SSL_CERT_FILE:-}
+    networks: [pw-masters-secure-gateway]
+    # In-network only by default; the gateway reaches it as http://ollama:11434.
+    # Published to the host too, so a natively-running gateway (debugger) reaches
+    # it at http://localhost:11434 — same pattern as Redis in the core file.
+    ports:
+      - "11434:11434"
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      start_period: 20s
+      retries: 5
+    # --- Linux + NVIDIA GPU (optional): uncomment for hardware acceleration ---
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  gateway-api:
+    # In-network override: with this file the backend reaches the containerized
+    # Ollama by its service name, taking precedence over the .env default
+    # (host.docker.internal). Same pattern as the REDIS_URL override in the core
+    # file, so the same .env works in every mode.
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+    depends_on:
+      ollama:
+        condition: service_healthy
+
+volumes:
+  ollama-models:

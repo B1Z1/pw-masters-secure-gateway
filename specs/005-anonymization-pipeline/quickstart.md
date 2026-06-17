@@ -38,6 +38,18 @@ Expected — these prove the epic without a live LLM:
 
 ## 2. Live validation — real Ollama round-trip (manual, optional)
 
+You need an Ollama server reachable at `OLLAMA_BASE_URL`. Two ways:
+
+- **Native (recommended on macOS — uses Metal, fast)**: run `ollama serve` on the host; use
+  `http://localhost:11434` for native dev, or the default `http://host.docker.internal:11434` under the
+  core compose stack.
+- **Containerized (opt-in)**: bring up the optional add-on — see
+  [`dev/ollama/README.md`](../../dev/ollama/README.md):
+  `docker compose -f docker-compose.yml -f dev/ollama/docker-compose.ollama.yml up -d` then
+  `dev/ollama/pull-model.sh`. On a Mac this is CPU-only and slow; on Linux+GPU uncomment the device block.
+
+Either way, set `DEFAULT_MODEL` to an **installed** Ollama model (the default `gpt-4o` is not one).
+
 ```bash
 # with Redis up, Ollama up, DEFAULT_MODEL set to an installed model:
 uv run uvicorn gateway_api.main:app --reload    # or: nx serve gateway-api / docker compose up

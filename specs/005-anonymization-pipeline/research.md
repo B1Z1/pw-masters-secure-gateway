@@ -212,3 +212,35 @@ metadata are the later "full response contract" epic.
 **Rationale**: `pytest-asyncio` is in `asyncio_mode = "auto"` and `fakeredis` is already a dev
 dependency, so store-backed tests run offline. The `EchoProvider`/stub keep the suite deterministic
 and network-free, satisfying spec FR-027.
+
+---
+
+## D11 — Provisioning the LLM backend (deployment)
+
+**Decision**: The core `docker-compose.yml` stays **LLM-agnostic** — the gateway connects out to
+whatever `OLLAMA_BASE_URL` (or, later, the hosted-API keys) points at, and the core stack bundles **no**
+model server. A self-hosted Ollama is provided as an **optional, opt-in compose add-on** at
+`dev/ollama/docker-compose.ollama.yml`, used additively:
+`docker compose -f docker-compose.yml -f dev/ollama/docker-compose.ollama.yml up`. The single
+`OLLAMA_BASE_URL` env gives three modes, mirroring the existing `REDIS_URL` native-vs-docker split:
+native dev → `http://localhost:11434`; core compose + host Ollama → `http://host.docker.internal:11434`
+(the `.env` default); core compose + the add-on → `http://ollama:11434` (the add-on overrides it).
+
+**Rationale**: Constitution IV (Provider Agnosticism) — the model backend is a dependency pointed at by
+configuration, not owned by the app. In real production the operator supplies the endpoint (a hosted
+API such as OpenAI/Anthropic, or their own model server); bundling a GBs-sized, GPU-bound model server
+into the core stack is heavy and opinionated, and Docker on macOS has **no GPU (Metal)** access so an
+in-container Ollama is CPU-only and slow. Keeping it opt-in keeps the default stack light and
+reproducible while still letting a thesis demo run self-contained with one extra `-f` flag.
+
+**Alternatives rejected**:
+- *Bake `ollama` into the core compose* — forces a heavy, opinionated dependency on every deploy and is
+  slow on a Mac.
+- *A `--profile ollama` in the core file* — works, but a separate file under `dev/ollama/` signals
+  "optional, not production" more clearly and keeps the core compose clean.
+
+The add-on ships `docker-compose.ollama.yml` (the `ollama` service + a persistent `ollama-models`
+volume + healthcheck + the `OLLAMA_BASE_URL` override), `pull-model.sh` (pull `DEFAULT_MODEL` into the
+container), and a `README.md` (run instructions + macOS/GPU caveats). `DEFAULT_MODEL` must name an
+installed Ollama model (the default `gpt-4o` is not one) — otherwise the gateway returns 503
+(missing_model) per D6.

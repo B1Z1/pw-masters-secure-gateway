@@ -111,13 +111,25 @@ apps/gateway-api/tests/
 └── llm_providers/test_ollama_provider.py     # NEW — error→kind mapping (mocked httpx, no network)
 ```
 
+Optional deployment add-on (NOT part of the core stack — research D11):
+
+```text
+dev/ollama/                              # NEW — opt-in self-hosted LLM for dev/demo
+├── docker-compose.ollama.yml           # in-network `ollama` service + OLLAMA_BASE_URL override
+├── pull-model.sh                       # pull DEFAULT_MODEL into the container
+└── README.md                           # how to run; macOS CPU-only / Linux GPU caveats
+```
+
 **Structure Decision**: Backend-only change within the existing `apps/gateway-api` package, following
 the EPIC 3 by-domain layout and the active naming rule (`.claude/rules/python-naming-conventions.md`):
 role-revealing module names (`anonymization_pipeline.py`, `ollama_provider.py`,
 `fuzzy_restoration.py`), no generic names. New top-level packages `pipeline/` and `llm_providers/`
 mirror the existing `pii_detection/` / `pseudonym_vault/` / `pseudonym_generation/` decomposition. The
 two EPIC 3 touch-points (`pseudonymize.py` delegation, `restore_text` additive flag) are constrained by
-the regression contract.
+the regression contract. The LLM backend itself is **not** owned by the core stack (Constitution IV):
+the gateway connects out via `OLLAMA_BASE_URL` (or, later, hosted-API keys), and a self-hosted Ollama is
+an **opt-in** compose add-on under `dev/ollama/` rather than a service in the core `docker-compose.yml`
+(research D11).
 
 ## Complexity Tracking
 

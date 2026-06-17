@@ -399,6 +399,11 @@ confirm the same endpoint completes a deterministic round-trip with no network.
   by the `complete()` call raising a provider error, and the reachability check is **reserved for the future
   `/health` integration**. The full provider line-up and model-based routing are a later epic — the
   configured default-provider setting is **not consulted** here (the endpoint talks to Ollama directly).
+- **Deployment of the LLM backend**: The core deployment stack stays LLM-agnostic — the gateway connects
+  to whatever the configuration points at (a hosted API, or a self-hosted server) and does **not** bundle
+  a model server. For local development/demo an **optional** containerized Ollama is provided as a
+  separate, opt-in compose add-on (`dev/ollama/`); in real production the operator supplies the endpoint.
+  This keeps provider-agnosticism (Constitution IV) intact and the default stack light.
 - **No performance target**: No latency/throughput SLA is defined for this epic; large-document handling and
   performance tuning are out of scope. Synchronous request-response only (Constitution V).
 - **Trusted demo context**: The chat endpoint is exercised in a trusted/development context for the thesis

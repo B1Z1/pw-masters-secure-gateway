@@ -125,7 +125,9 @@ model. `health_check` → `True`.
 | `default_model` | `DEFAULT_MODEL` | `gpt-4o` | exists (operator sets an Ollama model for the demo) |
 | `default_llm_provider` | `DEFAULT_LLM_PROVIDER` | `openai` | exists (router is a later epic; this epic wires Ollama directly) |
 
-No change to `redis_*` or `redis_encryption_key`.
+**Deployment**: the core stack stays LLM-agnostic; an optional containerized Ollama add-on lives in
+`dev/ollama/` and overrides `OLLAMA_BASE_URL` to `http://ollama:11434` when used (research D11). No
+change to `redis_*` or `redis_encryption_key`.
 
 ---
 

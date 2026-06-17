@@ -29,6 +29,15 @@ services:
       # REDIS_URL in `.env` (which is the source of truth for NATIVE dev), so
       # the same `.env` works in both worlds without ever editing the host.
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
+      # Same idea for Ollama: `.env` holds the NATIVE value (`localhost`), so a
+      # dockerized gateway must NOT use it (inside the container `localhost` is
+      # the container itself). Default to a host-run Ollama; the `dev/ollama/`
+      # add-on overrides this again to `http://ollama:11434` (later `-f` wins).
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+    # Linux Docker has no built-in host.docker.internal; map it to the host
+    # gateway. Harmless no-op on Docker Desktop (macOS/Windows), which provides it.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "8000:8000"
     networks: [pw-masters-secure-gateway]
