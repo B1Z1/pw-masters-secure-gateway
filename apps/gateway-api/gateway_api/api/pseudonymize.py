@@ -17,7 +17,7 @@ from pydantic import BaseModel
 
 from ..pii_detection import nlp as _nlp
 from ..pii_detection.engine import get_engine
-from ..pseudonym_vault.store import get_mapping_store
+from ..pseudonym_vault.mapping_store import get_mapping_store
 
 router = APIRouter()
 logger = logging.getLogger("gateway_api")
@@ -59,45 +59,57 @@ class SessionMappingsResponse(BaseModel):
 
 def _store_or_503():
     store = get_mapping_store()
+
     if store is None:  # Redis unavailable (the gate normally catches this first)
         raise HTTPException(status_code=503, detail="Redis unavailable")
+
     return store
 
 
 @router.post("/v1/pseudonymize", response_model=PseudonymizeResponse)
 async def pseudonymize(request: PseudonymizeRequest) -> PseudonymizeResponse:
     session_id = request.session_id or uuid.uuid4().hex
+
     if not request.text or not request.text.strip():
         return PseudonymizeResponse(
             pseudonymized_text=request.text, entities_replaced=[], session_id=session_id
         )
+
     if not _nlp.is_model_ready():
         raise HTTPException(status_code=503, detail="Detection model not ready")
+
     store = _store_or_503()
 
     entities = get_engine().detect(request.text)
-    items = [(e, await store.get_or_create(session_id, e)) for e in entities]
+    items = [
+        (entity, await store.get_or_create(session_id, entity)) for entity in entities
+    ]
 
     text = request.text
-    for entity, fake_form in sorted(items, key=lambda x: x[0].start, reverse=True):
-        text = text[: entity.start] + fake_form + text[entity.end :]
+
+    for entity, fake_form in sorted(
+            items, key=lambda pair: pair[0].start, reverse=True
+    ):
+        text = text[: entity.start] + fake_form + text[entity.end:]
 
     replacements = [
         Replacement(
-            entity_type=e.entity_type,
-            original=e.text,
+            entity_type=entity.entity_type,
+            original=entity.text,
             fake=fake_form,
-            start=e.start,
-            end=e.end,
+            start=entity.start,
+            end=entity.end,
         )
-        for e, fake_form in items
+        for entity, fake_form in items
     ]
+
     logger.info(
         "pseudonymize session=%s entities=%d types=%s",
         session_id,
         len(items),
-        sorted({e.entity_type for e, _ in items}),
+        sorted({entity.entity_type for entity, _ in items}),
     )
+
     return PseudonymizeResponse(
         pseudonymized_text=text, entities_replaced=replacements, session_id=session_id
     )
@@ -109,11 +121,14 @@ async def depseudonymize(request: DepseudonymizeRequest) -> DepseudonymizeRespon
         return DepseudonymizeResponse(
             restored_text=request.text, session_id=request.session_id
         )
+
     store = _store_or_503()
     restored = await store.restore_text(request.session_id, request.text)
+
     logger.info(
         "depseudonymize session=%s chars=%d", request.session_id, len(request.text)
     )
+
     return DepseudonymizeResponse(restored_text=restored, session_id=request.session_id)
 
 
@@ -123,5 +138,7 @@ async def depseudonymize(request: DepseudonymizeRequest) -> DepseudonymizeRespon
 async def list_session_mappings(session_id: str) -> SessionMappingsResponse:
     store = _store_or_503()
     mappings = await store.get_all_mappings(session_id)
+
     logger.info("list_mappings session=%s count=%d", session_id, len(mappings))
+
     return SessionMappingsResponse(session_id=session_id, mappings=mappings)

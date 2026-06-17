@@ -2,6 +2,6 @@
 
 from __future__ import annotations
 
-from .store import MappingStore, get_mapping_store
+from .mapping_store import MappingStore, get_mapping_store
 
 __all__ = ["MappingStore", "get_mapping_store"]

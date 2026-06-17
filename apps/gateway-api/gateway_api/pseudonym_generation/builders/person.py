@@ -22,9 +22,15 @@ def _declinable_surname(faker, rng, gender: str) -> str:
 
 def person_forms(first: str, last: str, gender: str) -> dict[str, str]:
     """Inflect first name and surname independently, then join per case."""
-    pf = classify(first, gender)
-    pl = classify(last, gender)
-    return {c: f"{decline(first, pf, c)} {decline(last, pl, c)}" for c in CASES}
+    first_pattern = classify(first, gender)
+    last_pattern = classify(last, gender)
+    return {
+        grammatical_case: (
+            f"{decline(first, first_pattern, grammatical_case)} "
+            f"{decline(last, last_pattern, grammatical_case)}"
+        )
+        for grammatical_case in CASES
+    }
 
 
 def build_person(faker, rng, entity=None) -> FakeValue:

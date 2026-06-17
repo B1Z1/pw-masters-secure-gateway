@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 from gateway_api.pseudonym_generation.dto import FakeValue
-from gateway_api.pseudonym_vault.encryption import Encryptor
-from gateway_api.pseudonym_vault.store import MappingStore
+from gateway_api.pseudonym_vault.aes_gcm_encryption import Encryptor
+from gateway_api.pseudonym_vault.mapping_store import MappingStore
 
 _PESEL = {"gender": "male"}
 

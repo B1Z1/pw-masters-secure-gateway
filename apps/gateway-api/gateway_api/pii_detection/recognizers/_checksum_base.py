@@ -41,14 +41,14 @@ class ChecksumPatternRecognizer(PatternRecognizer):
         results = super().analyze(
             text, entities, nlp_artifacts=nlp_artifacts, regex_flags=regex_flags
         )
-        for r in results:
-            normalized = strip_separators(text[r.start : r.end])
+        for result in results:
+            normalized = strip_separators(text[result.start : result.end])
             valid, meta = self.validate_checksum(normalized)
-            r.score = S_VALID if valid else S_INVALID
+            result.score = S_VALID if valid else S_INVALID
             meta = dict(meta or {})
             meta.setdefault("normalized", normalized)
             meta["checksum_valid"] = valid
-            attach_pii_meta(r, meta)
+            attach_pii_meta(result, meta)
         return results
 
     def validate_checksum(self, normalized: str) -> tuple[bool, dict]:

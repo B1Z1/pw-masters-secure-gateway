@@ -82,23 +82,28 @@ def resolve_overlaps(entities: list[DetectedEntity]) -> list[DetectedEntity]:
     # Deterministic order: longest first, then earliest, then higher score, then type.
     ordered = sorted(
         entities,
-        key=lambda e: (-(e.end - e.start), e.start, -e.score, e.entity_type),
+        key=lambda entity: (
+            -(entity.end - entity.start),
+            entity.start,
+            -entity.score,
+            entity.entity_type,
+        ),
     )
     kept: list[DetectedEntity] = []
-    for e in ordered:
-        if any(_subsumed_by(e, k) for k in kept):
+    for entity in ordered:
+        if any(_subsumed_by(entity, kept_entity) for kept_entity in kept):
             continue
-        kept.append(e)
+        kept.append(entity)
     return kept
 
 
-def _subsumed_by(e: DetectedEntity, k: DetectedEntity) -> bool:
-    contained = k.start <= e.start and e.end <= k.end
+def _subsumed_by(entity: DetectedEntity, kept_entity: DetectedEntity) -> bool:
+    contained = kept_entity.start <= entity.start and entity.end <= kept_entity.end
     if not contained:
         return False
-    # k is strictly longer → it wins (containing span subsumes the shorter one),
-    # or identical span → e is a duplicate of the already-kept (higher-score) k.
-    return (k.end - k.start) >= (e.end - e.start)
+    # kept_entity is strictly longer → it wins (containing span subsumes the
+    # shorter one), or identical span → entity duplicates the kept higher-score one.
+    return (kept_entity.end - kept_entity.start) >= (entity.end - entity.start)
 
 
 _NAME_TYPES = frozenset({"PERSON", "LOCATION"})
@@ -111,7 +116,7 @@ def _enrich_morphology(entities: list[DetectedEntity], text: str) -> None:
     types are left untouched. Failure (no model / no span) leaves the fields None —
     substitution then falls back to the base form (documented limitation).
     """
-    targets = [e for e in entities if e.entity_type in _NAME_TYPES]
+    targets = [entity for entity in entities if entity.entity_type in _NAME_TYPES]
     if not targets:
         return
     try:
@@ -120,13 +125,13 @@ def _enrich_morphology(entities: list[DetectedEntity], text: str) -> None:
         return
     if doc is None:
         return
-    for e in targets:
-        span = doc.char_span(e.start, e.end, alignment_mode="expand")
+    for entity in targets:
+        span = doc.char_span(entity.start, entity.end, alignment_mode="expand")
         if span is None or len(span) == 0:
             continue
-        e.lemma = " ".join(t.lemma_ for t in span).strip() or None
-        case_vals = span.root.morph.get("Case")
-        e.case = case_vals[0].lower() if case_vals else None
+        entity.lemma = " ".join(token.lemma_ for token in span).strip() or None
+        case_values = span.root.morph.get("Case")
+        entity.case = case_values[0].lower() if case_values else None
 
 
 class DetectionEngine:
@@ -139,18 +144,18 @@ class DetectionEngine:
         raw = _get_analyzer().analyze(
             text=text, language="pl", entities=list(ALL_ENTITIES)
         )
-        entities = [_result_to_dto(r, text) for r in raw]
+        entities = [_result_to_dto(result, text) for result in raw]
         entities = resolve_overlaps(entities)
         entities = apply_thresholds(entities)
         _enrich_morphology(entities, text)
-        entities.sort(key=lambda e: (e.start, e.end))
+        entities.sort(key=lambda entity: (entity.start, entity.end))
         duration_ms = (time.perf_counter() - start) * 1000
         # No PII: only types/counts/scores/timing (Constitution VIII).
         logger.info(
             "detect chars=%d entities=%d types=%s duration_ms=%.1f",
             len(text),
             len(entities),
-            sorted({e.entity_type for e in entities}),
+            sorted({entity.entity_type for entity in entities}),
             duration_ms,
         )
         return entities

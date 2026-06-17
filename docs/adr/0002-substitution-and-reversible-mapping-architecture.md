@@ -5,6 +5,7 @@
 - **Deciders:** Project author (thesis), with the project constitution as the binding authority
 - **Scope:** `apps/gateway-api` — the realistic fake-data **generation** + reversible, encrypted **session mapping** layer
 - **Related:** `specs/003-fake-data-generator/` (spec + clarifications 2026-06-16, plan, research D1–D9, data-model, contracts), constitution `.specify/memory/constitution.md` (**v1.1.0**), ADR 0001 (Epic 2 detection)
+- **Amended by:** **ADR 0003** (2026-06-17) — the internal `pseudonym_vault/` structure was refactored for readability (module renames + `MappingStore` decomposed into a thin facade + collaborators). Every decision, rationale, and wire contract below is **unchanged**; the file/node names in §3.4 and §4.1 describe the pre-refactor layout (see ADR 0003 §4 for the current one).
 
 ---
 

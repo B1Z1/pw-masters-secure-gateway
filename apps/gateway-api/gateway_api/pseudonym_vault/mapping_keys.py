@@ -24,14 +24,17 @@ def mapping_key(entity_type: str, text: str, lemma: str | None = None) -> str:
     """
     if entity_type in _NAME_TYPES:
         return (lemma or text).strip().lower()
+
     if entity_type in _DIGIT_TYPES:
         return digits_only(text)
+
     return " ".join(text.split()).casefold()
 
 
-def fwd_field(key_bytes: bytes, entity_type: str, mkey: str) -> str:
+def fwd_field(key_bytes: bytes, entity_type: str, normalized_key: str) -> str:
     """Forward field name = ``fwd:`` + HMAC-SHA256(key, type|mapping_key)."""
-    mac = hmac.new(
-        key_bytes, f"{entity_type}|{mkey}".encode(), hashlib.sha256
+    hmac_digest = hmac.new(
+        key_bytes, f"{entity_type}|{normalized_key}".encode(), hashlib.sha256
     ).hexdigest()
-    return f"fwd:{mac}"
+
+    return f"fwd:{hmac_digest}"

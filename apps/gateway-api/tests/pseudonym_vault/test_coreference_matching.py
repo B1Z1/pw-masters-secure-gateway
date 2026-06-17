@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from gateway_api.pseudonym_vault.matching import (
+from gateway_api.pseudonym_vault.coreference_matching import (
     aligned_fake,
     bounded_levenshtein,
     lemma_overlap,
