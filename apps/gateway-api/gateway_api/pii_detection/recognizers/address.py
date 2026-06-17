@@ -55,12 +55,12 @@ class PolishAddressRecognizer(PatternRecognizer):
         results = super().analyze(
             text, entities, nlp_artifacts=nlp_artifacts, regex_flags=regex_flags
         )
-        for r in results:
-            matched = text[r.start : r.end]
+        for result in results:
+            matched = text[result.start : result.end]
             has_street = bool(re.match(_STREET_PREFIX, matched.strip()))
             postal_match = _POSTAL_RE.search(matched)
             attach_pii_meta(
-                r,
+                result,
                 {
                     "has_street": has_street,
                     "postal_code": postal_match.group(0) if postal_match else None,

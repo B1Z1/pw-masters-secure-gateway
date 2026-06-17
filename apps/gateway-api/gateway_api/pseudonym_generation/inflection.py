@@ -154,4 +154,7 @@ def decline(token: str, pattern: Pattern, case: str) -> str:
 
 def all_forms(token: str, pattern: Pattern) -> dict[str, str]:
     """Map every case to ``token`` inflected under ``pattern``."""
-    return {c: decline(token, pattern, c) for c in CASES}
+    return {
+        grammatical_case: decline(token, pattern, grammatical_case)
+        for grammatical_case in CASES
+    }

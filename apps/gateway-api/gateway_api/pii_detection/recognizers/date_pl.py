@@ -45,8 +45,12 @@ class DateRecognizer(PatternRecognizer):
             text, entities, nlp_artifacts=nlp_artifacts, regex_flags=regex_flags
         )
         lowered_months = _MONTHS.split("|")
-        for r in results:
-            matched = text[r.start : r.end].lower()
-            kind = "worded" if any(m in matched for m in lowered_months) else "numeric"
-            attach_pii_meta(r, {"kind": kind})
+        for result in results:
+            matched = text[result.start : result.end].lower()
+            kind = (
+                "worded"
+                if any(month in matched for month in lowered_months)
+                else "numeric"
+            )
+            attach_pii_meta(result, {"kind": kind})
         return results

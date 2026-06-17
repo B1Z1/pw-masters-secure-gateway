@@ -22,9 +22,9 @@ from fastapi.responses import JSONResponse
 from .api.detect import router as detect_router
 from .api.pseudonymize import router as pseudonymize_router
 from .config import get_settings
-from .pii_detection import nlp as detection_nlp
 from .health import check_redis
 from .health import router as health_router
+from .pii_detection import nlp as detection_nlp
 
 # Routes exempt from the Redis-availability gate. /health (FR-022) and the
 # stateless detection endpoint (/v1/detect — FR-031) never depend on Redis.

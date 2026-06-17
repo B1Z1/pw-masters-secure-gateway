@@ -81,7 +81,11 @@ def apply_thresholds(entities: list[DetectedEntity]) -> list[DetectedEntity]:
     """
     cfg = load_thresholds()
     table, default = cfg["thresholds"], cfg["default"]
-    return [e for e in entities if e.score >= table.get(e.entity_type, default)]
+    return [
+        entity
+        for entity in entities
+        if entity.score >= table.get(entity.entity_type, default)
+    ]
 
 
 def _reset_cache_for_tests() -> None:

@@ -108,8 +108,8 @@ def make_store(fake_redis, enc_key):
 
     def _make(seed: int = 1, ttl: int = 1800):
         from gateway_api.pseudonym_generation import FakeDataGenerator
-        from gateway_api.pseudonym_vault.encryption import Encryptor
-        from gateway_api.pseudonym_vault.store import MappingStore
+        from gateway_api.pseudonym_vault.aes_gcm_encryption import Encryptor
+        from gateway_api.pseudonym_vault.mapping_store import MappingStore
 
         return MappingStore(
             fake_redis, Encryptor(enc_key), enc_key, ttl, FakeDataGenerator(seed=seed)

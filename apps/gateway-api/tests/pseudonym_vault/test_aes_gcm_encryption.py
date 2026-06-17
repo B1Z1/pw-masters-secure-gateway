@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from gateway_api.pseudonym_vault.encryption import Encryptor
+from gateway_api.pseudonym_vault.aes_gcm_encryption import Encryptor
 
 
 def test_round_trip(enc_key):

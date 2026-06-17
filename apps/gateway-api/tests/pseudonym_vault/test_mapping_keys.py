@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from gateway_api.pseudonym_vault.keys import fwd_field, mapping_key
+from gateway_api.pseudonym_vault.mapping_keys import fwd_field, mapping_key
 
 
 def test_separator_insensitive_identifier():
