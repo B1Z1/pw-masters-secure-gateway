@@ -77,6 +77,7 @@ class MappingStore:
 
         if exact_record is not None:
             await self.extend_ttl(session_id)
+
             return exact_record
 
         # bounded fuzzy over reverse field names (research D8)
@@ -86,11 +87,13 @@ class MappingStore:
                 session_id
         ):
             distance = bounded_levenshtein(fake_form, stored_form)
+
             if distance is not None and distance < best_distance:
                 best_record, best_distance = reverse_record, distance
 
         if best_record is not None:
             await self.extend_ttl(session_id)
+
             return best_record
 
         return None
