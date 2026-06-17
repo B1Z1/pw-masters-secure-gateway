@@ -37,6 +37,11 @@ def test_offsets_reference_original_span():
     assert text[r.start : r.end] == "44051401359"
 
 
+def test_dashed_digits_not_treated_as_pesel():
+    results = _detect("Numer 440-514-013-59 w aktach")
+    assert results == []
+
+
 def test_post_2000_pesel_birthdate():
     # Construct an 11-digit value with month-offset date; checksum may differ but
     # birth_date metadata must reflect the post-2000 century.

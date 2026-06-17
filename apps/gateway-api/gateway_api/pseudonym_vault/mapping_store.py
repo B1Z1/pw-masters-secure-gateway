@@ -20,6 +20,7 @@ from .coreference_matching import CoreferenceResolver, bounded_levenshtein
 from .fuzzy_restoration import FuzzyNameRestorer
 from .mapping_keys import fwd_field, mapping_key
 from .original_restoration import OriginalSurfaceRestorer
+from .session_lock_registry import SessionLockRegistry
 from .session_mapping_repository import SessionMappingRepository
 from .unique_fake_factory import UniqueFakeFactory
 
@@ -36,10 +37,19 @@ class MappingStore:
         self._fake_factory = UniqueFakeFactory(generator)
         self._surface_restorer = OriginalSurfaceRestorer()
         self._fuzzy_restorer = FuzzyNameRestorer()
+        self._session_locks = SessionLockRegistry()
 
     # --- public API ----------------------------------------------------------
 
     async def get_or_create(self, session_id: str, entity: DetectedEntity) -> str:
+        # Serialize per session: concurrent requests for the SAME original must not
+        # each mint a different fake (a read-then-write race would break FR-012 —
+        # same original → same fake). See SessionLockRegistry for the in-process /
+        # single-worker limitation.
+        async with self._session_locks.lock(session_id):
+            return await self._substitute(session_id, entity)
+
+    async def _substitute(self, session_id: str, entity: DetectedEntity) -> str:
         is_inflecting_name = entity.entity_type in _NAME_TYPES
         case = entity.case if is_inflecting_name else None
         normalized_key = mapping_key(entity.entity_type, entity.text, entity.lemma)
@@ -235,6 +245,7 @@ class MappingStore:
 
     async def delete_session(self, session_id: str) -> None:
         await self._repository.delete(session_id)
+        self._session_locks.discard(session_id)
 
     async def extend_ttl(self, session_id: str) -> None:
         await self._repository.extend_ttl(session_id)
