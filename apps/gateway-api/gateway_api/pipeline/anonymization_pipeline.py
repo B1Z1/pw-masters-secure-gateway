@@ -39,6 +39,31 @@ class AnonymizationPipeline:
         self._engine = engine
         self._store = store
 
+    async def pseudonymize_messages(
+            self, session_id: str, messages: list[ChatMessage]
+    ) -> list[ChatMessage]:
+        """Pseudonymize EVERY message each turn (FR-005); roles preserved.
+
+        Re-pseudonymizing content already seen in the session is deterministic
+        (same original → same fake) thanks to Epic 3 session consistency (FR-006),
+        so no original re-entering through an earlier assistant message can reach
+        the LLM (the gateway↔LLM hop is the protected one — FR-007).
+        """
+        pseudonymized: list[ChatMessage] = []
+
+        for message in messages:
+            fake_content, _ = await self.pseudonymize_text(session_id, message.content)
+
+            pseudonymized.append(
+                ChatMessage(role=message.role, content=fake_content)
+            )
+
+        return pseudonymized
+
+    async def depseudonymize_text(self, session_id: str, text: str) -> str:
+        """Restore originals in the LLM answer: exact + inflection, then fuzzy."""
+        return await self._store.restore_text(session_id, text, fuzzy=True)
+
     async def pseudonymize_text(
             self, session_id: str, text: str
     ) -> tuple[str, list[Replacement]]:
@@ -78,30 +103,6 @@ class AnonymizationPipeline:
         )
 
         return fake_text, replacements
-
-    async def pseudonymize_messages(
-            self, session_id: str, messages: list[ChatMessage]
-    ) -> list[ChatMessage]:
-        """Pseudonymize EVERY message each turn (FR-005); roles preserved.
-
-        Re-pseudonymizing content already seen in the session is deterministic
-        (same original → same fake) thanks to Epic 3 session consistency (FR-006),
-        so no original re-entering through an earlier assistant message can reach
-        the LLM (the gateway↔LLM hop is the protected one — FR-007).
-        """
-        pseudonymized: list[ChatMessage] = []
-
-        for message in messages:
-            fake_content, _ = await self.pseudonymize_text(session_id, message.content)
-            pseudonymized.append(
-                ChatMessage(role=message.role, content=fake_content)
-            )
-
-        return pseudonymized
-
-    async def depseudonymize_text(self, session_id: str, text: str) -> str:
-        """Restore originals in the LLM answer: exact + inflection, then fuzzy."""
-        return await self._store.restore_text(session_id, text, fuzzy=True)
 
 
 def get_pipeline() -> AnonymizationPipeline | None:
