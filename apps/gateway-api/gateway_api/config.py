@@ -49,6 +49,8 @@ class Settings(BaseSettings):
     openai_api_key: str | None = None
     anthropic_api_key: str | None = None
     ollama_base_url: str = "http://host.docker.internal:11434"
+    # Epic 4 (FR-022): per-request Ollama timeout; an exceeded call → 504.
+    ollama_timeout: float = 60.0
     default_llm_provider: str = "openai"
     default_model: str = "gpt-4o"
 

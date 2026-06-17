@@ -17,8 +17,10 @@ from ..pseudonym_generation import FakeDataGenerator
 from ..pseudonym_generation.inflection import all_forms, classify
 from .aes_gcm_encryption import EncryptedJsonCodec, Encryptor, key_from_settings
 from .coreference_matching import CoreferenceResolver, bounded_levenshtein
+from .fuzzy_restoration import FuzzyNameRestorer
 from .mapping_keys import fwd_field, mapping_key
 from .original_restoration import OriginalSurfaceRestorer
+from .session_lock_registry import SessionLockRegistry
 from .session_mapping_repository import SessionMappingRepository
 from .unique_fake_factory import UniqueFakeFactory
 
@@ -34,10 +36,20 @@ class MappingStore:
         self._coreference_resolver = CoreferenceResolver()
         self._fake_factory = UniqueFakeFactory(generator)
         self._surface_restorer = OriginalSurfaceRestorer()
+        self._fuzzy_restorer = FuzzyNameRestorer()
+        self._session_locks = SessionLockRegistry()
 
     # --- public API ----------------------------------------------------------
 
     async def get_or_create(self, session_id: str, entity: DetectedEntity) -> str:
+        # Serialize per session: concurrent requests for the SAME original must not
+        # each mint a different fake (a read-then-write race would break FR-012 —
+        # same original → same fake). See SessionLockRegistry for the in-process /
+        # single-worker limitation.
+        async with self._session_locks.lock(session_id):
+            return await self._substitute(session_id, entity)
+
+    async def _substitute(self, session_id: str, entity: DetectedEntity) -> str:
         is_inflecting_name = entity.entity_type in _NAME_TYPES
         case = entity.case if is_inflecting_name else None
         normalized_key = mapping_key(entity.entity_type, entity.text, entity.lemma)
@@ -77,6 +89,7 @@ class MappingStore:
 
         if exact_record is not None:
             await self.extend_ttl(session_id)
+
             return exact_record
 
         # bounded fuzzy over reverse field names (research D8)
@@ -86,11 +99,13 @@ class MappingStore:
                 session_id
         ):
             distance = bounded_levenshtein(fake_form, stored_form)
+
             if distance is not None and distance < best_distance:
                 best_record, best_distance = reverse_record, distance
 
         if best_record is not None:
             await self.extend_ttl(session_id)
+
             return best_record
 
         return None
@@ -147,12 +162,18 @@ class MappingStore:
 
         return pairs
 
-    async def restore_text(self, session_id: str, text: str) -> str:
+    async def restore_text(
+            self, session_id: str, text: str, fuzzy: bool = False
+    ) -> str:
         """Replace every fake form in ``text`` with its original (FR-022).
 
         Longest-first + word-boundary aware so a fake never partially clobbers
         another; case-aware for PERSON/LOCATION (decline the original to the fake
-        form's case). Exact rev match drives this; ``get_original`` adds fuzzy.
+        form's case). The exact + inflection pass below is unchanged.
+
+        ``fuzzy=True`` (Epic 4, FR-004/FR-008) adds a bounded, PERSON/LOCATION-only
+        fuzzy fallback over the tokens the exact pass did not replace; default
+        ``False`` keeps the Epic 3 behaviour byte-identical (``/v1/depseudonymize``).
         """
         reverse_records = await self._repository.reverse_records(session_id)
 
@@ -169,12 +190,62 @@ class MappingStore:
                 text,
             )
 
+        if fuzzy:
+            text = await self._fuzzy_restore_names(session_id, text)
+
         await self.extend_ttl(session_id)
 
         return text
 
+    async def _fuzzy_restore_names(self, session_id: str, text: str) -> str:
+        """Outbound fuzzy fallback over PERSON/LOCATION fakes (Epic 4).
+
+        Builds one name record per fake base from the ``forms`` index (the stored
+        per-case fake surfaces) + the ``rev`` records (the nominative original and
+        entity type), scoped to PERSON/LOCATION, then delegates the bounded,
+        prefix-anchored token pass to ``FuzzyNameRestorer``.
+        """
+        (
+            forms_by_base,
+            reverse_by_form,
+        ) = await self._repository.forms_and_reverse_indexes(session_id)
+        name_records = []
+
+        for fake_base, forms_by_case in forms_by_base.items():
+            reverse_record = next(
+                (
+                    reverse_by_form[fake_form]
+                    for fake_form in forms_by_case.values()
+                    if fake_form in reverse_by_form
+                ),
+                None,
+            )
+
+            if (
+                    reverse_record is None
+                    or reverse_record["entity_type"] not in _NAME_TYPES
+            ):
+                continue
+
+            name_records.append(
+                {
+                    "entity_type": reverse_record["entity_type"],
+                    "orig_base": self._surface_restorer.titlecase(
+                        reverse_record["orig_base"]
+                    ),
+                    "fake_base": fake_base,
+                    "fake_forms": list(forms_by_case.values()),
+                }
+            )
+
+        if not name_records:
+            return text
+
+        return self._fuzzy_restorer.restore(text, name_records)
+
     async def delete_session(self, session_id: str) -> None:
         await self._repository.delete(session_id)
+        self._session_locks.discard(session_id)
 
     async def extend_ttl(self, session_id: str) -> None:
         await self._repository.extend_ttl(session_id)

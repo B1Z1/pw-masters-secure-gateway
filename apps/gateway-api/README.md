@@ -72,3 +72,27 @@ clear as the reverse index and forward field names are a keyed HMAC (Constitutio
   internally inflected; only standalone cities (LOCATION) are case-inflected.
 - **Redis restart loses the session**: durability is out of scope — a restart drops all mappings;
   starting a new session is the expected recovery.
+
+## Anonymization pipeline & first LLM round-trip (Epic 4)
+
+`gateway_api/pipeline/` orchestrates inbound pseudonymize → LLM → outbound de-pseudonymize, reusing
+Epic 2 detection and the Epic 3 store. `POST /v1/chat/completions` (OpenAI-compatible in shape)
+pseudonymizes **every** message each turn (so no original reaches the LLM), calls one provider behind
+the `gateway_api/llm_providers/` port (a local **Ollama** REST adapter + a network-free echo stub),
+then restores the originals in the answer. The outbound restore adds a bounded, PERSON/LOCATION-only
+**fuzzy fallback** (`pseudonym_vault/fuzzy_restoration.py`) after the exact + inflection pass.
+
+Config: `OLLAMA_BASE_URL`, `OLLAMA_TIMEOUT` (seconds; an exceeded call → **504**). Set `DEFAULT_MODEL`
+to an **installed Ollama model** for the live demo — this epic talks to Ollama directly and does not
+consult `DEFAULT_LLM_PROVIDER` (the provider router is a later epic). Errors: empty messages / a
+non-user last message → **400**; Ollama unreachable or missing model → **503**; timeout → **504**;
+every error preserves the `session_id`.
+
+### Known limitations (Constitution IX — documented, not solved)
+
+- **Fuzzy restores the base (nominative) form**: when an LLM inflects a fake PERSON/LOCATION in a form
+  the suffix table did not foresee, the original is restored in its base form — identity is correct
+  even if the surrounding grammar is slightly off. It is strictly PERSON/LOCATION only and prefix- and
+  edit-distance-bounded, so identifiers/e-mail/phone are never fuzzed and invented names are not
+  restored.
+- **Synchronous only**: the full LLM answer is received before de-pseudonymization (no streaming).

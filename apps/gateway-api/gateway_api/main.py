@@ -19,6 +19,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
+from .api.chat import router as chat_router
 from .api.detect import router as detect_router
 from .api.pseudonymize import router as pseudonymize_router
 from .config import get_settings
@@ -69,6 +70,8 @@ app.include_router(detect_router)
 # Epic 3 substitution routes — NOT gate-exempt: they require Redis, so the Epic 1
 # middleware 503s them when Redis is down (unlike the stateless /v1/detect).
 app.include_router(pseudonymize_router)
+# Epic 4 chat round-trip — also NOT gate-exempt (it needs Redis via the store).
+app.include_router(chat_router)
 
 
 @app.middleware("http")

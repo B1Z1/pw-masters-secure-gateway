@@ -135,8 +135,8 @@ different entity types and confirm two independent fakes.
 3. **Given** two genuinely different people who share a surname root ("Anna Kowalska" and "Jan
    Kowalski"), **When** both are processed, **Then** each receives a separate fake — matching is on the
    whole name within the same entity type, not on shared word fragments.
-4. **Given** the same identifier written with separators and without (PESEL "900-101-123-45" vs
-   "90010112345"), **When** both forms appear in the session, **Then** they are treated as the same value
+4. **Given** the same identifier written with separators and without (NIP "123-456-32-18" vs
+   "1234563218"), **When** both forms appear in the session, **Then** they are treated as the same value
    and map to a single fake.
 5. **Given** the same literal value detected under two different entity types, **When** both are
    processed, **Then** they are stored as two independent mappings, each with its own fake.
@@ -256,7 +256,8 @@ fresh.
   "Kowalski"; each part is inflected separately and both resolve to the same fake person.
 - **Address vs standalone city**: an address is replaced and restored as one atomic block; a standalone
   city elsewhere is inflected.
-- **Separators vs none**: a PESEL as "90010112345" and as "900-101-123-45" is the same value → one fake.
+- **Separators vs none**: a NIP as "1234563218" and as "123-456-32-18" is the same value → one fake.
+  (A PESEL, by contrast, is always an unbroken 11-digit string — it has no separator form.)
 - **Same literal, two types**: the same literal value detected under two different entity types → two
   independent mappings, each with its own fake.
 - **Session expiry / explicit clear**: when the TTL elapses or the session is cleared, its mappings are
@@ -351,9 +352,10 @@ fresh.
 
 #### Cross-cutting rules
 
-- **FR-024**: The same original written with or without separators (e.g. a PESEL as "90010112345" vs
-  "900-101-123-45") MUST be treated as the same value and map to a single fake (matching on a normalized
-  form).
+- **FR-024**: The same original written with or without separators (e.g. a NIP as "1234563218" vs
+  "123-456-32-18") MUST be treated as the same value and map to a single fake (matching on a normalized
+  form). Note: this applies to types that genuinely have a separator form (NIP, bank account/NRB); a
+  PESEL is always an unbroken 11-digit string and has no dashed/spaced variant.
 - **FR-025**: The same literal value detected under two different entity types MUST be treated as two
   independent mappings, each with its own fake.
 - **FR-026**: Logs and stored keys MUST never contain original personal data in readable form — only

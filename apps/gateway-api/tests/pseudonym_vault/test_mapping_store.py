@@ -192,3 +192,35 @@ async def test_round_trip_exact_for_female_consonant_surname(make_store, make_en
     )
     restored = await store.restore_text("s", f"Spotkanie z {fake}.")
     assert restored == "Spotkanie z Anną Nowak."
+
+
+async def test_restore_text_default_flag_is_exact_only(make_store, make_entity):
+    # Epic 4 regression guard: restore_text WITHOUT the opt-in fuzzy flag must keep
+    # the Epic 3 behaviour unchanged — a bare surname-only mention (which the exact
+    # pass cannot match) is left untouched; only fuzzy=True would recover it.
+    store = make_store(seed=7)
+    fake = await store.get_or_create(
+        "g", make_entity("PERSON", "Kowalski", lemma="Kowalski", case="nom")
+    )
+    surname = fake.split()[-1]
+    text = f"Pan {surname} wrócił."
+
+    assert await store.restore_text("g", text) == text
+    assert await store.restore_text("g", text, fuzzy=False) == text
+
+
+async def test_concurrent_same_original_yields_one_fake(make_store, make_entity):
+    # Race-safety (FR-012): many concurrent get_or_create for the SAME original in
+    # one session must converge on a SINGLE fake, not mint one per request.
+    import asyncio
+
+    store = make_store(seed=7)
+    calls = [
+        store.get_or_create(
+            "c", make_entity("PERSON", "Jan Kowalski", lemma="Jan Kowalski", case="nom")
+        )
+        for _ in range(30)
+    ]
+    fakes = await asyncio.gather(*calls)
+
+    assert len(set(fakes)) == 1
