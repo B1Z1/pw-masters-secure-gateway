@@ -17,6 +17,7 @@ from pydantic import BaseModel
 
 from ..pii_detection import nlp as _nlp
 from ..pii_detection.engine import get_engine
+from ..pipeline.anonymization_pipeline import AnonymizationPipeline, Replacement
 from ..pseudonym_vault.mapping_store import get_mapping_store
 
 router = APIRouter()
@@ -26,14 +27,6 @@ logger = logging.getLogger("gateway_api")
 class PseudonymizeRequest(BaseModel):
     text: str
     session_id: str | None = None
-
-
-class Replacement(BaseModel):
-    entity_type: str
-    original: str
-    fake: str
-    start: int  # offset into the ORIGINAL text
-    end: int
 
 
 class PseudonymizeResponse(BaseModel):
@@ -80,35 +73,11 @@ async def pseudonymize(request: PseudonymizeRequest) -> PseudonymizeResponse:
 
     store = _store_or_503()
 
-    entities = get_engine().detect(request.text)
-    items = [
-        (entity, await store.get_or_create(session_id, entity)) for entity in entities
-    ]
-
-    text = request.text
-
-    for entity, fake_form in sorted(
-            items, key=lambda pair: pair[0].start, reverse=True
-    ):
-        text = text[: entity.start] + fake_form + text[entity.end:]
-
-    replacements = [
-        Replacement(
-            entity_type=entity.entity_type,
-            original=entity.text,
-            fake=fake_form,
-            start=entity.start,
-            end=entity.end,
-        )
-        for entity, fake_form in items
-    ]
-
-    logger.info(
-        "pseudonymize session=%s entities=%d types=%s",
-        session_id,
-        len(items),
-        sorted({entity.entity_type for entity, _ in items}),
-    )
+    # Epic 4 (FR-003): the inbound substitution lives in the shared pipeline now;
+    # this handler delegates rather than duplicating it. Behaviour/response shape
+    # are unchanged (the Epic 3 round-trip stays the regression contract).
+    pipeline = AnonymizationPipeline(get_engine(), store)
+    text, replacements = await pipeline.pseudonymize_text(session_id, request.text)
 
     return PseudonymizeResponse(
         pseudonymized_text=text, entities_replaced=replacements, session_id=session_id

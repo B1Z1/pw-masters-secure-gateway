@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from gateway_api.pii_detection.recognizers.bank_account import PolishBankAccountRecognizer
+from gateway_api.pii_detection.recognizers.bank_account import (
+    PolishBankAccountRecognizer,
+)
 from gateway_api.pii_detection.scoring import S_INVALID, S_VALID
 
 REC = PolishBankAccountRecognizer()

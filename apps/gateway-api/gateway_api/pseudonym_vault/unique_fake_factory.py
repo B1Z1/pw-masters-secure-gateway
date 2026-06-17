@@ -36,7 +36,9 @@ class UniqueFakeFactory:
         if fake.base.isdigit():
             suffix_number = 1
 
-            while (candidate := fake.base[: -len(str(suffix_number))] + str(suffix_number)) in used_fake_forms:
+            while (
+                candidate := fake.base[: -len(str(suffix_number))] + str(suffix_number)
+            ) in used_fake_forms:
                 suffix_number += 1
 
             return fake.model_copy(update={"base": candidate, "forms": None})
