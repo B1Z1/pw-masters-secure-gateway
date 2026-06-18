@@ -319,7 +319,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Najemcą jest Jan Kowalski z Krakowa, PESEL 90010112345. Przepisz to zdanie dokładnie, bez żadnych zmian ani komentarzy.\"\n    }\n  ],\n  \"session_id\": null,\n  \"model\": \"qwen2.5:3b\"\n}",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Najemcą jest Jan Kowalski z Krakowa, PESEL 90010112345. Przepisz to zdanie dokładnie, bez żadnych zmian ani komentarzy.\"\n    }\n  ],\n  \"session_id\": null,\n  \"model\": \"ollama/qwen2.5:3b\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -367,7 +367,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Kim jest najemca Jan Kowalski z Krakowa?\"\n    },\n    {\n      \"role\": \"assistant\",\n      \"content\": \"Najemcą jest Jan Kowalski z Krakowa.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Powtórz dokładnie imię, nazwisko i miasto najemcy.\"\n    }\n  ],\n  \"session_id\": \"{{chatSessionId}}\",\n  \"model\": \"qwen2.5:3b\"\n}",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Kim jest najemca Jan Kowalski z Krakowa?\"\n    },\n    {\n      \"role\": \"assistant\",\n      \"content\": \"Najemcą jest Jan Kowalski z Krakowa.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Powtórz dokładnie imię, nazwisko i miasto najemcy.\"\n    }\n  ],\n  \"session_id\": \"{{chatSessionId}}\",\n  \"model\": \"ollama/qwen2.5:3b\"\n}",
               "options": {
                 "raw": {
                   "language": "json"

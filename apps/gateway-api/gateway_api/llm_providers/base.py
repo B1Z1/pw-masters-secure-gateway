@@ -13,8 +13,17 @@ from typing import Literal
 
 from pydantic import BaseModel
 
-# unreachable / missing_model → 503; timeout → 504 (research D6).
-ProviderErrorKind = Literal["unreachable", "missing_model", "timeout"]
+# kind → HTTP, mapped centrally in api/chat.py (Epic 5, research D6):
+#   unreachable / missing_model / auth → 503; timeout → 504; rate_limit → 429;
+#   unknown_model → 400 (raised by the router before any adapter call).
+ProviderErrorKind = Literal[
+    "unreachable",
+    "missing_model",
+    "timeout",
+    "rate_limit",
+    "auth",
+    "unknown_model",
+]
 
 
 class ChatMessage(BaseModel):

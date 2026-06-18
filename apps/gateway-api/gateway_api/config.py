@@ -51,8 +51,14 @@ class Settings(BaseSettings):
     ollama_base_url: str = "http://host.docker.internal:11434"
     # Epic 4 (FR-022): per-request Ollama timeout; an exceeded call → 504.
     ollama_timeout: float = 60.0
-    default_llm_provider: str = "openai"
-    default_model: str = "gpt-4o"
+    # Epic 5 (FR-010): Anthropic requires an explicit max-output-tokens on every
+    # call; it comes from configuration.
+    anthropic_max_tokens: int = 4096
+    # Epic 5 (FR-016/FR-017): provider selection is by model prefix via the router,
+    # so the single source of truth is default_model (the Epic 4 DEFAULT_LLM_PROVIDER
+    # setting is removed). The default is a local Ollama model so the keyless, offline
+    # demo works out of the box; its "ollama/" prefix routes to the Ollama adapter.
+    default_model: str = "ollama/qwen2.5:3b"
 
     @field_validator("redis_encryption_key")
     @classmethod
