@@ -22,10 +22,14 @@ fi
 
 if [[ -z "$model" ]]; then
   echo "No model given and DEFAULT_MODEL not found in .env." >&2
-  echo "Usage: $0 <model>   (e.g. $0 llama3)" >&2
+  echo "Usage: $0 <model>   (e.g. $0 ollama/llama3)" >&2
   exit 1
 fi
 
+# Epic 5 routes by model prefix: DEFAULT_MODEL is "ollama/<name>", but `ollama pull`
+# wants the bare name. Strip a leading "ollama/" so either form works here.
+model="${model#ollama/}"
+
 echo "Pulling Ollama model: $model"
 docker compose -f "$core_compose" -f "$ollama_compose" exec ollama ollama pull "$model"
-echo "Done. Set DEFAULT_MODEL=$model in .env so the gateway uses it."
+echo "Done. Set DEFAULT_MODEL=ollama/$model in .env so the gateway routes to Ollama."

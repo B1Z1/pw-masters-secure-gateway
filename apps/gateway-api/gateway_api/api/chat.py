@@ -21,12 +21,26 @@ from pydantic import BaseModel
 
 from ..config import get_settings
 from ..llm_providers import LLMProvider, LLMProviderError, get_llm_provider
-from ..llm_providers.base import ChatMessage
+from ..llm_providers.base import ChatMessage, ProviderErrorKind
 from ..pii_detection import nlp
 from ..pipeline.anonymization_pipeline import get_pipeline
 
 router = APIRouter()
 logger = logging.getLogger("gateway_api")
+
+# Single source of truth: provider-error kind → HTTP status (Epic 5, FR-023).
+# unknown_model is raised by the router before any adapter call (FR-015); auth is a
+# missing/invalid API key (FR-021); rate_limit is an upstream 429 with no retry
+# (FR-020). Existing Epic 4 kinds (unreachable/missing_model → 503, timeout → 504)
+# are unchanged.
+_ERROR_STATUS: dict[ProviderErrorKind, int] = {
+    "unreachable": 503,
+    "missing_model": 503,
+    "timeout": 504,
+    "rate_limit": 429,
+    "auth": 503,
+    "unknown_model": 400,
+}
 
 
 class ChatCompletionRequest(BaseModel):
@@ -83,15 +97,15 @@ async def chat_completions(
     # --- LLM round-trip (synchronous; full answer before restore — FR-025) ---
     try:
         fake_answer = await provider.complete(fake_messages, model=model)
-    except LLMProviderError as exc:
-        status_code = 504 if exc.kind == "timeout" else 503
+    except LLMProviderError as llmException:
+        status_code = _ERROR_STATUS.get(llmException.kind, 503)
         logger.info(
             "chat session=%s provider_error=%s status=%d",
             session_id,
-            exc.kind,
+            llmException.kind,
             status_code,
         )
-        return _error(status_code, str(exc), session_id)
+        return _error(status_code, str(llmException), session_id)
 
     # --- outbound: restore originals in the answer for display (FR-007) ------
     answer = await pipeline.depseudonymize_text(session_id, fake_answer)

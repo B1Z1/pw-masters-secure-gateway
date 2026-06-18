@@ -42,8 +42,7 @@ settings = get_settings()
 # Note we log whether Redis is configured, not the URL/password, and never the
 # encryption key or any API key.
 logger.info(
-    "Configuration loaded: provider=%s model=%s redis_configured=%s session_ttl=%s",
-    settings.default_llm_provider,
+    "Configuration loaded: model=%s redis_configured=%s session_ttl=%s",
     settings.default_model,
     bool(settings.redis_url),
     settings.redis_session_ttl,

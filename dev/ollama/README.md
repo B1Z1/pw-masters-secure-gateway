@@ -31,11 +31,14 @@ in-network `ollama` service and overrides `OLLAMA_BASE_URL` for the gateway.
 # from the repo root, with a valid .env (REDIS_* etc.):
 docker compose -f docker-compose.yml -f dev/ollama/docker-compose.ollama.yml up -d
 
-# pull the model the gateway will use (reads DEFAULT_MODEL from .env, or pass one):
-dev/ollama/pull-model.sh            # or: dev/ollama/pull-model.sh llama3
+# pull the model the gateway will use (reads DEFAULT_MODEL from .env, or pass one;
+# the "ollama/" prefix is stripped automatically before `ollama pull`):
+dev/ollama/pull-model.sh            # or: dev/ollama/pull-model.sh ollama/llama3
 
-# set DEFAULT_MODEL in .env to that model (the default gpt-4o is NOT an Ollama model!),
-# then exercise the chat endpoint:
+# set DEFAULT_MODEL in .env to that model WITH the "ollama/" prefix (Epic 5 routes by
+# prefix: ollama/<name> -> Ollama; a bare name -> 400 unknown model), e.g.
+# DEFAULT_MODEL=ollama/qwen2.5:3b. Then exercise the chat endpoint (no model field =
+# use the default), or send "model": "ollama/qwen2.5:3b" explicitly:
 curl -s localhost:8000/v1/chat/completions -H 'content-type: application/json' \
   -d '{"messages":[{"role":"user","content":"Streść umowę: najemca Jan Kowalski z Krakowa."}]}' | jq
 ```
@@ -67,5 +70,7 @@ in-network HTTP, so only model pulls need this.
   block in `docker-compose.ollama.yml` for hardware acceleration.
 - **Models are large** (GBs). They are kept in the `ollama-models` named volume,
   so you only download each once.
-- `DEFAULT_MODEL` must name an **installed** Ollama model; otherwise the gateway
-  returns **503** (missing model). Timeouts (tune `OLLAMA_TIMEOUT`) return **504**.
+- `DEFAULT_MODEL` must be an **`ollama/`-prefixed installed** model (e.g.
+  `ollama/qwen2.5:3b`); the router strips the prefix before calling Ollama. A bare
+  name → **400** (unknown model); a prefixed-but-not-pulled model → **503** (missing
+  model). Timeouts (tune `OLLAMA_TIMEOUT`) return **504**.

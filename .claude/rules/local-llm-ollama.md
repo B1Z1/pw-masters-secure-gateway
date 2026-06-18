@@ -46,11 +46,16 @@ dev/ollama/pull-model.sh                # pulls DEFAULT_MODEL from .env
 docker compose -f docker-compose.yml -f dev/ollama/docker-compose.ollama.yml exec ollama ollama pull qwen2.5:3b
 ```
 
-Set `DEFAULT_MODEL` in `.env` to an **installed** model (default: `qwen2.5:3b`).
-The literal default `gpt-4o` is NOT an Ollama model → the gateway returns **503
-missing_model**. Model recommendations: `qwen2.5:3b` follows instructions well in
-Polish; `llama3.2:1b` is faster but too weak to echo names reliably. The chat
-request may also override per call with an optional `"model"` field.
+Set `DEFAULT_MODEL` in `.env` to an **`ollama/`-prefixed installed** model
+(default: `ollama/qwen2.5:3b`). Epic 5 routes by the model **prefix**, so the model
+NAME in the request/`DEFAULT_MODEL` must carry `ollama/` — a bare `qwen2.5:3b` now
+returns **400 unknown model**, and the router strips the prefix before calling
+Ollama (`ollama/qwen2.5:3b` → Ollama sees `qwen2.5:3b`). An installed model whose
+prefixed name is sent but isn't pulled → **503 missing_model**. Model
+recommendations: `ollama/qwen2.5:3b` follows instructions well in Polish;
+`ollama/llama3.2:1b` is faster but too weak to echo names reliably. The chat request
+may also override per call with an optional `"model"` field (also `ollama/`-prefixed
+for Ollama; `gpt-…`/`claude-…` route to OpenAI/Anthropic instead).
 
 ## 4. After changing backend CODE, REBUILD the image
 
