@@ -75,7 +75,9 @@ async def test_native_passthrough_no_conversion_no_stream(monkeypatch):
 
     result = await OpenAIProvider("sk-test").complete(_MESSAGES, model="gpt-4o")
 
-    assert result == "ok"
+    assert result.content == "ok"
+    assert result.finish_reason == "stop"  # normalized OpenAI vocab (FR-003)
+    assert result.provider == "openai"
     # Native shape: messages passed through unchanged, system stays first.
     assert completions.last_kwargs["messages"] == [
         {"role": "system", "content": "Jesteś asystentem."},
@@ -93,7 +95,8 @@ async def test_length_truncation_warns_and_returns_partial(monkeypatch, caplog):
     with caplog.at_level(logging.WARNING, logger="gateway_api"):
         result = await OpenAIProvider("sk-test").complete(_MESSAGES, model="gpt-4o")
 
-    assert result == "partial answer"  # partial content still returned
+    assert result.content == "partial answer"  # partial content still returned
+    assert result.finish_reason == "length"  # "length" → "length" (FR-003)
     assert "truncated" in caplog.text
     assert "partial answer" not in caplog.text  # content is never logged
 

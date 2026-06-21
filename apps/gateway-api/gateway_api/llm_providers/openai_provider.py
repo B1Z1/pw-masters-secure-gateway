@@ -16,7 +16,13 @@ import logging
 
 import openai
 
-from .base import ChatMessage, LLMProvider, LLMProviderError
+from .base import (
+    ChatMessage,
+    CompletionResult,
+    LLMProvider,
+    LLMProviderError,
+    normalize_finish_reason,
+)
 
 logger = logging.getLogger("gateway_api")
 
@@ -35,7 +41,9 @@ class OpenAIProvider(LLMProvider):
             self._client = openai.AsyncOpenAI(api_key=self._api_key, max_retries=0)
         return self._client
 
-    async def complete(self, messages: list[ChatMessage], *, model: str) -> str:
+    async def complete(
+        self, messages: list[ChatMessage], *, model: str
+    ) -> CompletionResult:
         client = self._ensure_client()
         # Native shape — no conversion; a system message stays the first message.
         payload = [
@@ -67,7 +75,11 @@ class OpenAIProvider(LLMProvider):
             logger.warning(
                 "openai answer truncated finish_reason=length model=%s", model
             )
-        return choice.message.content or ""
+        return CompletionResult(
+            content=choice.message.content or "",
+            finish_reason=normalize_finish_reason(choice.finish_reason),
+            provider="openai",
+        )
 
     async def health_check(self) -> bool:
         return bool(self._api_key)

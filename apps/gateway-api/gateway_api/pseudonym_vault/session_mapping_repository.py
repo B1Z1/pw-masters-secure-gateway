@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
+from ..observability.request_metrics import timed_inbound_stage
 from .aes_gcm_encryption import EncryptedJsonCodec
 from .session_layout import COREFS, FORMS, META, REV, SessionMeta, session_hash_key
 
@@ -148,7 +149,8 @@ class SessionMappingRepository:
                 }
             )
 
-        await self._redis.hset(session_hash_key(session_id), mapping=fields)
+        with timed_inbound_stage("redis_write"):
+            await self._redis.hset(session_hash_key(session_id), mapping=fields)
 
         if register_coref:
             await self.append_coref(session_id, normalized_key, fake_base, entity_type)
@@ -167,18 +169,19 @@ class SessionMappingRepository:
     ) -> None:
         # The EXACT original surface for the inserted form, so restore is literal
         # (no gender-blind re-declension); lemma-based rev entries are a fallback.
-        await self._redis.hset(
-            session_hash_key(session_id),
-            REV + fake_form,
-            self._codec.encrypt_object(
-                {
-                    "orig_base": original_text,
-                    "case": case,
-                    "entity_type": entity_type,
-                    "exact": True,
-                }
-            ),
-        )
+        with timed_inbound_stage("redis_write"):
+            await self._redis.hset(
+                session_hash_key(session_id),
+                REV + fake_form,
+                self._codec.encrypt_object(
+                    {
+                        "orig_base": original_text,
+                        "case": case,
+                        "entity_type": entity_type,
+                        "exact": True,
+                    }
+                ),
+            )
 
     async def append_coref(
             self, session_id: str, normalized_key: str, fake_base: str, entity_type: str
@@ -192,11 +195,12 @@ class SessionMappingRepository:
             }
         )
 
-        await self._redis.hset(
-            session_hash_key(session_id),
-            COREFS,
-            self._codec.encrypt_object(coref_records),
-        )
+        with timed_inbound_stage("redis_write"):
+            await self._redis.hset(
+                session_hash_key(session_id),
+                COREFS,
+                self._codec.encrypt_object(coref_records),
+            )
 
     async def bump_meta(self, session_id: str) -> None:
         now = datetime.now(UTC).isoformat()
@@ -213,18 +217,59 @@ class SessionMappingRepository:
                 message_count=stored.get("message_count", 0),
             )
 
+        with timed_inbound_stage("redis_write"):
+            await self._redis.hset(
+                session_hash_key(session_id),
+                META,
+                self._codec.encrypt_object(meta.to_dict()),
+            )
+
+    async def bump_message_count(self, session_id: str) -> None:
+        """+1 to a successful chat round-trip count (Epic 6, FR-019/D7).
+
+        Only when the session already has stored state (``meta`` present): a
+        PII-free session has no hash, so this is a no-op and the session stays
+        unmanageable (404), per the never-stored-session rule.
+        """
+        encrypted_meta = await self._redis.hget(session_hash_key(session_id), META)
+
+        if encrypted_meta is None:
+            return
+
+        stored = self._codec.decrypt_object(encrypted_meta)
+        meta = SessionMeta(
+            created_at=stored["created_at"],
+            last_activity=stored["last_activity"],
+            entity_count=stored.get("entity_count", 0),
+            message_count=stored.get("message_count", 0) + 1,
+        )
         await self._redis.hset(
             session_hash_key(session_id),
             META,
             self._codec.encrypt_object(meta.to_dict()),
         )
 
+    async def read_meta(self, session_id: str) -> dict | None:
+        """Decrypted ``SessionMeta`` dict for the session, or ``None`` if absent."""
+        encrypted_meta = await self._redis.hget(session_hash_key(session_id), META)
+
+        if encrypted_meta is None:
+            return None
+
+        return self._codec.decrypt_object(encrypted_meta)
+
+    async def ttl_seconds(self, session_id: str) -> int:
+        """Live Redis TTL of the session hash (Redis: -2 missing, -1 no-expire)."""
+        return await self._redis.ttl(session_hash_key(session_id))
+
     # --- lifecycle -----------------------------------------------------------
 
     async def extend_ttl(self, session_id: str) -> None:
-        await self._redis.expire(
-            session_hash_key(session_id), self._session_ttl_seconds
-        )
+        with timed_inbound_stage("redis_write"):
+            await self._redis.expire(
+                session_hash_key(session_id), self._session_ttl_seconds
+            )
 
-    async def delete(self, session_id: str) -> None:
-        await self._redis.delete(session_hash_key(session_id))
+    async def delete(self, session_id: str) -> bool:
+        """Delete the session hash; return whether it existed (Epic 6, FR-020)."""
+        return await self._redis.delete(session_hash_key(session_id)) == 1

@@ -53,7 +53,7 @@ async def test_round_trip_hides_pii_and_restores(make_store):
     messages = [
         ChatMessage(role="user", content="Jan Kowalski, Kraków, PESEL 90010112345.")
     ]
-    fake_messages = await pipeline.pseudonymize_messages("s1", messages)
+    fake_messages = (await pipeline.run_inbound("s1", messages)).fake_messages
 
     # The provider only ever sees synthetic data (SC-001, Constitution I).
     sent = fake_messages[0].content
@@ -61,7 +61,7 @@ async def test_round_trip_hides_pii_and_restores(make_store):
     assert "Kraków" not in sent
     assert "90010112345" not in sent
 
-    fake_answer = await EchoProvider().complete(fake_messages, model="stub")
+    fake_answer = (await EchoProvider().complete(fake_messages, model="stub")).content
     restored = await pipeline.depseudonymize_text("s1", fake_answer)
 
     assert "Jan Kowalski" in restored
@@ -81,7 +81,7 @@ async def test_multi_turn_repseudonymizes_whole_history_consistently(make_store)
         ChatMessage(role="assistant", content="Jan Kowalski to najemca."),
         ChatMessage(role="user", content="Gdzie mieszka Jan Kowalski?"),
     ]
-    fake_messages = await pipeline.pseudonymize_messages("s2", history)
+    fake_messages = (await pipeline.run_inbound("s2", history)).fake_messages
 
     for message in fake_messages:
         assert "Jan Kowalski" not in message.content

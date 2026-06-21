@@ -58,9 +58,33 @@ def provider():
 async def test_complete_parses_message_content(provider, monkeypatch):
     _patch_client(
         monkeypatch,
-        response=_FakeResponse(200, {"message": {"content": "Dzień dobry"}}),
+        response=_FakeResponse(
+            200, {"message": {"content": "Dzień dobry"}, "done_reason": "stop"}
+        ),
     )
-    assert await provider.complete(_MESSAGES, model="m") == "Dzień dobry"
+    result = await provider.complete(_MESSAGES, model="m")
+    assert result.content == "Dzień dobry"
+    assert result.finish_reason == "stop"
+    assert result.provider == "ollama"
+
+
+async def test_complete_missing_done_reason_defaults_to_stop(provider, monkeypatch):
+    _patch_client(
+        monkeypatch, response=_FakeResponse(200, {"message": {"content": "ok"}})
+    )
+    result = await provider.complete(_MESSAGES, model="m")
+    assert result.finish_reason == "stop"  # absent done_reason → "stop" (FR-003)
+
+
+async def test_complete_length_done_reason_normalizes(provider, monkeypatch):
+    _patch_client(
+        monkeypatch,
+        response=_FakeResponse(
+            200, {"message": {"content": "cut"}, "done_reason": "length"}
+        ),
+    )
+    result = await provider.complete(_MESSAGES, model="m")
+    assert result.finish_reason == "length"
 
 
 async def test_connect_error_maps_to_unreachable(provider, monkeypatch):

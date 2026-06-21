@@ -15,9 +15,9 @@ from gateway_api.llm_providers.anthropic_provider import AnthropicProvider
 from gateway_api.llm_providers.base import ChatMessage, LLMProviderError
 
 
-def _response(*text_blocks):
+def _response(*text_blocks, stop_reason="end_turn"):
     content = [SimpleNamespace(type="text", text=t) for t in text_blocks]
-    return SimpleNamespace(content=content)
+    return SimpleNamespace(content=content, stop_reason=stop_reason)
 
 
 class _FakeMessages:
@@ -126,7 +126,26 @@ async def test_joins_text_blocks(monkeypatch):
         [ChatMessage(role="user", content="cześć")], model="claude-x"
     )
 
-    assert result == "Dzień dobry"
+    assert result.content == "Dzień dobry"
+    assert result.finish_reason == "stop"  # end_turn → "stop" (FR-003)
+    assert result.provider == "anthropic"
+
+
+@pytest.mark.parametrize(
+    "stop_reason,expected",
+    [("end_turn", "stop"), ("stop_sequence", "stop"), ("max_tokens", "length")],
+)
+async def test_stop_reason_normalized_to_openai_vocab(
+    monkeypatch, stop_reason, expected
+):
+    messages = _FakeMessages(result=_response("ok", stop_reason=stop_reason))
+    _patch(monkeypatch, messages)
+
+    result = await AnthropicProvider("sk-test", max_tokens=100).complete(
+        [ChatMessage(role="user", content="cześć")], model="claude-x"
+    )
+
+    assert result.finish_reason == expected
 
 
 @pytest.mark.parametrize(
