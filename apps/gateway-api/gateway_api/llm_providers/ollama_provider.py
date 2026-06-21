@@ -10,7 +10,13 @@ from __future__ import annotations
 
 import httpx
 
-from .base import ChatMessage, LLMProvider, LLMProviderError
+from .base import (
+    ChatMessage,
+    CompletionResult,
+    LLMProvider,
+    LLMProviderError,
+    normalize_finish_reason,
+)
 
 
 class OllamaProvider(LLMProvider):
@@ -18,7 +24,9 @@ class OllamaProvider(LLMProvider):
         self._base_url = base_url.rstrip("/")
         self._timeout = timeout
 
-    async def complete(self, messages: list[ChatMessage], *, model: str) -> str:
+    async def complete(
+        self, messages: list[ChatMessage], *, model: str
+    ) -> CompletionResult:
         payload = {
             "model": model,
             "messages": [
@@ -52,7 +60,14 @@ class OllamaProvider(LLMProvider):
                 f"Ollama returned HTTP {response.status_code}", kind="unreachable"
             )
 
-        return response.json()["message"]["content"]
+        body = response.json()
+        # Newer Ollama reports done_reason ("stop"/"length"); older builds omit
+        # it → None → normalized to "stop" (FR-003).
+        return CompletionResult(
+            content=body["message"]["content"],
+            finish_reason=normalize_finish_reason(body.get("done_reason")),
+            provider="ollama",
+        )
 
     async def health_check(self) -> bool:
         try:

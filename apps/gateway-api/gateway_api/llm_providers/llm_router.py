@@ -15,7 +15,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping
 
-from .base import ChatMessage, LLMProvider, LLMProviderError
+from .base import ChatMessage, CompletionResult, LLMProvider, LLMProviderError
 
 _OLLAMA_PREFIX = "ollama/"
 
@@ -33,7 +33,9 @@ class LLMRouter(LLMProvider):
         self._default_model = default_model
         self._adapters: dict[str, LLMProvider] = {}
 
-    async def complete(self, messages: list[ChatMessage], *, model: str) -> str:
+    async def complete(
+        self, messages: list[ChatMessage], *, model: str
+    ) -> CompletionResult:
         prefix, model_to_send = self._resolve(model)
         return await self._adapter_for(prefix).complete(messages, model=model_to_send)
 

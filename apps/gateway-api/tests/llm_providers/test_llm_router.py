@@ -8,7 +8,12 @@ from __future__ import annotations
 
 import pytest
 
-from gateway_api.llm_providers.base import ChatMessage, LLMProvider, LLMProviderError
+from gateway_api.llm_providers.base import (
+    ChatMessage,
+    CompletionResult,
+    LLMProvider,
+    LLMProviderError,
+)
 from gateway_api.llm_providers.llm_router import LLMRouter
 
 _MESSAGES = [ChatMessage(role="user", content="cześć")]
@@ -21,7 +26,9 @@ class _RecordingProvider(LLMProvider):
 
     async def complete(self, messages, *, model):
         self.calls.append(model)
-        return f"{self.name}:{model}"
+        return CompletionResult(
+            content=f"{self.name}:{model}", finish_reason="stop", provider=self.name
+        )
 
     async def health_check(self):
         return True
@@ -52,7 +59,8 @@ def _make_router(default_model: str = "ollama/qwen2.5:3b"):
 async def test_gpt_routes_to_openai():
     router, providers, _ = _make_router()
     result = await router.complete(_MESSAGES, model="gpt-4o")
-    assert result == "openai:gpt-4o"
+    assert result.content == "openai:gpt-4o"  # router passes the result through
+    assert result.provider == "openai"
     assert providers["gpt-"].calls == ["gpt-4o"]
     assert providers["claude-"].calls == []
     assert providers["ollama/"].calls == []

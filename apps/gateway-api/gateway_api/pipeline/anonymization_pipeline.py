@@ -14,10 +14,15 @@ fakes (Constitution VIII, FR-024).
 from __future__ import annotations
 
 import logging
+from dataclasses import dataclass, field
 
 from pydantic import BaseModel
 
 from ..llm_providers.base import ChatMessage
+from ..observability.request_metrics import (
+    capture_inbound_stages,
+    timed_inbound_stage,
+)
 from ..pii_detection.engine import get_engine
 from ..pseudonym_vault.mapping_store import get_mapping_store
 
@@ -34,35 +39,104 @@ class Replacement(BaseModel):
     end: int
 
 
+@dataclass
+class InboundTiming:
+    """Per-stage inbound wall-clock in milliseconds (Epic 6, FR-014/D4)."""
+
+    ner_analysis_ms: float = 0.0
+    fake_generation_ms: float = 0.0
+    redis_write_ms: float = 0.0
+
+
+@dataclass
+class InboundResult:
+    """Everything one inbound pass produces for the chat response (Epic 6)."""
+
+    fake_messages: list[ChatMessage]
+    entities_detected: dict[str, int] = field(default_factory=dict)
+    total_entities: int = 0
+    last_user_pseudonymized: str = ""
+    last_user_replacements: list[Replacement] = field(default_factory=list)
+    timing: InboundTiming = field(default_factory=InboundTiming)
+
+
 class AnonymizationPipeline:
     def __init__(self, engine, store) -> None:
         self._engine = engine
         self._store = store
 
-    async def pseudonymize_messages(
+    async def run_inbound(
             self, session_id: str, messages: list[ChatMessage]
-    ) -> list[ChatMessage]:
-        """Pseudonymize EVERY message each turn (FR-005); roles preserved.
+    ) -> InboundResult:
+        """Pseudonymize the WHOLE history once, returning the data the chat
+        response and the log line need (Epic 6, FR-005/FR-006/FR-015).
 
-        Re-pseudonymizing content already seen in the session is deterministic
-        (same original → same fake) thanks to Epic 3 session consistency (FR-006),
-        so no original re-entering through an earlier assistant message can reach
-        the LLM (the gateway↔LLM hop is the protected one — FR-007).
+        Every message is pseudonymized each turn (deterministic per Epic 3
+        session consistency, FR-006), so no original re-entering through an
+        earlier assistant message can reach the LLM. Per-type counts are summed
+        over the whole history; the latest user message's synthetic text +
+        replacements are captured for ``input_anonymization``. Inbound stage
+        timings are attributed via the request-scoped accumulator (D4).
         """
-        pseudonymized: list[ChatMessage] = []
+        last_user_index = next(
+            (
+                index
+                for index in range(len(messages) - 1, -1, -1)
+                if messages[index].role == "user"
+            ),
+            None,
+        )
 
-        for message in messages:
-            fake_content, _ = await self.pseudonymize_text(session_id, message.content)
+        fake_messages: list[ChatMessage] = []
+        entities_detected: dict[str, int] = {}
+        last_user_pseudonymized = ""
+        last_user_replacements: list[Replacement] = []
 
-            pseudonymized.append(
-                ChatMessage(role=message.role, content=fake_content)
-            )
+        with capture_inbound_stages() as stage_seconds:
+            for index, message in enumerate(messages):
+                fake_content, replacements = await self.pseudonymize_text(
+                    session_id, message.content
+                )
+                fake_messages.append(
+                    ChatMessage(role=message.role, content=fake_content)
+                )
 
-        return pseudonymized
+                for replacement in replacements:
+                    entities_detected[replacement.entity_type] = (
+                        entities_detected.get(replacement.entity_type, 0) + 1
+                    )
+
+                if index == last_user_index:
+                    last_user_pseudonymized = fake_content
+                    last_user_replacements = replacements
+
+        redis_write_ms = stage_seconds.get("redis_write", 0.0) * 1000
+        # fake_generation = substitution compute − the inbound Redis-write time
+        # captured within it (D4); a small amount of inbound read time folds in.
+        fake_generation_ms = (
+            stage_seconds.get("substitution", 0.0) * 1000 - redis_write_ms
+        )
+
+        return InboundResult(
+            fake_messages=fake_messages,
+            entities_detected=entities_detected,
+            total_entities=sum(entities_detected.values()),
+            last_user_pseudonymized=last_user_pseudonymized,
+            last_user_replacements=last_user_replacements,
+            timing=InboundTiming(
+                ner_analysis_ms=stage_seconds.get("ner_analysis", 0.0) * 1000,
+                fake_generation_ms=max(fake_generation_ms, 0.0),
+                redis_write_ms=redis_write_ms,
+            ),
+        )
 
     async def depseudonymize_text(self, session_id: str, text: str) -> str:
         """Restore originals in the LLM answer: exact + inflection, then fuzzy."""
         return await self._store.restore_text(session_id, text, fuzzy=True)
+
+    async def increment_message_count(self, session_id: str) -> None:
+        """+1 successful chat round-trip (delegates to the store; no-op if no state)."""
+        await self._store.increment_message_count(session_id)
 
     async def pseudonymize_text(
             self, session_id: str, text: str
@@ -71,11 +145,16 @@ class AnonymizationPipeline:
         if not text or not text.strip():
             return text, []
 
-        entities = self._engine.detect(text)
-        items = [
-            (entity, await self._store.get_or_create(session_id, entity))
-            for entity in entities
-        ]
+        with timed_inbound_stage("ner_analysis"):
+            entities = self._engine.detect(text)
+
+        # The store's inbound Redis writes time themselves into "redis_write"
+        # within this window; the remainder is fake-generation compute (D4).
+        with timed_inbound_stage("substitution"):
+            items = [
+                (entity, await self._store.get_or_create(session_id, entity))
+                for entity in entities
+            ]
 
         fake_text = text
 

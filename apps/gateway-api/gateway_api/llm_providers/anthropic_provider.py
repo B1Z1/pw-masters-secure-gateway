@@ -15,7 +15,13 @@ from __future__ import annotations
 
 import anthropic
 
-from .base import ChatMessage, LLMProvider, LLMProviderError
+from .base import (
+    ChatMessage,
+    CompletionResult,
+    LLMProvider,
+    LLMProviderError,
+    normalize_finish_reason,
+)
 
 _SEPARATOR = "\n\n"
 
@@ -60,7 +66,9 @@ class AnthropicProvider(LLMProvider):
             )
         return self._client
 
-    async def complete(self, messages: list[ChatMessage], *, model: str) -> str:
+    async def complete(
+        self, messages: list[ChatMessage], *, model: str
+    ) -> CompletionResult:
         client = self._ensure_client()
         system, turns = _split_system_and_turns(messages)
 
@@ -88,8 +96,17 @@ class AnthropicProvider(LLMProvider):
         except anthropic.NotFoundError as exc:
             raise LLMProviderError(str(exc), kind="missing_model") from exc
 
-        return "".join(
+        content = "".join(
             block.text for block in response.content if block.type == "text"
+        )
+        # Anthropic reports stop_reason (end_turn/max_tokens/stop_sequence); a
+        # mock may omit it → getattr default None → normalized to "stop".
+        return CompletionResult(
+            content=content,
+            finish_reason=normalize_finish_reason(
+                getattr(response, "stop_reason", None)
+            ),
+            provider="anthropic",
         )
 
     async def health_check(self) -> bool:

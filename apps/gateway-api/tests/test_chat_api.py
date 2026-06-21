@@ -15,25 +15,33 @@ from types import SimpleNamespace
 import pytest
 
 from gateway_api.llm_providers import LLMRouter, OpenAIProvider, get_llm_provider
-from gateway_api.llm_providers.base import ChatMessage, LLMProvider, LLMProviderError
+from gateway_api.llm_providers.base import (
+    ChatMessage,
+    CompletionResult,
+    LLMProvider,
+    LLMProviderError,
+)
 from gateway_api.pii_detection.dto import DetectedEntity
 
 
 class _RecordingProvider(LLMProvider):
     """Captures the messages it receives; echoes the last user content by default."""
 
-    def __init__(self, reply: str | None = None):
+    def __init__(self, reply: str | None = None, finish_reason: str = "stop"):
         self.received: list[ChatMessage] | None = None
         self._reply = reply
+        self._finish_reason = finish_reason
 
     async def complete(self, messages, *, model):
         self.received = messages
-        if self._reply is not None:
-            return self._reply
-        for message in reversed(messages):
-            if message.role == "user":
-                return message.content
-        return ""
+        content = self._reply
+        if content is None:
+            content = next(
+                (m.content for m in reversed(messages) if m.role == "user"), ""
+            )
+        return CompletionResult(
+            content=content, finish_reason=self._finish_reason, provider="ollama"
+        )
 
     async def health_check(self):
         return True
@@ -65,7 +73,9 @@ class _ModelRecordingProvider(LLMProvider):
         self.calls += 1
         self.model = model
         self.received = messages
-        return self._reply
+        return CompletionResult(
+            content=self._reply, finish_reason="stop", provider="ollama"
+        )
 
     async def health_check(self):
         return True
@@ -452,3 +462,149 @@ async def test_no_pii_reaches_provider_or_logs_on_routed_path(
     for message in ollama.received:
         assert "Kowalski" not in message.content
     assert "Kowalski" not in caplog.text
+
+
+# --- Epic 6 (US1): the full chat-completions response contract ---------------
+
+
+async def test_full_response_contract(client, chat_env, use_provider):
+    """US1: every documented field is present and well-formed (FR-002..FR-006)."""
+    _, set_engine = chat_env
+    set_engine(
+        [
+            ("PERSON", "Jan Kowalski", "Jan Kowalski", "nom", {}),
+            ("PESEL", "90010112345", None, None, {"gender": "male"}),
+        ]
+    )
+    use_provider(_RecordingProvider(reply="odpowiedź", finish_reason="length"))
+
+    original = "Jan Kowalski, PESEL 90010112345."
+    resp = await client.post(
+        "/v1/chat/completions",
+        json={"session_id": "c", "messages": [{"role": "user", "content": original}]},
+    )
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["id"].startswith("chatcmpl-")
+    assert body["object"] == "chat.completion"
+    assert isinstance(body["created"], int) and body["created"] > 0
+    assert body["model"] == "ollama/qwen2.5:3b"  # resolved default, un-stripped
+    assert body["session_id"] == "c"
+
+    choice = body["choices"][0]
+    assert choice["index"] == 0
+    assert choice["message"]["role"] == "assistant"
+    assert choice["finish_reason"] == "length"  # real value, normalized (FR-003)
+
+    meta = body["anonymization_meta"]
+    assert meta["entities_detected"] == {"PERSON": 1, "PESEL": 1}
+    assert meta["total_entities"] == 2
+    assert meta["provider"] == "ollama"
+    assert meta["model"] == "ollama/qwen2.5:3b"
+    assert set(meta["timing_ms"]) == {
+        "ner_analysis",
+        "fake_generation",
+        "redis_write",
+        "llm_request",
+        "deanonymization",
+        "total",
+    }
+    assert all(value >= 0.0 for value in meta["timing_ms"].values())
+    assert meta["processing_time_ms"] == meta["timing_ms"]["total"]
+
+    input_anon = body["input_anonymization"]
+    assert "Jan Kowalski" not in input_anon["pseudonymized_content"]
+    by_type = {r["entity_type"] for r in input_anon["replacements"]}
+    assert by_type == {"PERSON", "PESEL"}
+    person = next(
+        r for r in input_anon["replacements"] if r["entity_type"] == "PERSON"
+    )
+    assert original[person["start"] : person["end"]] == "Jan Kowalski"
+
+
+async def test_finish_reason_stop_for_stub(client, chat_env, use_provider):
+    """US1: a provider reporting stop (or unable to report) yields "stop"."""
+    _, set_engine = chat_env
+    set_engine([])
+    use_provider(_RecordingProvider(reply="ok", finish_reason="stop"))
+
+    resp = await client.post(
+        "/v1/chat/completions",
+        json={"messages": [{"role": "user", "content": "cześć"}]},
+    )
+    assert resp.json()["choices"][0]["finish_reason"] == "stop"
+
+
+async def test_entities_detected_counted_over_whole_history(
+        client, chat_env, use_provider
+):
+    """US1: anonymization_meta counts over the WHOLE history, not just the last turn."""
+    _, set_engine = chat_env
+    set_engine([("PERSON", "Jan Kowalski", "Jan Kowalski", "nom", {})])
+    use_provider(_RecordingProvider(reply="ok"))
+
+    resp = await client.post(
+        "/v1/chat/completions",
+        json={
+            "session_id": "hist",
+            "messages": [
+                {"role": "user", "content": "Kto to Jan Kowalski?"},
+                {"role": "assistant", "content": "Jan Kowalski to najemca."},
+                {"role": "user", "content": "Gdzie mieszka Jan Kowalski?"},
+            ],
+        },
+    )
+    assert resp.json()["anonymization_meta"]["entities_detected"] == {"PERSON": 3}
+
+
+async def test_message_count_increments_on_success(client, chat_env, use_provider):
+    """US1: a successful round-trip that detected PII bumps message_count (D7)."""
+    store, set_engine = chat_env
+    set_engine([("PERSON", "Jan Kowalski", "Jan Kowalski", "nom", {})])
+    use_provider(_RecordingProvider(reply="ok"))
+
+    await client.post(
+        "/v1/chat/completions",
+        json={
+            "session_id": "mc",
+            "messages": [{"role": "user", "content": "Jan Kowalski"}],
+        },
+    )
+    summary = await store.get_session_summary("mc")
+    assert summary["message_count"] == 1
+
+
+# --- Epic 6 (US5): validation matrix preserves session_id, contacts no provider ---
+
+
+async def test_invalid_role_returns_400_and_dispatches_nothing(
+        client, chat_env, use_provider
+):
+    _, set_engine = chat_env
+    set_engine([])
+    provider = _RecordingProvider()
+    use_provider(provider)
+
+    resp = await client.post(
+        "/v1/chat/completions",
+        json={"session_id": "v", "messages": [{"role": "tool", "content": "x"}]},
+    )
+    assert resp.status_code == 400
+    assert resp.json()["session_id"] == "v"
+    assert provider.received is None  # nothing sent to the provider
+
+
+async def test_non_string_content_returns_400(client, chat_env, use_provider):
+    _, set_engine = chat_env
+    set_engine([])
+    provider = _RecordingProvider()
+    use_provider(provider)
+
+    resp = await client.post(
+        "/v1/chat/completions",
+        json={"session_id": "v2", "messages": [{"role": "user", "content": 123}]},
+    )
+    assert resp.status_code == 400
+    assert resp.json()["session_id"] == "v2"
+    assert provider.received is None

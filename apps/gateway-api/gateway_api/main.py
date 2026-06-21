@@ -13,7 +13,6 @@ from __future__ import annotations
 
 import logging
 import threading
-import time
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
@@ -21,15 +20,19 @@ from fastapi.responses import JSONResponse
 
 from .api.chat import router as chat_router
 from .api.detect import router as detect_router
+from .api.providers import router as providers_router
 from .api.pseudonymize import router as pseudonymize_router
+from .api.sessions import router as sessions_router
 from .config import get_settings
 from .health import check_redis
 from .health import router as health_router
+from .observability.request_logging import RequestLoggingMiddleware
 from .pii_detection import nlp as detection_nlp
 
-# Routes exempt from the Redis-availability gate. /health (FR-022) and the
-# stateless detection endpoint (/v1/detect — FR-031) never depend on Redis.
-_GATE_EXEMPT_PATHS = frozenset({"/health", "/v1/detect"})
+# Routes exempt from the Redis-availability gate. /health (FR-022), the stateless
+# detection endpoint (/v1/detect — FR-031), and the read-only provider discovery
+# (/v1/providers — Epic 6 FR-011, needs no Redis) never depend on Redis.
+_GATE_EXEMPT_PATHS = frozenset({"/health", "/v1/detect", "/v1/providers"})
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("gateway_api")
@@ -71,32 +74,29 @@ app.include_router(detect_router)
 app.include_router(pseudonymize_router)
 # Epic 4 chat round-trip — also NOT gate-exempt (it needs Redis via the store).
 app.include_router(chat_router)
+# Epic 6 — session management (GET/DELETE, need Redis) + provider discovery
+# (gate-exempt above).
+app.include_router(sessions_router)
+app.include_router(providers_router)
 
 
 @app.middleware("http")
 async def redis_availability_gate(request: Request, call_next):
-    """Pass ``/health`` through untouched; gate all other routes on Redis.
+    """Pass gate-exempt routes through; gate all others on Redis availability.
 
-    Logs request path, status, and timing only — no headers, query, body, or
-    secrets (FR-030).
+    The per-request structured log line is emitted by the separate
+    ``RequestLoggingMiddleware`` (Epic 6) — this gate no longer logs, so there is
+    exactly one structured line per request and the two do not duplicate (FR-013).
     """
-    start = time.perf_counter()
-    path = request.url.path
+    if request.url.path in _GATE_EXEMPT_PATHS:
+        return await call_next(request)
 
-    if path in _GATE_EXEMPT_PATHS:
-        response = await call_next(request)
-    elif await check_redis() != "ok":
-        response = JSONResponse(
-            status_code=503, content={"detail": "Redis unavailable"}
-        )
-    else:
-        response = await call_next(request)
+    if await check_redis() != "ok":
+        return JSONResponse(status_code=503, content={"detail": "Redis unavailable"})
 
-    duration_ms = (time.perf_counter() - start) * 1000
-    logger.info(
-        "request path=%s status=%s duration_ms=%.1f",
-        path,
-        response.status_code,
-        duration_ms,
-    )
-    return response
+    return await call_next(request)
+
+
+# Registered AFTER the gate so it is the OUTERMOST middleware: it wraps the gate
+# and therefore logs EVERY response — including a gate 503 — exactly once (D10).
+app.add_middleware(RequestLoggingMiddleware)

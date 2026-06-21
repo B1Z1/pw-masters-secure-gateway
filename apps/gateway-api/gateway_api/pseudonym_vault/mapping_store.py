@@ -243,9 +243,46 @@ class MappingStore:
 
         return self._fuzzy_restorer.restore(text, name_records)
 
-    async def delete_session(self, session_id: str) -> None:
-        await self._repository.delete(session_id)
+    async def delete_session(self, session_id: str) -> bool:
+        """Delete the session + all its mappings; return whether it existed (FR-020)."""
+        existed = await self._repository.delete(session_id)
         self._session_locks.discard(session_id)
+
+        return existed
+
+    async def increment_message_count(self, session_id: str) -> None:
+        """+1 successful chat round-trip; no-op when the session has no state (D7)."""
+        await self._repository.bump_message_count(session_id)
+
+    async def get_session_summary(self, session_id: str) -> dict | None:
+        """Dashboard statistics for a session, or ``None`` when nothing is stored.
+
+        ``entity_count``/``entities_by_type`` come from the DISTINCT original↔fake
+        mappings (the dashboard bar chart), NOT ``meta.entity_count`` (a write
+        counter). The live TTL is read BEFORE ``get_all_mappings`` (which refreshes
+        the sliding TTL), so the reported remaining time is the pre-read value.
+        """
+        meta = await self._repository.read_meta(session_id)
+
+        if meta is None:
+            return None
+
+        ttl_remaining_seconds = await self._repository.ttl_seconds(session_id)
+        entities_by_type: dict[str, int] = {}
+
+        for mapping in await self.get_all_mappings(session_id):
+            entity_type = mapping["entity_type"]
+            entities_by_type[entity_type] = entities_by_type.get(entity_type, 0) + 1
+
+        return {
+            "session_id": session_id,
+            "created_at": meta["created_at"],
+            "last_activity": meta["last_activity"],
+            "ttl_remaining_seconds": ttl_remaining_seconds,
+            "entity_count": sum(entities_by_type.values()),
+            "entities_by_type": entities_by_type,
+            "message_count": meta.get("message_count", 0),
+        }
 
     async def extend_ttl(self, session_id: str) -> None:
         await self._repository.extend_ttl(session_id)

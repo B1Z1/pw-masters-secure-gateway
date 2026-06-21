@@ -96,3 +96,42 @@ every error preserves the `session_id`.
   edit-distance-bounded, so identifiers/e-mail/phone are never fuzzed and invented names are not
   restored.
 - **Synchronous only**: the full LLM answer is received before de-pseudonymization (no streaming).
+
+## Frontend-ready surface, logging/metrics & session management (Epic 6)
+
+The HTTP surface is hardened into the complete backend contract the React SPA is built against — no
+new anonymization logic, the Epic 4/5 flow is reused unchanged (only the provider port now returns a
+finish reason and the pipeline now returns timing/entity metrics).
+
+- **`POST /v1/chat/completions`** returns the full OpenAI-shaped body — `id` (`chatcmpl-…`), `object`,
+  `created`, the resolved `model`, and `choices[0]` with a **real** `finish_reason` normalized to
+  `stop`/`length` — plus the gateway extensions: `anonymization_meta` (per-type `entities_detected`
+  over the whole history, `total_entities`, `provider`, `model`, `processing_time_ms`, and the
+  per-stage `timing_ms`) and `input_anonymization` (the latest user message's synthetic text +
+  `replacements` with offsets into the original). Validation (empty messages, bad role/content,
+  non-user last turn, unknown model) returns **400**; provider failures map to 503/429/504; **every**
+  error body preserves `session_id`.
+- **`GET` / `DELETE /v1/sessions/{id}`** — per-session dashboard statistics (`created_at`,
+  `last_activity`, `ttl_remaining_seconds`, `entity_count`, `entities_by_type`, `message_count`) and
+  session reset. 404 for a non-existent, TTL-expired, or never-stored (no PII) session. No auth: anyone
+  holding a `session_id` may read/delete it (documented prototype limitation).
+- **`GET /v1/providers`** — read-only `{name, requires_key, key_configured}` for openai/anthropic/ollama
+  so the config panel can warn about a missing key before the first message. Never returns a key value;
+  gate-exempt (answers while Redis is down).
+- **Structured request log** — a separate, outermost middleware (`gateway_api/observability/`) emits
+  **exactly one** JSON line per request to **stdout**: `timestamp`, `session_id`, `endpoint` (the route
+  **template** — no path-parameter values), `provider`, `model`, `entities_detected`, and `timing_ms`
+  (`ner_analysis`, `fake_generation`, `redis_write`, `llm_request`, `deanonymization`, `total`). It
+  carries **no** original PII, message content, or fake values (Constitution VIII); a logging failure is
+  caught (reported to stderr) and never breaks the request.
+
+### Known limitations (Constitution IX — documented, not solved)
+
+- **No authentication on any endpoint**: a thesis prototype; anyone with a `session_id` may GET/DELETE
+  it, and there is no rate limiting or per-client isolation.
+- **`message_count` requires session state**: it lives in the session metadata, which exists only once
+  PII has been detected; a session whose only activity was PII-free turns has no stored state (404), so
+  those successful turns are not separately counted.
+- **`timing_ms` is wall-clock at instrumented boundaries**: `fake_generation` is derived
+  (inbound substitution time − inbound Redis-write time), so a little inbound read time folds into it;
+  the stages are for the dashboard, not a precise profiler.

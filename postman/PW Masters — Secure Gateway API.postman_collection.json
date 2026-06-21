@@ -304,7 +304,11 @@
                   "pm.test('session_id returned', () => pm.expect(j.session_id).to.be.a('string').and.not.empty);",
                   "pm.test('assistant answer present', () => pm.expect(j.choices[0].message.content).to.be.a('string'));",
                   "console.log('session', j.session_id);",
-                  "console.log('answer:', j.choices[0].message.content);"
+                  "console.log('answer:', j.choices[0].message.content);",
+                  "pm.test('Epic 6: id/object/created', () => { pm.expect(j.id).to.match(/^chatcmpl-/); pm.expect(j.object).to.eql('chat.completion'); pm.expect(j.created).to.be.a('number'); });",
+                  "pm.test('Epic 6: real finish_reason', () => pm.expect(j.choices[0].finish_reason).to.be.oneOf(['stop','length']));",
+                  "pm.test('Epic 6: anonymization_meta', () => { pm.expect(j.anonymization_meta).to.have.property('entities_detected'); pm.expect(j.anonymization_meta).to.have.property('timing_ms'); pm.expect(j.anonymization_meta.timing_ms).to.have.property('total'); });",
+                  "pm.test('Epic 6: input_anonymization', () => { pm.expect(j.input_anonymization).to.have.property('pseudonymized_content'); pm.expect(j.input_anonymization).to.have.property('replacements'); });"
                 ]
               }
             }
@@ -482,6 +486,117 @@
               ]
             },
             "description": "Validation: the last message must be a `user` turn, otherwise 400 BEFORE any LLM call; the error body still carries `session_id`."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Session Management (Epic 6)",
+      "item": [
+        {
+          "name": "GET /v1/sessions/{id} (dashboard statistics)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('summary fields', () => { ['session_id','created_at','last_activity','ttl_remaining_seconds','entity_count','entities_by_type','message_count'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "console.log('entities_by_type', JSON.stringify(j.entities_by_type), 'messages', j.message_count, 'ttl', j.ttl_remaining_seconds);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/sessions/{{chatSessionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "sessions",
+                "{{chatSessionId}}"
+              ]
+            },
+            "description": "EPIC 6: per-session statistics for the dashboard. `entity_count`/`entities_by_type` are the DISTINCT original↔fake mappings grouped by type; `message_count` is successful chat round-trips; `ttl_remaining_seconds` is the live Redis TTL. 404 for a non-existent / TTL-expired / never-stored (no PII) session. Run the Chat round-trip first to populate `{{chatSessionId}}`."
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /v1/sessions/{id} (reset session)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK (existed)', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('deleted true', () => pm.expect(j.deleted).to.eql(true));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/sessions/{{chatSessionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "sessions",
+                "{{chatSessionId}}"
+              ]
+            },
+            "description": "EPIC 6: delete the session and ALL its mappings (the config panel's 'reset session'). Returns 200 only when the session existed, otherwise 404. A subsequent GET/DELETE of the same id returns 404."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Provider Discovery (Epic 6)",
+      "item": [
+        {
+          "name": "GET /v1/providers (config panel)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('three providers', () => pm.expect(j).to.be.an('array').with.lengthOf(3));",
+                  "pm.test('shape', () => j.forEach(p => { ['name','requires_key','key_configured'].forEach(k => pm.expect(p).to.have.property(k)); }));",
+                  "j.forEach(p => console.log(p.name, 'requires_key=' + p.requires_key, 'key_configured=' + p.key_configured));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/providers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "providers"
+              ]
+            },
+            "description": "EPIC 6: read-only provider discovery for the config panel. Returns `{name, requires_key, key_configured}` for openai/anthropic/ollama — never a key value. Gate-exempt (answers even when Redis is down). Keys are server-side `.env` only."
           },
           "response": []
         }
