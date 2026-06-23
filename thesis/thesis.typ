@@ -47,7 +47,7 @@
       thesis-type: "master", // praca magisterska (inne wartości: "bachelor", "engineer")
       program: "Informatyka Stosowana", // pol. kierunek
       specialisation: "Informatyka Stosowana", // pol. specjalność
-      institute: "TODO: Instytut ...", // brak w dokumencie — uzupełnij (Wydz. Elektryczny)
+      institute: "Politechnika Warszawska", // brak w dokumencie — uzupełnij (Wydz. Elektryczny)
       supervisor: "dr inż. Jarosław Wilk",
       // Opcjonalny konsultant — na stronie tytułowej jako `konsultacje`.
       advisor: none, // lub "tytuł Imię Nazwisko"

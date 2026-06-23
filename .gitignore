@@ -61,3 +61,8 @@ htmlcov/
 docs/*
 !docs/adr
 !docs/product-backlog.md
+
+# Skills
+.claude/skills/thesis-write-style
+.claude/skills/thesis-write-style-workspace
+.claude/skills/research-papers
