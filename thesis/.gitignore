@@ -1,0 +1,9 @@
+# Fonty Adagio_Slab są własnością PW (intranet) — nie commitujemy ich.
+# TeX Gyre Heros (texgyreheros-*.otf) jest publiczny (GFL) i może być w repo.
+fonts/Adagio_Slab*.otf
+
+# Artefakt kompilacji
+*.pdf
+
+# Cache Typst (jeśli powstanie lokalnie)
+.typst-cache/
