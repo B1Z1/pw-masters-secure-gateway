@@ -5,11 +5,6 @@ personally identifiable information (PII) in requests, substitutes realistic
 synthetic data before sending to the provider, and restores the original values
 in the response. Master's thesis project — use case: Polish civil-law contracts.
 
-**Epic 1 (this milestone)** delivers the runtime foundation only: an Nx monorepo
-with a FastAPI backend (`gateway-api`), a React + Vite SPA (`gateway-ui`), and a
-Redis session store — all started with one `docker compose up`. No PII/NER/LLM
-logic yet; the SpaCy model check is a stub replaced in Epic 2.
-
 ## Prerequisites
 
 - Docker + Docker Compose v2
