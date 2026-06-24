@@ -141,13 +141,13 @@
   // --- Rozdziały pracy (struktura z docs/MasterThesisShorten.pdf) ---
   // Ściąga ze składni Typst — referencja, NIE część pracy. Odkomentuj, gdy potrzebna:
   // include "content/Tutorial.typ"
-  include "content/01-wstep.typ"
-  include "content/02-prywatnosc-danych.typ"
-  include "content/03-anonimizacja-pseudonimizacja.typ"
-  include "content/04-projekt-gatewaya.typ"
-  include "content/05-implementacja.typ"
-  include "content/06-testy-ewaluacja.typ"
-  include "content/07-podsumowanie.typ"
+  include "content/01-wstep/01-wstep.typ"
+  include "content/02-prywatnosc-danych/02-prywatnosc-danych.typ"
+  include "content/03-anonimizacja-pseudonimizacja/03-anonimizacja-pseudonimizacja.typ"
+  include "content/04-projekt-gatewaya/04-projekt-gatewaya.typ"
+  include "content/05-implementacja/05-implementacja.typ"
+  include "content/06-testy-ewaluacja/06-testy-ewaluacja.typ"
+  include "content/07-podsumowanie/07-podsumowanie.typ"
 
   // --- Acknowledgements ---
   // You can put your acknowledgements (pol. podziękowania) here.
