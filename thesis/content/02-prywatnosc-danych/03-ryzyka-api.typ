@@ -9,8 +9,8 @@ pośrednictwem którego użytkownik komunikuje się z~modelem. O~ile zagrożenia
 w~poprzednim podrozdziale wynikają z~samego sposobu działania modelu, o~tyle ryzyka omawiane
 poniżej dotyczą operacyjnej obsługi zapytań po stronie usługodawcy. Przeglądowe opracowania
 wskazują, że korzystanie z~usług opartych na modelach językowych wiąże się z~szeregiem zagrożeń
-bezpieczeństwa i~prywatności obejmujących cały cykl przetwarzania danych @Yao2024. Że nie są to
-zagrożenia wyłącznie teoretyczne, pokazał incydent z~marca 2023 roku, gdy z~powodu błędu
+bezpieczeństwa i~prywatności obejmujących cały cykl przetwarzania danych @Yao2024. O~tym, że nie
+są to zagrożenia wyłącznie teoretyczne, świadczy incydent z~marca 2023 roku, gdy z~powodu błędu
 w~bibliotece Redis część użytkowników serwisu ChatGPT zobaczyła tytuły rozmów innych osób,
 a~w~przypadku około 1,2% subskrybentów płatnej wersji ujawnione mogły zostać także dane
 płatnicze, w~tym imię i~nazwisko oraz końcowe cyfry numeru karty @openai2023outage. Poniżej
@@ -33,9 +33,9 @@ danymi zostaje przeniesiona na podmiot zewnętrzny.
 Drugim ryzykiem jest możliwość wykorzystania przekazanych danych do dalszego trenowania lub
 dostrajania modeli. Zasady w~tym zakresie różnią się w~zależności od dostawcy oraz wariantu
 usługi. W~przypadku interfejsów API przeznaczonych do zastosowań biznesowych dane zwykle nie są
-domyślnie wykorzystywane do trenowania modeli, podczas gdy w~konsumenckich wersjach asystentów
-treść konwersacji może służyć do doskonalenia modelu, o~ile użytkownik nie skorzysta z~opcji
-rezygnacji (ang. _opt-out_) @openaiprivacy. Rozróżnienie to ma istotne znaczenie praktyczne,
+domyślnie wykorzystywane do trenowania modeli @openaiprivacy, podczas gdy w~konsumenckich
+wersjach asystentów treść konwersacji może służyć do doskonalenia modelu, o~ile użytkownik nie
+skorzysta z~opcji rezygnacji (ang. _opt-out_) @openaitraining. Rozróżnienie to ma istotne znaczenie praktyczne,
 ponieważ przypadkowe użycie wersji konsumenckiej do analizy poufnych dokumentów może skutkować
 trwałym włączeniem zawartych w~nich danych osobowych do procesu uczenia modelu. W~połączeniu
 z~opisanym wcześniej zjawiskiem zapamiętywania (zob. @sec:memorization) prowadzi to do ryzyka
@@ -51,9 +51,9 @@ niebezpieczna jest jego odmiana pośrednia (ang. _indirect prompt injection_), w
 złośliwe instrukcje są ukryte w~treści przetwarzanego dokumentu lub innych danych pobieranych
 przez aplikację. Greshake i~in. @Greshake2023 wykazali, że aplikacje integrujące modele
 językowe zacierają granicę między danymi a~instrukcjami, co pozwala atakującemu zdalnie przejąć
-kontrolę nad ich działaniem, w~tym doprowadzić do kradzieży danych. W~kontekście analizy umów
-cywilnoprawnych oznacza to, że odpowiednio spreparowany dokument mógłby skłonić model do
-ujawnienia danych z~innych fragmentów kontekstu lub do wykonania niezamierzonych operacji.
+kontrolę nad ich działaniem, w~tym doprowadzić do kradzieży danych. Gdy przedmiotem analizy są umowy
+cywilnoprawne, odpowiednio przygotowany dokument mógłby skłonić model do ujawnienia danych
+z~innych fragmentów kontekstu lub do wykonania niezamierzonych operacji.
 Mechanizm pośredniego ataku przedstawiono na rysunku @rys:prompt-injection.
 
 #figure(

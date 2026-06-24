@@ -28,7 +28,7 @@ z~niego podmiot przetwarzający, co wymaga odpowiedniej podstawy prawnej oraz ur
 powierzenia przetwarzania (art. 28). Dodatkowym utrudnieniem jest fakt, że wielu dostawców
 modeli językowych działa poza Europejskim Obszarem Gospodarczym, co uruchamia obostrzenia
 dotyczące transferu danych do państw trzecich (rozdział V rozporządzenia). Problem nabiera wagi
-w~kontekście umów cywilnoprawnych, które z~natury zawierają liczne dane identyfikacyjne, takie
+w~przypadku umów cywilnoprawnych, które z~natury zawierają liczne dane identyfikacyjne, takie
 jak imiona i~nazwiska, numery PESEL, adresy czy dane finansowe stron, a~w~niektórych przypadkach
 mogą obejmować również informacje należące do szczególnych kategorii danych, podlegających
 wzmożonej ochronie na podstawie art. 9 rozporządzenia.
@@ -40,7 +40,7 @@ według poziomu zagrożenia, jakie stwarzają, od praktyk zakazanych, przez syst
 ryzyka objęte najszerszymi obowiązkami, po systemy o~ryzyku ograniczonym i~minimalnym
 @aiact2024. Dla rozwiązań wykorzystujących modele językowe istotne są przede wszystkim
 obowiązki w~zakresie przejrzystości, w~tym informowanie użytkownika, że wchodzi w~interakcję
-z~systemem sztucznej inteligencji. Akt o~sztucznej inteligencji nie zastępuje przy tym
+z~systemem sztucznej inteligencji. Akt ten nie zastępuje przy tym
 przepisów o~ochronie danych osobowych, lecz je uzupełnia, ponieważ przetwarzanie danych
 w~systemach AI nadal w~pełni podlega RODO. Dla projektowanego systemu oznacza to konieczność
 łącznego spełnienia wymagań obu reżimów prawnych. Wprowadzony przez akt podział na poziomy

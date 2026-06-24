@@ -27,14 +27,14 @@ zjawisko to jest powszechniejsze, niż wcześniej sądzono, i~prawdopodobnie bę
 wraz ze skalowaniem modeli. W~praktyce oznacza to, że wraz z~rosnącą liczbą parametrów
 współczesnych modeli językowych ryzyko utrwalenia danych osobowych systematycznie wzrasta.
 
-Zapamiętane dane można z~modelu wydobyć za pomocą konkretnych ataków. Ekstrakcja danych
+Zapamiętane dane można z~modelu wydobyć za pomocą wyspecjalizowanych ataków. Ekstrakcja danych
 treningowych, polegająca na odzyskaniu fragmentów zbioru uczącego poprzez odpowiednie
 odpytywanie modelu, stanowi praktyczne zagrożenie dla współczesnych systemów @Carlini2021,
 w~tym dla modeli produkcyjnych udostępnianych komercyjnie @Nasr2023. Pokrewnym zagrożeniem
 jest atak wnioskowania o~przynależności (ang. _membership inference_), w~którym przeciwnik,
 dysponując jedynie dostępem do modelu w~trybie czarnej skrzynki, ustala, czy dany rekord
-znajdował się w~zbiorze treningowym @Shokri2017. Konsekwencje tych ataków są szczególnie
-istotne w~kontekście niniejszej pracy. Gdyby treść analizowanych umów cywilnoprawnych trafiła
+znajdował się w~zbiorze treningowym @Shokri2017. Konsekwencje tych ataków mają
+szczególne znaczenie dla niniejszej pracy. Gdyby treść analizowanych umów cywilnoprawnych trafiła
 do zbioru treningowego modelu, zawarte w~niej dane osobowe mogłyby zostać później odtworzone
 lub powiązane z~konkretną osobą. Już samo przekazanie takich dokumentów zewnętrznemu dostawcy,
 który może wykorzystać je do dalszego trenowania modelu, tworzy realne ryzyko naruszenia
