@@ -4,3 +4,4 @@
 #import "@preview/lovelace:0.3.0"
 #import "@preview/cheq:0.3.0"
 #import "@preview/meander:0.3.0"
+#import "@preview/fletcher:0.5.8"

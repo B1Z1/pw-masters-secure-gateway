@@ -1,4 +1,6 @@
 #import "../../utils.typ": todo, silentheading, flex-caption
+#import "../../requirements.typ": fletcher
+#import fletcher: diagram, node, edge
 
 == Ryzyka związane z interfejsami API dostawców <sec:ryzyka-api>
 
@@ -52,3 +54,23 @@ językowe zacierają granicę między danymi a~instrukcjami, co pozwala atakują
 kontrolę nad ich działaniem, w~tym doprowadzić do kradzieży danych. W~kontekście analizy umów
 cywilnoprawnych oznacza to, że odpowiednio spreparowany dokument mógłby skłonić model do
 ujawnienia danych z~innych fragmentów kontekstu lub do wykonania niezamierzonych operacji.
+Mechanizm pośredniego ataku przedstawiono na rysunku @rys:prompt-injection.
+
+#figure(
+  diagram(
+    spacing: (20mm, 11mm),
+    node-stroke: 0.6pt,
+    node-corner-radius: 3pt,
+    node((0, 1), [Użytkownik\ #text(size: 0.7em, fill: gray.darken(40%))[nieszkodliwe\ polecenie]], name: <user>),
+    node((0, -0.2), [Spreparowany dokument\ #text(size: 0.7em, fill: red.darken(10%))[„…ukryta instrukcja…"]], stroke: red.darken(10%), name: <doc>),
+    node((1.8, 0.4), [Aplikacja\ z~modelem LLM], name: <model>),
+    node((3.4, 0.4), [Wstrzyknięta instrukcja\ wykonana\ #text(size: 0.7em, fill: gray.darken(40%))[wyciek danych]], name: <out>),
+    edge(<user>, <model>, "->", [#text(size: 0.78em)[polecenie]]),
+    edge(<doc>, <model>, "->", [#text(size: 0.78em)[treść jako\ kontekst]]),
+    edge(<model>, <out>, "->", [#text(size: 0.78em)[dane jako\ instrukcja]]),
+  ),
+  caption: flex-caption(
+    [Schemat pośredniego ataku _prompt injection_.],
+    [Pośredni atak prompt injection],
+  ),
+) <rys:prompt-injection>

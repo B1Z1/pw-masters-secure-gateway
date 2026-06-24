@@ -43,4 +43,26 @@ obowiązki w~zakresie przejrzystości, w~tym informowanie użytkownika, że wcho
 z~systemem sztucznej inteligencji. Akt o~sztucznej inteligencji nie zastępuje przy tym
 przepisów o~ochronie danych osobowych, lecz je uzupełnia, ponieważ przetwarzanie danych
 w~systemach AI nadal w~pełni podlega RODO. Dla projektowanego systemu oznacza to konieczność
-łącznego spełnienia wymagań obu reżimów prawnych.
+łącznego spełnienia wymagań obu reżimów prawnych. Wprowadzony przez akt podział na poziomy
+ryzyka zilustrowano na rysunku @rys:ai-act-ryzyko.
+
+#figure(
+  {
+    let band(w, fill, title, sub) = box(
+      width: w, fill: fill, inset: (y: 7pt, x: 8pt), radius: 3pt,
+      stroke: 0.5pt + gray.darken(20%),
+      align(center)[#strong[#title] \ #text(size: 0.78em, fill: gray.darken(40%))[#sub]],
+    )
+    align(center, stack(
+      dir: ttb, spacing: 5pt,
+      band(34%, red.lighten(55%), [Ryzyko niedopuszczalne], [praktyki zakazane]),
+      band(54%, orange.lighten(55%), [Wysokie ryzyko], [najszersze obowiązki i~nadzór]),
+      band(74%, yellow.lighten(50%), [Ograniczone ryzyko], [obowiązki przejrzystości]),
+      band(94%, green.lighten(65%), [Minimalne ryzyko], [brak dodatkowych wymogów]),
+    ))
+  },
+  caption: flex-caption(
+    [Poziomy ryzyka w~akcie o~sztucznej inteligencji (EU AI Act).],
+    [Poziomy ryzyka w EU AI Act],
+  ),
+) <rys:ai-act-ryzyko>
