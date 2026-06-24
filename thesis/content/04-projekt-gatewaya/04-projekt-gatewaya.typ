@@ -1,4 +1,4 @@
-#import "../utils.typ": todo, silentheading, flex-caption
+#import "../../utils.typ": todo, silentheading, flex-caption
 
 = Projekt bezpiecznego gatewaya do anonimizacji danych <ch:projekt>
 #todo[Rozdział do rozwinięcia — poniżej zakres z konspektu (docs/MasterThesisShorten.pdf).]

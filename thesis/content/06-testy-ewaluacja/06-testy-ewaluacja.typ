@@ -1,4 +1,4 @@
-#import "../utils.typ": todo, silentheading, flex-caption
+#import "../../utils.typ": todo, silentheading, flex-caption
 
 = Testy, ewaluacja i analiza wyników <ch:ewaluacja>
 #todo[Rozdział do rozwinięcia — poniżej zakres z konspektu (docs/MasterThesisShorten.pdf).]

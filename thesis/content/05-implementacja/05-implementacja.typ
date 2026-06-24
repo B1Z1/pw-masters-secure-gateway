@@ -1,4 +1,4 @@
-#import "../utils.typ": todo, silentheading, flex-caption
+#import "../../utils.typ": todo, silentheading, flex-caption
 
 = Implementacja systemu i stos technologiczny <ch:implementacja>
 #todo[Rozdział do rozwinięcia — poniżej zakres z konspektu (docs/MasterThesisShorten.pdf).]

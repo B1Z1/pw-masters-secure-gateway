@@ -1,4 +1,4 @@
-#import "../utils.typ": todo, silentheading, flex-caption
+#import "../../utils.typ": todo, silentheading, flex-caption
 
 = Anonimizacja i pseudonimizacja danych w systemach AI <ch:anonimizacja>
 #todo[Rozdział do rozwinięcia — poniżej zakres z konspektu (docs/MasterThesisShorten.pdf).]
