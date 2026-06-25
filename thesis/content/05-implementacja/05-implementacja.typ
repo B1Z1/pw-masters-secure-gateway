@@ -2,28 +2,33 @@
 
 = Implementacja systemu i stos technologiczny <ch:implementacja>
 
-Rozdział piąty przedstawia implementację kluczowych komponentów systemu gateway, opisując
-sposób realizacji założeń projektowych określonych w poprzednim rozdziale. Omówione zostaną
-decyzje dotyczące wyboru technologii oraz implementacja mechanizmów odpowiedzialnych za
-pseudonimizację danych, komunikację z modelami językowymi, zarządzanie sesją oraz obsługę
-interfejsu użytkownika. Celem rozdziału jest przedstawienie praktycznej realizacji zaprojektowanej
-architektury oraz uzasadnienie zastosowanych rozwiązań technologicznych.
+Rozdział piąty przedstawia implementację systemu gateway, którego architekturę zaprojektowano
+w~rozdziale @ch:projekt. O~ile poprzedni rozdział określał strukturę rozwiązania na poziomie
+koncepcyjnym, o~tyle celem niniejszego rozdziału jest pokazanie, w~jaki sposób poszczególne
+komponenty tej architektury zostały zrealizowane w~praktyce, wraz z~uzasadnieniem konkretnych
+decyzji technologicznych podjętych na tym etapie. Zgodnie z~przyjętym wcześniej założeniem
+(zob. @sec:architektura) system wykonano jako usługę backendową udostępniającą interfejs
+programistyczny, dlatego opis koncentruje się na warstwie serwerowej, a~zagadnienia interfejsu
+użytkownika pozostają poza jego zakresem.
 
-W pierwszej części rozdziału zaprezentowany zostanie stos technologiczny wykorzystany do
-budowy systemu wraz z uzasadnieniem wyboru narzędzi zastosowanych w warstwie backendowej,
-mechanizmach rozpoznawania danych osobowych, przechowywaniu mapowań oraz warstwie interfejsu
-użytkownika. Pozwoli to przedstawić, w jaki sposób wymagania funkcjonalne i niefunkcjonalne
-zostały odwzorowane w konkretnych rozwiązaniach technologicznych.
+W~pierwszej części rozdziału przedstawiony zostanie stos technologiczny wykorzystany do budowy
+systemu oraz ogólna organizacja kodu, w~szczególności oddzielenie logiki czystej od warstwy
+odpowiedzialnej za komunikację z~zasobami zewnętrznymi. Następnie omówiona zostanie implementacja
+silnika pseudonimizacji, na którą składają się wykrywanie polskich danych osobowych, generowanie
+realistycznych danych zastępczych oraz magazyn odwracalnych mapowań, przechowujący powiązania
+między danymi oryginalnymi a~syntetycznymi w~postaci zaszyfrowanej.
 
-Centralnym elementem rozdziału będzie opis implementacji silnika pseudonimizacji odpowiedzialnego
-za wykrywanie i zastępowanie danych osobowych w treści zapytań użytkownika. Omówione zostaną
-mechanizmy rozpoznawania polskich danych identyfikacyjnych, sposób generowania danych
-zastępczych oraz rozwiązania zapewniające zachowanie spójności mapowań w ramach sesji.
-Przedstawiona zostanie również implementacja warstwy API umożliwiającej komunikację pomiędzy
-użytkownikiem a zewnętrznymi modelami językowymi oraz mechanizmy integracji z różnymi
-dostawcami modeli LLM.
+Kolejna część rozdziału poświęcona zostanie warstwie API oraz integracji z~zewnętrznymi dostawcami
+modeli językowych, w~tym mechanizmowi kierowania żądań do różnych dostawców i~obsłudze sytuacji
+błędnych. Rozdział zamykają zagadnienia konfiguracji, uruchomienia i~obserwowalności systemu,
+a~także przyjęty sposób testowania i~zapewniania jakości kodu. Tak przedstawiona realizacja pozwala
+prześledzić, w~jaki sposób wymagania i~projekt z~poprzednich rozdziałów przełożyły się na działające
+oprogramowanie oraz jak współdziałają jego komponenty.
 
-W końcowej części rozdziału opisane zostaną rozwiązania związane z przechowywaniem danych
-sesyjnych, obsługą interfejsu użytkownika oraz konfiguracją środowiska uruchomieniowego.
-Umożliwi to przedstawienie kompletnej implementacji systemu oraz sposobu współdziałania
-wszystkich jego komponentów.
+#include "01-stos-technologiczny.typ"
+#include "02-wykrywanie.typ"
+#include "03-generowanie.typ"
+#include "04-magazyn.typ"
+#include "05-api-dostawcy.typ"
+#include "06-srodowisko.typ"
+#include "07-testy.typ"
