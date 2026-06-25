@@ -9,10 +9,11 @@ zbiorem danych a~osobą, której one dotyczą, określa się mianem deidentyfika
 _de-identification_) @Garfinkel2015. Aby mówić o~nim precyzyjnie, trzeba najpierw rozróżnić
 rodzaje informacji, które ten związek tworzą. Identyfikatory bezpośrednie (ang.
 _direct identifiers_) to dane jednoznacznie wskazujące osobę, takie jak imię i~nazwisko, adres,
-numer telefonu czy numer rachunku bankowego @Lison2021. Quasi-identyfikatory (ang.
+numer telefonu czy numer rachunku bankowego. Quasi-identyfikatory (ang.
 _quasi-identifiers_) same w~sobie nie pozwalają na identyfikację, lecz prowadzą do niej
 w~połączeniu z~innymi danymi i~wiedzą zewnętrzną, jak płeć, narodowość czy miejsce zamieszkania
-@Lison2021. To rozróżnienie jest istotne, ponieważ samo usunięcie identyfikatorów bezpośrednich
+@Lison2021.
+To rozróżnienie jest istotne, ponieważ samo usunięcie identyfikatorów bezpośrednich
 często nie wystarcza, by dane przestały być możliwe do przypisania konkretnej osobie. Dokumenty
 takie jak umowy cywilnoprawne są przy tym gęsto wypełnione identyfikatorami obu rodzajów, co
 czyni problem szczególnie wyrazistym.
@@ -24,7 +25,7 @@ Pseudonimizacja polega natomiast na zastąpieniu identyfikatorów bezpośrednich
 w~sposób, który zachowuje możliwość odwrócenia tego procesu. Jak ujmuje to raport NIST,
 pseudonimizację można w~prosty sposób odwrócić, jeśli podmiot, który ją przeprowadził,
 przechowuje tablicę wiążącą pierwotne tożsamości z~pseudonimami, albo jeśli podstawienie wykonano
-algorytmem, którego parametry są znane @Garfinkel2015. Kluczowa różnica nie leży więc w~samym
+algorytmem, którego parametry są znane. Kluczowa różnica nie leży więc w~samym
 podstawieniu danych, lecz w~tym, czy zachowano środek umożliwiający jego cofnięcie.
 
 Tym środkiem jest zwykle tajny klucz albo tablica mapująca przechowywana po stronie podmiotu
@@ -33,8 +34,8 @@ pseudonimem może opierać się na liczniku, generatorze liczb losowych, kodzie 
 wiadomość lub szyfrowaniu symetrycznym; w~każdym z~tych przypadków odtworzenie pierwotnej
 wartości jest niemożliwe bez znajomości sekretu, a~bezpieczeństwo całego rozwiązania sprowadza
 się do ochrony tablicy mapującej @ENISA2021. Pseudonimizacja jest przy tym uznaną i~ugruntowaną
-metodą ochrony danych, do której wprost odwołuje się RODO, traktując ją jako jedno z~zabezpieczeń
-@ENISA2021. Pytanie o~to, jak rygorystycznie zmierzyć stopień, w~jakim dane pozostają anonimowe,
+metodą ochrony danych, do której wprost odwołuje się RODO, traktując ją jako jedno
+z~zabezpieczeń. Pytanie o~to, jak rygorystycznie zmierzyć stopień, w~jakim dane pozostają anonimowe,
 prowadzi natomiast do formalnych modeli prywatności, którym poświęcono kolejny podrozdział
 (@sec:modele-prywatnosci).
 

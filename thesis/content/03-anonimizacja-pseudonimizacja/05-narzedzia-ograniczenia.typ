@@ -10,8 +10,8 @@ z~modelami rozpoznawania encji nazwanych @presidio. Samo rozpoznawanie encji Pre
 za pomocą zewnętrznych bibliotek przetwarzania języka, domyślnie spaCy @spacy. Po stronie
 komercyjnej podobną funkcję pełnią usługi chmurowe klasy DLP (ang. _Data Loss Prevention_),
 takie jak Google Cloud Sensitive Data Protection, udostępniające rozbudowany zbiór wykrywanych
-typów danych @gcpdlp. W~środowisku akademickim badania nad deidentyfikacją koncentrowały się
-natomiast przede wszystkim na anglojęzycznych tekstach medycznych @Garfinkel2015.
+typów danych @gcpdlp. W~środowisku akademickim wiele prac nad deidentyfikacją tekstu skupiało
+się z~kolei na danych medycznych @Garfinkel2015.
 
 Narzędzia te, choć dojrzałe i~szeroko stosowane, ujawniają ograniczenia w~zastosowaniu do
 polskich umów cywilnoprawnych. Pierwszym z~nich jest niepełne pokrycie polskich identyfikatorów.
@@ -29,8 +29,9 @@ fleksją. Trzecim, dotyczącym rozwiązań komercyjnych, jest sam charakter usł
 przesłanie dokumentu do zewnętrznego dostawcy w~celu wykrycia danych odtwarza problem
 przekazywania informacji poza infrastrukturę organizacji, omówiony już wcześniej
 (zob. @ch:prywatnosc).
-Wreszcie dorobek narzędzi i~zasobów dla polskiego rozpoznawania encji, choć rosnący, pozostaje
-skromniejszy i~bardziej rozproszony niż dla języka angielskiego @Marcinczuk2019.
+Wreszcie choć dla języka polskiego istnieją publicznie dostępne zasoby i~narzędzia do
+rozpoznawania encji @Marcinczuk2019, mają one charakter ogólny i~nie są przystosowane do
+specyfiki polskich umów cywilnoprawnych.
 
 Zestawienie tych ograniczeń uzasadnia potrzebę opracowania dedykowanego rozwiązania. Żadne
 z~istniejących narzędzi nie łączy bowiem rozpoznawania pełnego zakresu polskich danych

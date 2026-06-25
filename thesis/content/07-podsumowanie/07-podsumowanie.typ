@@ -1,7 +1,6 @@
 #import "../../utils.typ": todo, silentheading, flex-caption
 
 = Podsumowanie i wnioski <ch:podsumowanie>
-#todo[Rozdział do rozwinięcia — poniżej zakres z konspektu (docs/MasterThesisShorten.pdf).]
 
 Rozdział siódmy stanowi podsumowanie całości pracy, syntetyzuje uzyskane wyniki oraz formułuje
 wnioski odpowiadające na postawione pytanie badawcze. Autor ocenia stopień realizacji celów,

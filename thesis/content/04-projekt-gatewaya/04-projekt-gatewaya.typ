@@ -1,7 +1,6 @@
 #import "../../utils.typ": todo, silentheading, flex-caption
 
 = Projekt bezpiecznego gatewaya do anonimizacji danych <ch:projekt>
-#todo[Rozdział do rozwinięcia — poniżej zakres z konspektu (docs/MasterThesisShorten.pdf).]
 
 Rozdział czwarty przedstawia projekt architektury systemu gateway do pseudonimizacji danych
 osobowych, stanowiąc przejście pomiędzy analizą teoretyczną a implementacją rozwiązania opisaną

@@ -10,15 +10,15 @@ zlokalizowanie w~zapytaniu tych fragmentów, które stanowią dane osobowe i~wym
 Zadanie ochrony tekstu sprowadza się wówczas do etykietowania sekwencji, w~którym model zaznacza
 ciągi słów należące do predefiniowanych kategorii @Lison2021.
 
-Metody rozpoznawania encji rozwijały się przez kilka pokoleń. Najstarsze podejścia opierały się
-na ręcznie tworzonych regułach i~słownikach, zwanych gazeterami, które nie wymagają danych
-uczących, lecz są pracochłonne i~trudne w~utrzymaniu @Li2022. Kolejne metody sięgnęły po uczenie
-maszynowe: w~podejściu nadzorowanym opartym na cechach zadanie sprowadza się do klasyfikacji lub
-etykietowania sekwencji, często z~użyciem warunkowych pól losowych (CRF, ang.
-_Conditional Random Fields_), wymagających starannego doboru cech @Li2022. Najnowsze rozwiązania
-należą do nurtu uczenia głębokiego, w~którym reprezentacje potrzebne do rozpoznania encji są
-wyznaczane automatycznie, a~najlepsze wyniki osiągają modele oparte na architekturze transformera
-@Li2022.
+Metody rozpoznawania encji rozwijały się przez kilka pokoleń, a~ich systematykę przedstawia
+przegląd autorstwa Li i~innych @Li2022. Najstarsze podejścia opierały się na ręcznie tworzonych
+regułach i~słownikach, zwanych gazeterami, które nie wymagają danych uczących, lecz są
+pracochłonne i~trudne w~utrzymaniu. Kolejne metody sięgnęły po uczenie maszynowe: w~podejściu
+nadzorowanym opartym na cechach zadanie sprowadza się do klasyfikacji lub etykietowania
+sekwencji, często z~użyciem warunkowych pól losowych (CRF, ang. _Conditional Random Fields_),
+wymagających starannego doboru cech. Najnowsze rozwiązania należą do nurtu uczenia głębokiego,
+w~którym reprezentacje potrzebne do rozpoznania encji są wyznaczane automatycznie, a~najlepsze
+wyniki osiągają modele oparte na architekturze transformera.
 
 Typy encji rozpoznawanych przez NER w~naturalny sposób odpowiadają kategoriom danych osobowych:
 osoby to imiona i~nazwiska, lokalizacje to adresy, a~organizacje to nazwy stron umowy. Oprócz

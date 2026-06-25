@@ -7,7 +7,7 @@ informacje identyfikujące w~dokumencie. Zgodnie z~opinią Grupy Roboczej Artyku
 dzielą się na dwa główne podejścia: randomizację, która zmienia prawdziwość danych, aby osłabić
 ich związek z~osobą, oraz generalizację, która obniża szczegółowość wartości @wp216. Obok nich
 opinia wymienia pseudonimizację, polegającą na zastąpieniu jednego atrybutu innym; sama w~sobie
-nie czyni ona zbioru anonimowym, lecz pozostaje użytecznym środkiem bezpieczeństwa @wp216.
+nie czyni ona zbioru anonimowym, lecz pozostaje użytecznym środkiem bezpieczeństwa.
 Z~perspektywy projektowanego systemu kluczowe jest to, które z~tych technik pozwalają zachować
 na tyle dużo treści dokumentu, by model językowy mógł nadal poprawnie go przeanalizować.
 

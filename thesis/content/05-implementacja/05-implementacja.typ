@@ -1,7 +1,6 @@
 #import "../../utils.typ": todo, silentheading, flex-caption
 
 = Implementacja systemu i stos technologiczny <ch:implementacja>
-#todo[Rozdział do rozwinięcia — poniżej zakres z konspektu (docs/MasterThesisShorten.pdf).]
 
 Rozdział piąty przedstawia implementację kluczowych komponentów systemu gateway, opisując
 sposób realizacji założeń projektowych określonych w poprzednim rozdziale. Omówione zostaną
