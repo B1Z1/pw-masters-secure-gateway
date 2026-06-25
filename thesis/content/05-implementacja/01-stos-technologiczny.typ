@@ -82,8 +82,7 @@ dla wszystkich tras. Uproszczony fragment tego pliku przedstawiono na rysunku @r
     stroke: 0.5pt + gray.lighten(30%),
     radius: 3pt,
     inset: (x: 8pt, y: 7pt),
-    align(left, raw(block: true, lang: "python", "app = FastAPI(title=\"LLM Anonymization Gateway\", lifespan=lifespan)
-
+    text(size: 0.8em, align(left, raw(block: true, lang: "python", "app = FastAPI(title=\"LLM Anonymization Gateway\", version=\"0.1.0\", lifespan=lifespan)
 app.include_router(health_router)
 app.include_router(detect_router)
 app.include_router(pseudonymize_router)
@@ -94,10 +93,14 @@ app.include_router(providers_router)
 
 @app.middleware(\"http\")
 async def redis_availability_gate(request: Request, call_next):
-    ...  # 503, gdy magazyn sesji jest niedostępny
+    if request.url.path in _GATE_EXEMPT_PATHS:
+        return await call_next(request)
+    if await check_redis() != \"ok\":
+        return JSONResponse(status_code=503, content={\"detail\": \"Redis unavailable\"})
+    return await call_next(request)
 
 
-app.add_middleware(RequestLoggingMiddleware)")),
+app.add_middleware(RequestLoggingMiddleware)"))),
   ),
   caption: flex-caption(
     [Korzeń kompozycji w~pliku głównym: utworzenie aplikacji, dołączenie routerów i~rejestracja oprogramowania pośredniczącego (fragment).],
