@@ -34,11 +34,11 @@ Działanie takiej warstwy przedstawiono na rysunku @rys:gateway.
     node((1, 1.25), [#text(size: 0.76em)[magazyn mapowań]], stroke: (dash: "dotted"), name: <map>),
     edge(<g>, <map>, "<->", stroke: gray),
     edge(<u>, <g>, "->", [#text(size: 0.82em)[1.~dane osobowe]], bend: 30deg),
-    edge(<g>, <m>, "->", [#text(size: 0.82em)[2.~dane syntetyczne]], bend: 30deg),
-    edge(<m>, <g>, "->", [#text(size: 0.82em)[3.~dane syntetyczne]], bend: 30deg),
     edge(<g>, <u>, "->", [#text(size: 0.82em)[4.~dane oryginalne]], bend: 30deg),
     edge((1.5, -1.05), (1.5, 1.6), stroke: (dash: "dashed", paint: gray)),
     node((1.5, -1.25), text(size: 0.74em, fill: gray.darken(40%))[granica zaufania], stroke: none),
+    edge(<g>, <m>, "->", [#box(fill: white, inset: (x: 3pt, y: 1pt))[#text(size: 0.82em)[2.~dane syntetyczne]]], bend: 30deg),
+    edge(<m>, <g>, "->", [#box(fill: white, inset: (x: 3pt, y: 1pt))[#text(size: 0.82em)[3.~dane syntetyczne]]], bend: 30deg),
   ),
   caption: flex-caption(
     [Działanie pośredniczącej warstwy anonimizującej (gateway).],
