@@ -17,9 +17,9 @@ zastąpienie nazwiska napisem „IMIĘ I~NAZWISKO" @Garfinkel2015. Generalizacja
 mniej dokładną, lecz wciąż poprawną, jak sam rok zamiast pełnej daty urodzenia. Perturbacja,
 a~w~szczególności dodanie szumu, modyfikuje atrybuty tak, by były mniej dokładne, zachowując
 przy tym ogólny rozkład wartości w~zbiorze @wp216. Tokenizacja zastępuje identyfikator
-pseudonimem wyliczonym za pomocą licznika, generatora liczb losowych, kodu uwierzytelniającego
-wiadomość lub szyfrowania, przy czym odtworzenie pierwotnej wartości wymaga znajomości sekretu
-lub tablicy mapującej @ENISA2021. Ostatnią techniką jest podstawianie danych syntetycznych,
+pseudonimem wyliczonym jedną z~omówionych wcześniej metod pseudonimizacji
+(zob. @sec:anon-pseudo), przy czym odtworzenie pierwotnej wartości wymaga znajomości sekretu
+lub tablicy mapującej. Ostatnią techniką jest podstawianie danych syntetycznych,
 czyli zastąpienie rzeczywistej danej inną, fikcyjną, lecz wyglądającą realistycznie. Podział
 omawianych technik ze~względu na odwracalność przedstawiono na rysunku @rys:techniki-maskowania.
 

@@ -20,13 +20,14 @@ czyni problem szczególnie wyrazistym.
 
 Na gruncie tak rozumianej deidentyfikacji rysuje się różnica między anonimizacją
 a~pseudonimizacją. Anonimizacja oznacza trwałe i~nieodwracalne usunięcie związku między danymi
-a~osobą; po jej przeprowadzeniu ponowna identyfikacja nie jest już możliwa @Garfinkel2015.
+a~osobą; po jej przeprowadzeniu ponowna identyfikacja nie jest już możliwa.
 Pseudonimizacja polega natomiast na zastąpieniu identyfikatorów bezpośrednich pseudonimami
 w~sposób, który zachowuje możliwość odwrócenia tego procesu. Jak ujmuje to raport NIST,
 pseudonimizację można w~prosty sposób odwrócić, jeśli podmiot, który ją przeprowadził,
 przechowuje tablicę wiążącą pierwotne tożsamości z~pseudonimami, albo jeśli podstawienie wykonano
 algorytmem, którego parametry są znane. Kluczowa różnica nie leży więc w~samym
-podstawieniu danych, lecz w~tym, czy zachowano środek umożliwiający jego cofnięcie.
+podstawieniu danych, lecz w~tym, czy zachowano środek umożliwiający jego cofnięcie
+@Garfinkel2015 @Lison2021.
 
 Tym środkiem jest zwykle tajny klucz albo tablica mapująca przechowywana po stronie podmiotu
 dokonującego pseudonimizacji. W~zależności od użytej techniki odwzorowanie między daną a~jej

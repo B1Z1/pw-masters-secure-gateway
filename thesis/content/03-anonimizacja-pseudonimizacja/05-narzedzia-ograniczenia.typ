@@ -26,9 +26,8 @@ Drugim ograniczeniem jest jakość rozpoznawania encji ogólnych, takich jak imi
 adresy. Zależy ona od użytego modelu językowego, a~uzyskanie dobrych wyników dla polszczyzny
 wymaga podłączenia modelu wytrenowanego dla tego języka i~radzącego sobie z~omówioną wcześniej
 fleksją. Trzecim, dotyczącym rozwiązań komercyjnych, jest sam charakter usługi chmurowej:
-przesłanie dokumentu do zewnętrznego dostawcy w~celu wykrycia danych odtwarza problem
-przekazywania informacji poza infrastrukturę organizacji, omówiony już wcześniej
-(zob. @ch:prywatnosc).
+przesłanie dokumentu do zewnętrznego dostawcy w~celu wykrycia danych odtwarza omówiony już
+wcześniej problem wyprowadzania informacji poza organizację (zob. @ch:prywatnosc).
 Wreszcie choć dla języka polskiego istnieją publicznie dostępne zasoby i~narzędzia do
 rozpoznawania encji @Marcinczuk2019, mają one charakter ogólny i~nie są przystosowane do
 specyfiki polskich umów cywilnoprawnych.
