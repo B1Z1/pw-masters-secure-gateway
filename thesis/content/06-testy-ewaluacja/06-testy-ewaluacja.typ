@@ -1,7 +1,6 @@
 #import "../../utils.typ": todo, silentheading, flex-caption
 
 = Testy, ewaluacja i analiza wyników <ch:ewaluacja>
-#todo[Rozdział do rozwinięcia — poniżej zakres z konspektu (docs/MasterThesisShorten.pdf).]
 
 Rozdział szósty przedstawia metodologię testowania systemu oraz wyniki przeprowadzonej ewaluacji,
 których celem jest ocena skuteczności zaprojektowanego rozwiązania oraz weryfikacja wpływu
