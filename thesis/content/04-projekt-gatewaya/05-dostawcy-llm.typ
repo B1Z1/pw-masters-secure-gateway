@@ -59,9 +59,8 @@ systemu nieodróżnialny od pojedynczego adaptera. Strukturę warstwy dostawców
 ) <rys:dostawcy>
 
 Niezależnie od wybranego dostawcy obowiązują dwie zasady ustalone wcześniej. Po pierwsze, komunikacja
-jest synchroniczna, a~adapter oczekuje na kompletną odpowiedź modelu, co~stanowi warunek późniejszego
-przywrócenia danych (zob. @sec:przeplyw). Po drugie, do dowolnego dostawcy trafiają wyłącznie dane
-syntetyczne. Warto zauważyć, że wprowadzenie warstwy pośredniej wybierającej dostawcę samo
+przebiega synchronicznie: adapter oczekuje na kompletną odpowiedź modelu (zob. @sec:przeplyw). Po
+drugie, do dowolnego dostawcy trafiają wyłącznie dane syntetyczne. Warto zauważyć, że wprowadzenie warstwy pośredniej wybierającej dostawcę samo
 w~sobie bywa źródłem nowych zagrożeń dla prywatności, ponieważ warstwa taka uzyskuje wgląd
 w~kierowane przez nią dane @Wu2026. W~projektowanym systemie ryzyko to nie występuje, gdyż routing
 odbywa się już po pseudonimizacji, a~zatem ani router, ani żaden adapter nie operują na danych

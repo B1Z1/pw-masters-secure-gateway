@@ -76,7 +76,7 @@ zgodnie z~którą każdy z~nich odpowiada za jedną, jasno określoną funkcję:
   @sec:dane-zastepcze.
 - *Magazyn odwracalnych mapowań sesji* — przechowuje w~postaci zaszyfrowanej powiązania między
   danymi oryginalnymi a~syntetycznymi w~obrębie sesji i~udostępnia je na potrzeby przywracania.
-  Jest to jedyny komponent trwale przechowujący dane.
+  Jest to przy tym jedyny komponent przechowujący dane, i~to wyłącznie przez czas trwania sesji.
 - *Warstwa komunikacji z~dostawcami* — wysyła pseudonimizowane zapytanie do wybranego dostawcy
   modelu i~odbiera odpowiedź, a~jej projekt, wraz z~mechanizmem wyboru dostawcy, omówiono
   w~podrozdziale @sec:dostawcy-llm.

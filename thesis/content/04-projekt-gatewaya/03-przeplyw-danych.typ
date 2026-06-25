@@ -11,7 +11,7 @@ w~której system traktuje się jako zbiór komponentów połączonych przepływa
 przekraczają granice między zaufanymi a~niezaufanymi częściami systemu. Takie zorientowane na
 przepływ informacji ujęcie leży u~podstaw metod analizy prywatności @Deng2011, a~w~kontekście
 systemów generatywnej sztucznej inteligencji pytanie o~to, jak obsługiwane są przepływy danych
-osobowych, nabiera szczególnego znaczenia @Liao2026. Pełny obieg danych w~projektowanym gatewayu,
+osobowych, nabiera szczególnego znaczenia. Pełny obieg danych w~projektowanym gatewayu,
 od zapytania użytkownika po przywróconą odpowiedź, przedstawiono na rysunku @rys:przeplyw.
 
 #figure(
@@ -71,11 +71,11 @@ jest synchroniczny: gateway czeka na pełną odpowiedź, zanim rozpocznie przywr
 jej klientowi w~postaci strumieniowej (zob. @sec:wymagania).
 
 Dodatkowego rozważenia wymaga praca w~trybie konwersacyjnym, w~którym do modelu w~każdej turze
-przesyłana jest cała dotychczasowa historia rozmowy. Ponieważ wcześniejsze odpowiedzi zostały
-przywrócone na potrzeby wyświetlenia klientowi, zawierają one ponownie dane oryginalne. Aby żadne
-z~nich nie opuściło granicy zaufania, pseudonimizacji w~każdej turze podlega cała historia, a~nie
-tylko najnowsze zapytanie. Dzięki spójności mapowań w~obrębie sesji te same dane otrzymują przy tym
-te same zamienniki, co pozwala modelowi zachować ciągłość kontekstu rozmowy.
+przesyłana jest cała dotychczasowa historia rozmowy. Zgodnie z~przyjętym wcześniej wymaganiem
+(zob. @sec:wymagania) pseudonimizacji podlega wówczas cała historia, a~nie tylko najnowsze zapytanie,
+inaczej bowiem dane przywrócone w~poprzedniej turze ponownie opuściłyby granicę zaufania. Dzięki
+spójności mapowań w~obrębie sesji te same dane otrzymują przy tym te same zamienniki, co pozwala
+modelowi zachować ciągłość kontekstu rozmowy.
 
 Przedstawiony przepływ zakłada, że dla każdej danej istnieje spójny, odwracalny zamiennik. Sposób,
 w~jaki takie zamienniki są dobierane i~jak utrzymywana jest ich spójność w~obrębie sesji, omówiono

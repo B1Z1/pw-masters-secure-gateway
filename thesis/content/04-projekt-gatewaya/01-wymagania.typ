@@ -75,9 +75,8 @@ oryginał.
 Z~odwracalnością wiąże się wymaganie spójności w~ramach sesji użytkownika. Ta sama dana, występująca
 wielokrotnie w~dokumencie, a~także w~kolejnych zapytaniach tej samej sesji, powinna być
 konsekwentnie zastępowana tym samym odpowiednikiem. Wymaganie to obejmuje również koreferencję,
-czyli rozpoznanie, że „Jan Kowalski" oraz pojawiające się dalej samo „Kowalski" odnoszą się do tej
-samej osoby, a~także spójną odmianę przez przypadki, właściwą fleksyjnemu językowi polskiemu
-(zob. @sec:ner).
+czyli rozpoznanie, że różne wzmianki odnoszą się do tej samej osoby, oraz spójną odmianę przez
+przypadki, właściwą fleksyjnemu językowi polskiemu (zob. @sec:ner).
 
 Ponieważ docelowym trybem pracy systemu jest konwersacja, w~której cała historia rozmowy przesyłana
 jest do modelu w~każdej turze, pseudonimizacji podlega nie tylko ostatnie zapytanie, lecz każda
@@ -101,21 +100,21 @@ Najważniejszą charakterystyką jest bezpieczeństwo, rozumiane jako ochrona in
 w~taki sposób, by dostęp do nich miały wyłącznie podmioty o~odpowiednich uprawnieniach
 @Karnouskos2018. W~projektowanym systemie wymaganie to przyjmuje postać zasady prywatności w~fazie
 projektowania (ang. _privacy by design_), zgodnie z~którą ochrona prywatności jest wymaganiem
-systemowym, traktowanym na równi z~każdym wymaganiem funkcjonalnym @Hoepman2014. Z~zasady tej wynika
+systemowym, traktowanym na równi z~każdym wymaganiem funkcjonalnym. Z~zasady tej wynika
 kilka konkretnych ograniczeń projektowych. Po pierwsze, realizowana jest strategia minimalizacji
-danych, jedna z~wyróżnionych przez Hoepmana strategii projektowania prywatności @Hoepman2014: poza
-granicę zaufania trafiają wyłącznie dane syntetyczne, a~tablica wiążąca je z~oryginałami nigdy nie
-opuszcza infrastruktury organizacji. Po drugie, oryginalne dane osobowe przechowywane są w~postaci
+danych, jedna z~wyróżnionych przez Hoepmana strategii projektowania prywatności:
+infrastrukturę organizacji opuszczają jedynie dane syntetyczne, a~tablica wiążąca je z~oryginałami
+nigdy nie wykracza poza granicę zaufania. Po drugie, oryginalne dane osobowe przechowywane są w~postaci
 zaszyfrowanej. Po trzecie, w~dziennikach systemu nie zapisuje się rzeczywistych danych osobowych.
 Po czwarte, jak wspomniano przy wymaganiach funkcjonalnych, każde żądanie przechodzi przez etap
-pseudonimizacji.
+pseudonimizacji @Hoepman2014.
 
 Drugą istotną charakterystyką jest utrzymywalność, której podcharakterystyką jest modularność
 @Karnouskos2018. System projektowany jest jako zbiór wymiennych komponentów o~jasno wydzielonych
 odpowiedzialnościach, co pozwala rozwijać i~testować je niezależnie. W~szczególności warstwa
-komunikacji z~dostawcami modeli opiera się na jednolitym interfejsie oraz wymiennych adapterach,
-dzięki czemu dodanie nowego dostawcy sprowadza się do dostarczenia kolejnego adaptera i~zmiany
-konfiguracji, bez ingerencji w~logikę pseudonimizacji (zob. @sec:dostawcy-llm). Modularności sprzyja
+komunikacji z~dostawcami modeli opiera się na jednolitym interfejsie oraz wymiennych adapterach, tak
+aby obsługa kolejnego dostawcy nie wymuszała zmian w~logice pseudonimizacji (zob. @sec:dostawcy-llm).
+Modularności sprzyja
 też oddzielenie logiki czystej, niezależnej od zasobów zewnętrznych, od warstwy odpowiedzialnej za
 wejście i~wyjście.
 
