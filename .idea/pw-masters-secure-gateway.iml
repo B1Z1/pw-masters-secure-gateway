@@ -6,6 +6,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/apps/gateway-api/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/.claude/worktrees/zealous-margulis-6cb4f0/apps/gateway-eval/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/gateway-eval/.venv" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.12 (pw-masters-secure-gateway) (2)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
