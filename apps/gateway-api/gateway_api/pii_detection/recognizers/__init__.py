@@ -8,6 +8,7 @@ a custom recognizer. ``ALL_ENTITIES`` is the closed set the engine surfaces
 
 from __future__ import annotations
 
+import phonenumbers
 from presidio_analyzer import RecognizerRegistry
 from presidio_analyzer.predefined_recognizers import (
     EmailRecognizer,
@@ -47,6 +48,10 @@ def build_registry() -> RecognizerRegistry:
             supported_language="pl",
             supported_regions=["PL"],
             context=["tel", "telefon", "kom"],
+            # Recall over precision (Constitution II): accept "possible" numbers, not
+            # only phonenumbers-"valid" ones, so realistic-but-unassigned Polish
+            # formats (e.g. the +48 702/809/802 ranges) are masked instead of leaking.
+            leniency=phonenumbers.Leniency.POSSIBLE,
         )
     )
     # Custom Polish recognizers (one module each).
