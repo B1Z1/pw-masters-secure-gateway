@@ -1,0 +1,157 @@
+[
+  {
+    "doc": "syn-najem-000",
+    "q": "osoby",
+    "kind": "factual",
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0
+  },
+  {
+    "doc": "syn-najem-000",
+    "q": "pesel",
+    "kind": "factual",
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0
+  },
+  {
+    "doc": "syn-najem-000",
+    "q": "rachunek",
+    "kind": "factual",
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0
+  },
+  {
+    "doc": "syn-najem-000",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.1688,
+    "rougeL_AC": 0.1333
+  },
+  {
+    "doc": "syn-o-dzielo-001",
+    "q": "osoby",
+    "kind": "factual",
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0
+  },
+  {
+    "doc": "syn-o-dzielo-001",
+    "q": "pesel",
+    "kind": "factual",
+    "score_A": 1.0,
+    "score_B": 0.0,
+    "score_C": 0.0
+  },
+  {
+    "doc": "syn-o-dzielo-001",
+    "q": "rachunek",
+    "kind": "factual",
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0
+  },
+  {
+    "doc": "syn-o-dzielo-001",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.2,
+    "rougeL_AC": 0.1803
+  },
+  {
+    "doc": "syn-sprzedaz-002",
+    "q": "osoby",
+    "kind": "factual",
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0
+  },
+  {
+    "doc": "syn-sprzedaz-002",
+    "q": "pesel",
+    "kind": "factual",
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0
+  },
+  {
+    "doc": "syn-sprzedaz-002",
+    "q": "rachunek",
+    "kind": "factual",
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0
+  },
+  {
+    "doc": "syn-sprzedaz-002",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.1837,
+    "rougeL_AC": 0.16
+  },
+  {
+    "doc": "syn-zlecenie-003",
+    "q": "osoby",
+    "kind": "factual",
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0
+  },
+  {
+    "doc": "syn-zlecenie-003",
+    "q": "pesel",
+    "kind": "factual",
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0
+  },
+  {
+    "doc": "syn-zlecenie-003",
+    "q": "rachunek",
+    "kind": "factual",
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0
+  },
+  {
+    "doc": "syn-zlecenie-003",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.2192,
+    "rougeL_AC": 0.1443
+  },
+  {
+    "doc": "syn-najem-004",
+    "q": "osoby",
+    "kind": "factual",
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0
+  },
+  {
+    "doc": "syn-najem-004",
+    "q": "pesel",
+    "kind": "factual",
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0
+  },
+  {
+    "doc": "syn-najem-004",
+    "q": "rachunek",
+    "kind": "factual",
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0
+  },
+  {
+    "doc": "syn-najem-004",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.1935,
+    "rougeL_AC": 0.1564
+  }
+]

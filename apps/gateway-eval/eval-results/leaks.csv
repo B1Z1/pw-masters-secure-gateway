@@ -1,0 +1,6 @@
+doc_id,type,value,form_found,match_mode,start,end
+syn-najem-000,PHONE_NUMBER,+48 702 654 235,+48 702 654 235,exact_id,509,524
+syn-sprzedaz-006,PERSON,Aniela Potoczna,Potoczna,stem,93,101
+syn-najem-013,PERSON,Jakub Godzisz,Godzisz,stem,2233,2240
+syn-o-dzielo-030,PHONE_NUMBER,+48 802 838 578,+48 802 838 578,exact_id,290,305
+syn-najem-041,PHONE_NUMBER,+48 809 379 660,+48 809 379 660,exact_id,293,308

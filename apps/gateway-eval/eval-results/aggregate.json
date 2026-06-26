@@ -1,0 +1,976 @@
+{
+  "config": {
+    "seed": 42,
+    "base_url": "http://localhost:8000",
+    "gateway_health": {
+      "status": "ok",
+      "dependencies": {
+        "redis": "ok",
+        "spacy_model": "ok"
+      }
+    },
+    "corpus_version_hash": "43a6393fdf4e1982",
+    "span_policy": "overlap",
+    "provider": "echo",
+    "started_at": "2026-06-26T17:41:23.127608+00:00",
+    "finished_at": "2026-06-26T17:41:39.025072+00:00",
+    "gateway_eval_version": "1.0.0"
+  },
+  "corpus_stats": {
+    "n_docs": 56,
+    "n_entities": 1150,
+    "by_type": {
+      "DATE_TIME": 145,
+      "LOCATION": 89,
+      "PERSON": 224,
+      "PESEL": 89,
+      "ADDRESS": 132,
+      "EMAIL_ADDRESS": 168,
+      "PHONE_NUMBER": 168,
+      "BANK_ACCOUNT": 76,
+      "NIP": 36,
+      "REGON": 23
+    },
+    "by_source": {
+      "synthetic": 56,
+      "real": 0
+    },
+    "synthetic_ratio": 1.0,
+    "all_types_present": true
+  },
+  "detection_overlap": {
+    "policy": "overlap",
+    "per_type": [
+      {
+        "type": "PERSON",
+        "tp": 224,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 224
+      },
+      {
+        "type": "LOCATION",
+        "tp": 89,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.9889,
+        "recall": 1.0,
+        "f1": 0.9944,
+        "support": 89
+      },
+      {
+        "type": "ADDRESS",
+        "tp": 132,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 132
+      },
+      {
+        "type": "PESEL",
+        "tp": 89,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 89
+      },
+      {
+        "type": "NIP",
+        "tp": 36,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 36
+      },
+      {
+        "type": "REGON",
+        "tp": 23,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 23
+      },
+      {
+        "type": "BANK_ACCOUNT",
+        "tp": 76,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 76
+      },
+      {
+        "type": "EMAIL_ADDRESS",
+        "tp": 168,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 168
+      },
+      {
+        "type": "PHONE_NUMBER",
+        "tp": 163,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1.0,
+        "recall": 0.9702,
+        "f1": 0.9849,
+        "support": 168
+      },
+      {
+        "type": "DATE_TIME",
+        "tp": 145,
+        "fp": 145,
+        "fn": 0,
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1": 0.6667,
+        "support": 145
+      }
+    ],
+    "micro": {
+      "type": "__micro__",
+      "tp": 1145,
+      "fp": 146,
+      "fn": 5,
+      "precision": 0.8869,
+      "recall": 0.9957,
+      "f1": 0.9381,
+      "support": 1150
+    },
+    "macro": {
+      "type": "__macro__",
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0.9489,
+      "recall": 0.997,
+      "f1": 0.9646,
+      "support": 1150
+    },
+    "confusion_matrix": {
+      "labels": [
+        "PERSON",
+        "LOCATION",
+        "ADDRESS",
+        "PESEL",
+        "NIP",
+        "REGON",
+        "BANK_ACCOUNT",
+        "EMAIL_ADDRESS",
+        "PHONE_NUMBER",
+        "DATE_TIME",
+        "MISS",
+        "SPURIOUS"
+      ],
+      "matrix": [
+        [
+          224,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          89,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          132,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          89,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          36,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          23,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          76,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          168,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          163,
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          145,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          145,
+          0,
+          0
+        ]
+      ]
+    },
+    "unmapped_labels": {}
+  },
+  "detection_exact": {
+    "policy": "exact",
+    "per_type": [
+      {
+        "type": "PERSON",
+        "tp": 217,
+        "fp": 7,
+        "fn": 7,
+        "precision": 0.9688,
+        "recall": 0.9688,
+        "f1": 0.9688,
+        "support": 224
+      },
+      {
+        "type": "LOCATION",
+        "tp": 89,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.9889,
+        "recall": 1.0,
+        "f1": 0.9944,
+        "support": 89
+      },
+      {
+        "type": "ADDRESS",
+        "tp": 131,
+        "fp": 1,
+        "fn": 1,
+        "precision": 0.9924,
+        "recall": 0.9924,
+        "f1": 0.9924,
+        "support": 132
+      },
+      {
+        "type": "PESEL",
+        "tp": 89,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 89
+      },
+      {
+        "type": "NIP",
+        "tp": 36,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 36
+      },
+      {
+        "type": "REGON",
+        "tp": 23,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 23
+      },
+      {
+        "type": "BANK_ACCOUNT",
+        "tp": 76,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 76
+      },
+      {
+        "type": "EMAIL_ADDRESS",
+        "tp": 168,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 168
+      },
+      {
+        "type": "PHONE_NUMBER",
+        "tp": 163,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1.0,
+        "recall": 0.9702,
+        "f1": 0.9849,
+        "support": 168
+      },
+      {
+        "type": "DATE_TIME",
+        "tp": 145,
+        "fp": 145,
+        "fn": 0,
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1": 0.6667,
+        "support": 145
+      }
+    ],
+    "micro": {
+      "type": "__micro__",
+      "tp": 1137,
+      "fp": 154,
+      "fn": 13,
+      "precision": 0.8807,
+      "recall": 0.9887,
+      "f1": 0.9316,
+      "support": 1150
+    },
+    "macro": {
+      "type": "__macro__",
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0.945,
+      "recall": 0.9931,
+      "f1": 0.9607,
+      "support": 1150
+    },
+    "confusion_matrix": {
+      "labels": [
+        "PERSON",
+        "LOCATION",
+        "ADDRESS",
+        "PESEL",
+        "NIP",
+        "REGON",
+        "BANK_ACCOUNT",
+        "EMAIL_ADDRESS",
+        "PHONE_NUMBER",
+        "DATE_TIME",
+        "MISS",
+        "SPURIOUS"
+      ],
+      "matrix": [
+        [
+          224,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          89,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          132,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          89,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          36,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          23,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          76,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          168,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          163,
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          145,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          145,
+          0,
+          0
+        ]
+      ]
+    },
+    "unmapped_labels": {}
+  },
+  "leak": {
+    "total_leaks": 5,
+    "by_type": {
+      "PHONE_NUMBER": 3,
+      "PERSON": 2
+    },
+    "by_doc": {
+      "syn-najem-000": 1,
+      "syn-sprzedaz-006": 1,
+      "syn-najem-013": 1,
+      "syn-o-dzielo-030": 1,
+      "syn-najem-041": 1
+    },
+    "findings": [
+      {
+        "doc_id": "syn-najem-000",
+        "type": "PHONE_NUMBER",
+        "original": "+48 702 654 235",
+        "form_found": "+48 702 654 235",
+        "start": 509,
+        "end": 524,
+        "match_mode": "exact_id"
+      },
+      {
+        "doc_id": "syn-sprzedaz-006",
+        "type": "PERSON",
+        "original": "Aniela Potoczna",
+        "form_found": "Potoczna",
+        "start": 93,
+        "end": 101,
+        "match_mode": "stem"
+      },
+      {
+        "doc_id": "syn-najem-013",
+        "type": "PERSON",
+        "original": "Jakub Godzisz",
+        "form_found": "Godzisz",
+        "start": 2233,
+        "end": 2240,
+        "match_mode": "stem"
+      },
+      {
+        "doc_id": "syn-o-dzielo-030",
+        "type": "PHONE_NUMBER",
+        "original": "+48 802 838 578",
+        "form_found": "+48 802 838 578",
+        "start": 290,
+        "end": 305,
+        "match_mode": "exact_id"
+      },
+      {
+        "doc_id": "syn-najem-041",
+        "type": "PHONE_NUMBER",
+        "original": "+48 809 379 660",
+        "form_found": "+48 809 379 660",
+        "start": 293,
+        "end": 308,
+        "match_mode": "exact_id"
+      }
+    ]
+  },
+  "restoration": {
+    "by_outcome": {
+      "missed": 135,
+      "exact": 1001,
+      "correct_inflection": 14
+    },
+    "by_type": {
+      "DATE_TIME": {
+        "missed": 133,
+        "correct_inflection": 12
+      },
+      "LOCATION": {
+        "exact": 88,
+        "missed": 1
+      },
+      "PERSON": {
+        "exact": 222,
+        "correct_inflection": 2
+      },
+      "PESEL": {
+        "exact": 89
+      },
+      "ADDRESS": {
+        "exact": 131,
+        "missed": 1
+      },
+      "EMAIL_ADDRESS": {
+        "exact": 168
+      },
+      "PHONE_NUMBER": {
+        "exact": 168
+      },
+      "BANK_ACCOUNT": {
+        "exact": 76
+      },
+      "NIP": {
+        "exact": 36
+      },
+      "REGON": {
+        "exact": 23
+      }
+    },
+    "doc_exact_restore_rate": 0.0
+  },
+  "latency": {
+    "by_channel": {
+      "detect": {
+        "p50": 64.345,
+        "p90": 76.986,
+        "p99": 88.639,
+        "mean": 68.295,
+        "n": 56
+      },
+      "pseudonymize": {
+        "p50": 77.844,
+        "p90": 92.103,
+        "p99": 95.579,
+        "mean": 81.932,
+        "n": 56
+      },
+      "depseudonymize": {
+        "p50": 5.104,
+        "p90": 5.798,
+        "p99": 6.541,
+        "mean": 5.156,
+        "n": 56
+      },
+      "ner_analysis": {
+        "p50": 62.219,
+        "p90": 75.263,
+        "p99": 79.238,
+        "mean": 65.985,
+        "n": 56
+      },
+      "fake_generation": {
+        "p50": 9.128,
+        "p90": 10.044,
+        "p99": 12.368,
+        "mean": 8.874,
+        "n": 56
+      },
+      "redis_write": {
+        "p50": 7.047,
+        "p90": 7.792,
+        "p99": 10.096,
+        "mean": 7.029,
+        "n": 56
+      },
+      "llm_request": {
+        "p50": 0.009,
+        "p90": 0.01,
+        "p99": 0.015,
+        "mean": 0.009,
+        "n": 56
+      },
+      "deanonymization": {
+        "p50": 4.222,
+        "p90": 5.043,
+        "p99": 5.527,
+        "mean": 4.25,
+        "n": 56
+      },
+      "total": {
+        "p50": 82.504,
+        "p90": 97.679,
+        "p99": 102.773,
+        "mean": 86.459,
+        "n": 56
+      }
+    },
+    "by_length_bucket": {
+      "1500-2999": {
+        "detect": {
+          "p50": 64.345,
+          "p90": 76.986,
+          "p99": 88.639,
+          "mean": 68.295,
+          "n": 56
+        },
+        "pseudonymize": {
+          "p50": 77.844,
+          "p90": 92.103,
+          "p99": 95.579,
+          "mean": 81.932,
+          "n": 56
+        },
+        "depseudonymize": {
+          "p50": 5.104,
+          "p90": 5.798,
+          "p99": 6.541,
+          "mean": 5.156,
+          "n": 56
+        },
+        "ner_analysis": {
+          "p50": 62.219,
+          "p90": 75.263,
+          "p99": 79.238,
+          "mean": 65.985,
+          "n": 56
+        },
+        "fake_generation": {
+          "p50": 9.128,
+          "p90": 10.044,
+          "p99": 12.368,
+          "mean": 8.874,
+          "n": 56
+        },
+        "redis_write": {
+          "p50": 7.047,
+          "p90": 7.792,
+          "p99": 10.096,
+          "mean": 7.029,
+          "n": 56
+        },
+        "llm_request": {
+          "p50": 0.009,
+          "p90": 0.01,
+          "p99": 0.015,
+          "mean": 0.009,
+          "n": 56
+        },
+        "deanonymization": {
+          "p50": 4.222,
+          "p90": 5.043,
+          "p99": 5.527,
+          "mean": 4.25,
+          "n": 56
+        },
+        "total": {
+          "p50": 82.504,
+          "p90": 97.679,
+          "p99": 102.773,
+          "mean": 86.459,
+          "n": 56
+        }
+      }
+    },
+    "by_entity_bucket": {
+      "15-29": {
+        "detect": {
+          "p50": 64.345,
+          "p90": 76.986,
+          "p99": 88.639,
+          "mean": 68.295,
+          "n": 56
+        },
+        "pseudonymize": {
+          "p50": 77.844,
+          "p90": 92.103,
+          "p99": 95.579,
+          "mean": 81.932,
+          "n": 56
+        },
+        "depseudonymize": {
+          "p50": 5.104,
+          "p90": 5.798,
+          "p99": 6.541,
+          "mean": 5.156,
+          "n": 56
+        },
+        "ner_analysis": {
+          "p50": 62.219,
+          "p90": 75.263,
+          "p99": 79.238,
+          "mean": 65.985,
+          "n": 56
+        },
+        "fake_generation": {
+          "p50": 9.128,
+          "p90": 10.044,
+          "p99": 12.368,
+          "mean": 8.874,
+          "n": 56
+        },
+        "redis_write": {
+          "p50": 7.047,
+          "p90": 7.792,
+          "p99": 10.096,
+          "mean": 7.029,
+          "n": 56
+        },
+        "llm_request": {
+          "p50": 0.009,
+          "p90": 0.01,
+          "p99": 0.015,
+          "mean": 0.009,
+          "n": 56
+        },
+        "deanonymization": {
+          "p50": 4.222,
+          "p90": 5.043,
+          "p99": 5.527,
+          "mean": 4.25,
+          "n": 56
+        },
+        "total": {
+          "p50": 82.504,
+          "p90": 97.679,
+          "p99": 102.773,
+          "mean": 86.459,
+          "n": 56
+        }
+      }
+    }
+  },
+  "stage2_summary": {
+    "n_docs": 56,
+    "n_leak_free": 51,
+    "n_answer_restored": 0
+  }
+}

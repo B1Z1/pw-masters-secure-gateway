@@ -71,5 +71,8 @@ docs/*
 # Ignore the directory contents but keep the dir on clone via the .gitkeep negation.
 apps/gateway-eval/gateway_eval/corpus/data/real/*
 !apps/gateway-eval/gateway_eval/corpus/data/real/.gitkeep
-# Machine-readable per-document results may embed originals — treat as sensitive.
-apps/gateway-eval/eval-results/
+# Evaluation results. SYNTHETIC-corpus results are committed (no real PII). The
+# per-document dump embeds raw originals (real PII on a REAL-corpus run) → never commit it.
+# For a REAL-corpus run also review aggregate.json before committing (it embeds leaked
+# values when leaks occur); only redacted/aggregate artifacts are publishable (FR-032).
+apps/gateway-eval/eval-results/per_document.jsonl

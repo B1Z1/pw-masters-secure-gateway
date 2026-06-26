@@ -1,0 +1,16 @@
+#table(
+  columns: 6,
+  align: (left, right, right, right, right, right),
+  table.header[Typ][Recall][Precision][F1][Recall (exact)][Wsparcie],
+  [PERSON][1.0][1.0][1.0][0.9688][224],
+  [LOCATION][1.0][0.9889][0.9944][1.0][89],
+  [ADDRESS][1.0][1.0][1.0][0.9924][132],
+  [PESEL][1.0][1.0][1.0][1.0][89],
+  [NIP][1.0][1.0][1.0][1.0][36],
+  [REGON][1.0][1.0][1.0][1.0][23],
+  [BANK_ACCOUNT][1.0][1.0][1.0][1.0][76],
+  [EMAIL_ADDRESS][1.0][1.0][1.0][1.0][168],
+  [PHONE_NUMBER][0.9702][1.0][0.9849][0.9702][168],
+  [DATE_TIME][1.0][0.5][0.6667][1.0][145],
+  [micro][0.9957][0.8869][0.9381][][1150],
+)

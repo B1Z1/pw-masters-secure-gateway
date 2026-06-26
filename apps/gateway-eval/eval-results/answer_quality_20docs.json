@@ -1,0 +1,1073 @@
+[
+  {
+    "doc": "syn-najem-000",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Ewa Plewnia",
+      "Konstanty Straszak"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występują następujące osoby:\n\n1. Ewa Plewnia\n2. Konstanty Straszak",
+    "answer_B": "Podane w umowie następujące osoby występują:\n\n1. Ewa Plewnia - zwaną dalej \"Wynajmującym\"\n2. Konstanty Straszak - zwaną dalej \"Najemcą\"\n\nTe są wszystkie osoby, dla których wymieniono imię i nazwisko w umowie postrzegającej mówiącego o niepokrewnych stronach do umowy.",
+    "answer_C": "W tej umowie występują następujące osoby:\n\n1. Wynajmujący: [OSOBA] - imię i nazwisko不明示\n2. Najemca: [OSOBA] - imię i nazwisko不明示\n\nPamiętaj, że '[OSOBA]' i '[NR_RACHUNKU]' są pustymi poliami w treści zadanej umowy, gdzie powinny być wpisane prawdziwe dane."
+  },
+  {
+    "doc": "syn-najem-000",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "68032410491",
+      "09270845993"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występują następujące numery PESEL:\n\n1. 68032410491 - To numer PESEL zawarty w imieniu Wynajmującego Ewa Plewnia.\n2. 09270845993 - Ten numer PESEL jest wystąpieniem w imieniu Najemcy Konstanty Straszaka.",
+    "answer_B": "Podane w umowie następujące są numery PESEL:\n\n1. 68032410491 (PESEL Ewa Plewnia)\n2. 09270845993 (PESEL Konstanty Straszak)",
+    "answer_C": "Podana w umowie liczba PESEL występuje tylko raz i jest numer PESEL dla Wynajmującego (osoby出租方):\n\nPESEL [PESEL]\n\nNie znaleziono innych liczb PESEL w tej umowie."
+  },
+  {
+    "doc": "syn-najem-000",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "32078161849593103413164752"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego wskazany w umowie do płatności czynszu najmu to 32078161849593103413164752.",
+    "answer_B": "Numer rachunku bankowego, który jest wspomniany w umowie do płacenia czynszu najmu, to 32078161849593103413164752.",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie do płatności jest [NR_RACHUNKU]."
+  },
+  {
+    "doc": "syn-najem-000",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.1871,
+    "rougeL_AC": 0.2027,
+    "answer_A": "W przedmiocie umowy Ewa Plewnia przetrawiła lokal mieszkalny do użytku konstanta Straszaka od dnia 13 lutego 1958 roku do dnia 20 maja 1983 roku. Najemca zobowiązany jest płacić wynajmu w wysokości 2 800 zł na miesiąc na rachunek określonym Ewą Plewnią, wpłacając kaucję w wysokości jednymiesięcznego wynajmu jako zabezpieczenie roszczeń. Najemca obowiąkuje się do przygotowania i utrzymania lokalu do przenoszenia w porządku. Ponadto, w przypadkach potocznych Najemca powinien kontaktować się z Wynajmującym na podstawie danych określonych w umowie.",
+    "answer_B": "Streszczenie przedmiotu umowy to umowa na wynajmowanie lokalu mieszkalnego złożona między Ewa Plewnia a Konstanty Straszak. Wynajmujący, Ewa Plewnia, przekazuje Najjemcy, Konstanty Straszak, lokál, położony w Elbląg (Kościerzynę), o powierzchni użytkowej 52,40 m², składającym się z dwóch pokoi, kuchni oraz łazienki. Najemca zobowiązany jest do płacenia czynszu najmu w wysokości 2800 zł na miesiąc przez przelew do rachunek bankowego Własnościobiorcy, a także ponosić opłaty eksploatacyjne związane z bieżącym korzystaniem. Najemca musi używać Lokal zgodnie z jego przeznaczeniem i utrzymywać go w należytym stanie. W przypadku nieuregulowanych spraw umowa stosuje przepisy Kodeksu cywilnego.",
+    "answer_C": "Przedmiotem umowy jest najmu lokalu mieszkalnego o powierzchni 52,40 m² z dwoma pokojami, kuchnią i łazienką w miejscowości [Miejscowosc]. Najemca zobowiązuje się płacić czynsz w wysokości 2800 zł za miesiąc, a Wynajmujący odpowiada za utrzymanie lokalu. Najemca powinien używać Lokalu zgodnie z jego przeznaczeniem i ponosić opłaty eksploatacyjne. Wynajmujący otrzymuje kaucję w wysokości jednymiesięcznego czynszu jako zabezpieczenie roszczeń. Najemca ma załatwić sprawy pilne poprzez komunikację telefoniczną lub e-mailową."
+  },
+  {
+    "doc": "syn-o-dzielo-001",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Anna Maria Skałka",
+      "Kornelia Kycia"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występują następujące osoby:\n\n1. Anna Maria Skałka (Zamawiający)\n2. Kornelia Kycia (Wykonawca)",
+    "answer_B": "W umowie występują następujące osoby:\n\n1. Anna Maria Skałka - zamawiający (przeciętnie nazywa się „Zamawiającym”)\n2. Kornelia Kycia - wykonawca (przeciętnie nazywa się „Wykonawcą”)\n\nTe są wszystkie osoby wymienione w umowie, z nazwiskami i imiakami wprowadzonymi do umowy przez każdego z obu stroniarzy.",
+    "answer_C": "W umowie występują dwie osoby:\n\n1. [Zamawiający - imię i nazwisko]\n2. [Wykonawca - imię i nazwisko]"
+  },
+  {
+    "doc": "syn-o-dzielo-001",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "68031750501"
+    ],
+    "score_A": 1.0,
+    "score_B": 0.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występuje tylko jeden numer PESEL, to 68031750501, pojawiający się w danych kontaktowych Wykonawcy Kornelia Kycia. Nie są one wymienione pod innym tytułem niż dane kontaktowe, zatem nie są one związane bezpośrednio z umową o dzieło.",
+    "answer_B": "W podanym dokumentie nie występuje żaden numer PESEL. Warto zaznaczyć, że w treści wpisane są tylko PESELy obu stron (Annę Marię Skałkę i Kornelia Kycia), ale nie są one numerymi PESEL, a imiennikami osób. PESEL to odrębna wartość poświadczeniowa osoby podlegająca określonym prawom w Polsce. Warto zauważyć, że imię i nazwisko występują na różne sposoby - jako \"Anna Maria Skałka\" dla Annę Marię Skałkę i jako \"Zamawiającym\", a \"Kornelia Kycia\" dla Kornelia Kycia i jako \"Wykonawcą\".",
+    "answer_C": "W podanych treściach nie występuje żadne numery PESEL, zatem nie mogę je podać. Numery PESEL znajduje się bezpośrednio w danych osobowych strony wykonawczej i zapowiedzianego zamawiającego, które są wymieniane w nagłówku umowy, ale nie są w treści przepisów umowy."
+  },
+  {
+    "doc": "syn-o-dzielo-001",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "92801845146270482814893252"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego wskazany w umowie do płatności to 92801845146270482814893252.",
+    "answer_B": "Numer rachunku bankowego wskazany w umowie do płatności to 92801845146270482814893252.",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie do płatności to: NR_RACHUNKU."
+  },
+  {
+    "doc": "syn-o-dzielo-001",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.336,
+    "rougeL_AC": 0.2169,
+    "answer_A": "W przedmiocie umowy zamawiany jest opracowanie projektu z dokumentacją techniczną (Dzieło). Głównymi zobowiązaniem strony wykonawczej jest jej szybkie i dokładne wykonanie w terminie do 17 maja 2002. Z stroną zamawiającą jest wymagać zapłaty wynagrodzenia w wysokości 9200 zł, która zostaje wpłacona na rachunek wyznaczonych przez dalszą strone. Strony akceptują zastosowanie dla nieuregulowanych szczegółów Kodeksu cywilnego.",
+    "answer_B": "W przedmiocie tej umowy zamówiona jest opracowanie projektu z dokumentacją techniczną, które powinno zostać wykonane i przekazane Zamawiającemu w terminie do dnia 17. z odbiorem Działa na podstawie protokołu zdawczo-odbiorczego. Głównymi zobowiązaniem stron są zapłata wynagrodzenia w wysokości 9200 zł oraz przeniesienie przez Wykonawcę na Zamawiającego autorskich praw majątkowych do wykonanego Działa. Umowa ta jest stosowana zgodnie z Kodeckiem cywilnym dotyczącym umowy o dzieło, podpisana została w dwóch egzemplarzach.",
+    "answer_C": "W przedmiocie umowy [osoba], prowadząca działalność gospodarczą, zamawia opracowanie projektu i dokumentacji technicznej od [drugiej osoby]. Głównymi obowiązkami są one: wykonanie projektu wraz z dokumentacją oraz dostarczenie wynagrodzenia."
+  },
+  {
+    "doc": "syn-sprzedaz-002",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Natasza Smykała",
+      "Mariusz Wyrwał"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W tej umowie wystąpiły następujące osoby:\n\n1. Natasza Smykała\n2. Mariusz Wyrwał",
+    "answer_B": "W tej umowie występują następujące Mariusz z ich imionami i nazwiskami:\n\n1. Natasza Smykała, PESEL 42021289947 (Sprzedający)\n2. Mariusz Wyrwał, PESEL 79072266559 (Kupujący)",
+    "answer_C": "W tej umowie występują następujące osoby:\n\n1. [OSOBA], zamieszkała/zamieszkały pod adresem [ADRES], adres e-mail [EMAIL], numer telefonu [TELEFON] (Sprzedający)\n2. [OSOBA], zamieszkała/zamieszkały pod adresem [ADRES], adres e-mail [EMAIL], numer telefonu [TELEFON] (Kupujący)"
+  },
+  {
+    "doc": "syn-sprzedaz-002",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "42021289947",
+      "79072266559"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występuje dwa numery PESEL:\n\n1. Natasza Smykała: 42021289947\n2. Mariusz Wyrwał: 79072266559",
+    "answer_B": "W umowie występują następujące numery PESEL:\n\n1. PESEL 42021289947 (zawarty w rolce jako Natasza Smykała)\n2. PESEL 79072266559 (zawarty w rolce jako Mariusz Wyrwał)",
+    "answer_C": "W umowie nie są zaznaczone żadne numery PESEL. Dla odpowiedzi na Twoje pytanie muszę znaleźć to informacje bezpośrednio w umowie, które natychmiast po wpisaniu treści. Wskazano tylko adresy kontaktowe oraz numer telefonu, ale nie numery PESEL lub NIP."
+  },
+  {
+    "doc": "syn-sprzedaz-002",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "78983930103105183473829973"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego w skompletowanej umowie to: 78983930103105183473829973.",
+    "answer_B": "W skrócie, numeryrach rachunku nie jest podana w treści przyznawanej umowy. Umowa zauważyła tylko, że zapłata przeprowadza się na rachunek bankowym Sprzedającego o numerze 78983930103105183473829973.\n\nDlatego nie mogę podać konkretnej liczby bankowej, ponieważ ta informacja została pozbawiona w umowie. Jeśli potrzebujesz dokładniejszej informacji o tym rachunku, sugeruję skontaktować się bezpośrednio z Sprzedającym przez e-mail lub telefon, jak zostało określone w umowie.",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie do płatności to: NR_RACHUNKU."
+  },
+  {
+    "doc": "syn-sprzedaz-002",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.1481,
+    "rougeL_AC": 0.1739,
+    "answer_A": "Przedmiotem umowy jest sklep z zakupionym przez Kupującego (Mariusza Wyrwał) o valorze 18,500 zł. Odnotowane zostaną za rękojmy过错 sprzętu prawne na jego nieporozumionej formie. Sprzedający odpowiedzialny będzie w przypadku reklamacyjnych kwestii dotyczących sprzętu. Umowa określa również sposób wydania sprzętu (04.11.2005 w Słupsku) oraz porządek rozliczeń (zakładany przelew do rachunku Sprzedającego). Kupujący odpowiada za sprawę sprzyjającą sprzętu od chwili jego wydania, przy czym oba strony zobowiązane są do stosowania przepisów z Kodeksu cywilnego na niezdefiniowane kwestie.",
+    "answer_B": "Przedmiotem umowy jest rzecz ruchoma opisana w załączniku do niniejszej umowy, zwaną dalej \"Przedmiotem umowy\". Stosunki mające na celu sprawy związane z Przedmiotem umowy są określone szczegółowo w umowie. Kupujący zobowiązany jest zapłacć cenę sprzedaży 18 500 zł poprzez przelew na rachunek bankowy Sprzedającego, natomiast Sprzedający zobowiązuje się wydać rzecz dla Kupującego pod datą 2003-04-04.",
+    "answer_C": "Przedmiotem umowy jest rzecz ruchoma opisana w załączniku do tej umowy, będąca własnością Sprzedającego i wolną od wad prawnych. Głównymi zobowiązaniem stron są wymiany cenowej oraz upadek korzyści związanej z Przedmiotem umowy na dzień ustalony w umowie."
+  },
+  {
+    "doc": "syn-zlecenie-003",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Sonia Siewert",
+      "Iwo Majak"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W tej umowie występują następujące osoby:\n\n1. Sonia Siewert - Zleceniodawca\n2. Iwo Majak - Zleceniobiorca\n\nStreszczenie tego wymienia dwóch osób: Zleceniodawcę oraz Zleceniobiorcę, a nie ich imiona i nazwiska.",
+    "answer_B": "W umowie występują następujące osoby z ich imionami i nazwiskami:\n\n1. Sonia Siewert - Zleceniodawca\n2. Iwo Majak - Zleceniobiorca\n\nStreszczenie osób występujących w umowie to jedynie Sonia Siewert oraz Iwo Majak, ponieważ te są one zdefiniowane Sonia both \"Zleceniodawca\" i \"Zleceniobiorca\".",
+    "answer_C": "W tej umowy występują dwie osoby:\n\n1. [OSOBA], prowadzącym/prowadzącą działalność gospodarczą, NIP [NIP], REGON [REGON], z siedzibą pod adresem [ADRES], adres e-mail [EMAIL], telefon [TELEFON], zwanym/zwaną dalej „Zleceniodawcą”\n2. [OSOBA], zamieszkałym/zamieszkałą pod adresem [ADRES], adres e-mail [EMAIL], numer telefonu [TELEFON], zwanym/zwaną dalej „Zleceniobiorcą”"
+  },
+  {
+    "doc": "syn-zlecenie-003",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "02280788566"
+    ],
+    "score_A": 1.0,
+    "score_B": 0.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występuje tylko jeden numer PESEL, a to jest numer PESEL osoby zleceniodawcy (Zleceniodawcę):\n\nIwo Majak, PESEL 02280788566",
+    "answer_B": "W umowie występuje tylko jeden numer PESEL, który należy do Zlecenniodawcy (Sonia Siewert):\n\nPESEL 0106513332\n\nTen numer pojawia się w adresie e-mail Zlecenniodawcy ugoral@ppuh.com, gdzie kod PESEL występuje bez spacji.",
+    "answer_C": "W składzie podanych w umowie danych nie ma żadnego numeru PESEL. Umowa zawiera tylko identyfikatory osoby wykonawczej (PESEL Zleceniobiorcy), ale brak jest PESEL osoby przysługującej (Zleceniodawcy)."
+  },
+  {
+    "doc": "syn-zlecenie-003",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "73723430980500978820812191"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego wskazany w umowie do płatności to: 73723430980500978820812191.",
+    "answer_B": "Numer rachunku bankowego podany w umowie jest 73723430980500978820812191.",
+    "answer_C": "Numer rachunku bankowego, podany w umowie, to nr [NR_RACHUNKU]."
+  },
+  {
+    "doc": "syn-zlecenie-003",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.2651,
+    "rougeL_AC": 0.2727,
+    "answer_A": "W przedmiocie umowy Sonia Siewert (Zleceniodawca) zleca Iwo Majak (Zleceniobiorcy) przygotowanie analizy i dokumentacji w określonym zakresie, za wynagrodzenie w wysokości 6 500 zł brutto. Głównymi zobowiązaniem Zlecodawcę jest dostarczenie materiałów niezbędnych do wykonania zlecenia, natomiast Zleceniobiorcy przysługuje mu obowiązek wykonywania czynności w określonym terminie i odpowiednim stopniu staranności.",
+    "answer_B": "Przedmiot umowy to przygotowanie analizy i dokumentacji według warunków przekazanych stroną Zleceniodawcą. Głównymi zobowiązaniem są Stroną Zleceniobiorcą wykonywanie zlecenia w określonym terminie, a Stronią Zleceniodawcą dostarczanie niezbędnych materiałów oraz zaplata wynagrodzenia po wykonaniu zlecenia.",
+    "answer_C": "Przedmiotem umowy jest złożenie przez Zleceniodawcę do Zleceniobiorcy analizy oraz dokumentacji w określonym zakresie, przede wszystkim mając na celu przedstawienie wyników analizy w terminie oznaczonym w umowie. Głównymi zobowiązaniami Stron są: Zleceniodawca zobowiązuje się dostarczyć materiałów niezbędnych do wykonania zlecenia, a Zleceniobiorca odpowiada za spełnienie zatwierdzonego terminu i wykonanie zlecenia. Umowa zawiera również ustalenie dotyczące składu wynagrodzenia oraz sposób przekaziania go."
+  },
+  {
+    "doc": "syn-najem-004",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Antoni Karłowicz",
+      "Sara Skoneczna"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występują następujące osoby:\n\n1. Antoni Karłowicz\n2. Sara Skoneczna",
+    "answer_B": "W tej umowie występują następujące osoby:\n\n1. Antoni Karłowicz - ten jest zaznaczony jako Wynajmujący.\n2. Sara Skoneczna - ten jest zaznaczony jako Najemca.\n\nInne imiona i nazwiska nie występują w umowie bezpośrednio, ale są one wymienione tylko raz do podsumowania różnych osób związanych z umową:\n\n- Antoni Karłowicz (Wynajmujący)\n- Sara Skoneczna (Najemca)\n\nNawet adresy e-mail i numer telefonów nie są osobami w kontekście treści umowy, ale charakteryzują osoby występujące.",
+    "answer_C": "Umowa zawiera następujące osoby:\n\n1. [OSOBA], PESEL [PESEL], zamieszkała/zamieszkujący pod adresem [ADRES], adres e-mail [EMAIL], numer telefonu [TELEFON] - dana jest jako Wynajmującym\n2. [OSOBA], PESEL [PESEL], zamieszkała/zamieszkujący pod adresem [ADRES], adres e-mail [EMAIL], numer telefonu [TELEFON] - dana jest jako Najemcą"
+  },
+  {
+    "doc": "syn-najem-004",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "50072259794",
+      "49011563685"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Podane w umowie numery PESEL występujące to:\n\n1. PESEL 50072259794 - związku między Antonim Karłowiczem a Sara Skoneczną\n2. PESEL 49011563685 -łączenie związku między Antonim Karłowiczem a Sara Skoneczną",
+    "answer_B": "Podane w umowie numery PESEL występujące to:\n\n1. Antoni Karłowicz, PESEL 50072259794\n2. Antoni Skoneczna, PESEL 49011563685\n\nTa informacja zawiera wszystkie numery identyfikacyjne osób występujące w umowie do出租屋租赁。这份合同涉及以下两个人：\n\n1. Antoni Karłowicz，PESEL号码为50110994393\n   位于卢布诺尼的地址：ul. Listopada 17, 09-779 Nowy Targ，并通过anita49@gabinety.pl邮箱和+48 554 107 839电话与之联系。\n\n2. Antoni Skoneczna，PESEL号码为65031957020\n   位于格涅兹内的地址：ul. Plater 657, 67-463 Opole，并通过marianna91@pezda-bereda.pl邮箱和+48 770 611 898电话与之联系。\n\n合同中的其他信息包括租赁房屋的具体条款，例如租金金额、押金数额以及双方的权利义务等。",
+    "answer_C": "Na podstawie zawartości podanej umowy, odpowiednikem poproszenia byłaby następująca informacja:\n\nPESEL Wynajmującego: [PESEL]\nPESEL Najmującego: [PESEL]"
+  },
+  {
+    "doc": "syn-najem-004",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "53980841241182449353487401"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego wskazany do płatności czynszu to 53980841241182449353487401.",
+    "answer_B": "Numer rachunku bankowego wskazany w umowie do płatności czynszu jest 53980841241182449353487401.",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie dla przelewów na czynszu to: [NR_RACHUNKU]."
+  },
+  {
+    "doc": "syn-najem-004",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.1512,
+    "rougeL_AC": 0.2628,
+    "answer_A": "W przedmiocie tej umowy, Wynajmujący oddaje Najmocy lokál mieszkalny o powierzchni 52,40 m² na okres od 10 marca 1976 do 23 maja 1995. Głównymi zobowiązaniem są strony założone jest płaczenie przez Najmocie miesięcznego czynszu w wysokości 2800 zł, a także utrzymanie lokalu w odpowiednim stanie. Ponadto Najmoc zasiegona jest kontaktu ze Wynajmovym na potrzeby prowadzenia działalności lokalnej. Umowa zostaje ujęta w zgodzie z przepisami Kodeksu Cywilnego.",
+    "answer_B": "Przedmiot umowy to tenkutnica mieszkalna położona na ul. Tylna 40/11 w Wieluń, po powierzchni użytkowej 52,40 m², składająca się z dwóch pokoi, kuchni oraz łazienki. Wynajmujący zobowiązuje się oddać Najemcy tenkutnicę do użycia, a Najemca zobowiązuje się regularnie płacić czynsz na rachunek wynajmującego i utrzymywać lokal w odpowiednim stanie.\n\nZ grono głównych zobowiązaniom stron należy podkreślić, że Najemca zmuszony jest do użycia lokalu w zależności od jego przeznaczenia oraz do utrzymania go w odpowiednich warunkach. Warto też pamiętać, że Najemca ponosi czynsz i opłaty eksploatacyjne związane z korzystaniem z lokalu, a Wynajmujący zobowiązany jest do odbierania kaucji na rachunek przypominającego o swoich prawach.",
+    "answer_C": "Przedmiotem umowy są wyznaczony przez Stronę 1 lokall mieszkalny mający powierzchnię użytkową 52,40 m². Strona 1 oddaje Stronie 2 lojal do używania w oparciu o fakt jej własności. Głównymi zobowiązaniem Strony 2 jest płatać za Najmu czynsz w wysokości 2800 zł na miesiąc z zapłatom wprowadzonymi na rachunek Strony 1. Od strony 1, Strona 2 powinna utrzymać lojal w odpowiednim stanie oraz kontaktować się z nim w sprawach pilnych."
+  },
+  {
+    "doc": "syn-najem-005",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Leon Matyka",
+      "Patryk Kroczak"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występują następujące osoby:\n\n1. Leon Matyka (Wynajmujący)\n2. Patryk Kroczak (Najemca)\n\nNie wymieniono innych osób, takich jak świadkowie lub innych stron do umowy cywilnej.",
+    "answer_B": "Oto lista wszystkich osób występujących w tej umowie, zgodnie z informacjami w niej zawartymi:\n\n1. Leon Matyka - Wypisana jako Wynajmujący\n2. Patryk Kroczak - Wypisana jako Najemca\n3. Xstroka - Wypisany jako Wynajmujący (wskazane jest jako wynajmujący, ale brak imienia i nazwiska)\n4. Stowarzyszenie - Wypisane jako Wynajmujący (brak imienia i nazwiska)\n5. Bakalarczyk Dawid - Najemca (wyraźnie wymieniony w imieniu)\n6. Spoldzielnia - Najemca (wyraźnie wymieniona w imieniu)\n\nPrzez zastosowanie imion i nazwisk można zaakcentować postaci, choć nie wszystkie imiona są wyraźnie podane we własnym formacie w umowie.",
+    "answer_C": "W umowie występują następujące osoby:\n\n1. [OSOBA] z imieniem i nazwiskiem wynajmujący\n2. [OSOBA] z imieniem i nazwiskiem najmującyka"
+  },
+  {
+    "doc": "syn-najem-005",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "82032126839",
+      "10231413001"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występuje dwa numery PESEL:\n\n1. Numery PESEL wynajmującego: 82032126839\n2. Numery PESEL najemcą: 10231413001",
+    "answer_B": "Podane w umowie numery PESEL występują następująco:\n\n1. PESEL 82032126839 - to numer PESEL związany z Leon Matyka, który jest Wynajmującym.\n\n2. PESEL 10231413001 - to numer PESEL związany z Patryk Kroczak, który jest Najemcą.",
+    "answer_C": "Podano tylko jeden numer PESEL w umowach, który jest PESEL Wynajmującego. Niemądliersto, nie można uzyskać innych numerów PESEL z podanych danych umowy."
+  },
+  {
+    "doc": "syn-najem-005",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "04602563421607337543303654"
+    ],
+    "score_A": 0.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego wskazany w umowie do płatności najmu jest 04602563421607337543.",
+    "answer_B": "Numer rachunek bankowy wskazany w umowie do płatności czynszu najmu to 04602563421607337543303654.",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie do płatności jest 123456789."
+  },
+  {
+    "doc": "syn-najem-005",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.1875,
+    "rougeL_AC": 0.1897,
+    "answer_A": "Przedmiotem umowy jest najmu lokalu mieszkalnego położonego na ul. Tulipanowa 38 w miejscowości Tczew, z powierzchnią użytkową 52,40 m². Głównymi obowiązkami sąle jest wykonywanie czynszu i utrzymanie lokalu w odpowiednim stanie przez Najemcę. Wynajmujący zobowiązany jest do wpłaty kaucji, a Najemca zobowiązuje się używać Lokalu zgodnie z przeznaczeniem oraz kontaktować się z wynajmującym w sprawach pilnych.",
+    "answer_B": "Objęty jest ten dokument umowa na najmu lokalu mieszkalnego w Tczewie między Ada Matyka (Wynajmującym) a Patrykiem Kroczakiem (Najemcą). Umowa określa przekaz zabezpieczony czynszowym w wysokości 2800 zł miesięcznie. Wynajmujący zobowiązuje się do udzielania Najemu Loca, zaś Najemca musi używać Lokal bez pozwolenia Wymianującego i płacić czynsz, ponosić eksploatacyjne opłaty oraz spełniać warunki zabezpieczenia w wysokości jednego miesięcy czynszu. Umowa ma charakter nieprowizowany, stosowane są przepisy Kodeksu Cywilnego dla spraw niezdefiniowanych.",
+    "answer_C": "W przedmiocie tej umowy Wynajmujący oddaje Najjemcy lokál mieszkalny, a Najemca zobowiązuje się do zapłaty czynszu i utrzymywania lokal w porządku. Głównymi zobowiązaniami są zgodne użytkowanie Lokalu przez Najemcę oraz opłacanie czynszu wynajmu oraz eksploatacyjnych opłat przez Najemcą. Strony umiłowują się ustawianie się z sprawami nieugranionymi w umowie, w zależności od przepisów Kodeksu Cywilnego. Umowę podpisano dwiema jednobrzmiącymi egzemplarami."
+  },
+  {
+    "doc": "syn-sprzedaz-006",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Aniela Potoczna",
+      "Karol Bartłomiejczyk"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W tej umowie występują następujące osoby:\n\n1. Aniela Potoczna (Sprzedającym)\n2. Karol Bartłomiejczyk (Kupującym)",
+    "answer_B": "W umowie występują następujące osoby:\n\n1. Aniela Potoczna - Sprzedający, PESEL 43020918287\n\n2. Karol Bartłomiejczyk - Kupujący, PESEL 95022294247",
+    "answer_C": "W tej umowie występują dwa osoby:\n\n1. [OSOBA], zamieszkaną/zamieszkałą pod adresem [ADRES] oraz kontaktowaną z nadawaniem imienia i nazwiska „Sprzedającym”.\n2. [OSOBA], zamieszkaną/zamieszkałą pod adresem [ADRES] oraz kontakowanej z nadawaniem imienia i nazwiska „Kupującym”."
+  },
+  {
+    "doc": "syn-sprzedaz-006",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "43020918287",
+      "95022294247"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występuje dwa numery PESEL:\n\n1. 43020918287 - nalezy do Sprzedającego Anieli Potocznej\n2. 95022294247 - nalezy do Kupującego Karola Bartłomiejczyka",
+    "answer_B": "W umowie występują następujące numery PESEL:\n\n1. Numery PESEL Sprzedającego (Aniela Potoczna): 43020918287\n2. Numery PESEL Kupującego (Karol Bartłomiejczyk): 95022294247",
+    "answer_C": "W podanej umowie nie wystąpiło żadne numery PESEL. Umowa zawiera informacje tylko dotyczące identyfikacji osoby sprzedawcy i kupującego, bez wpisania specjalnych numerów identyfikacyjnych."
+  },
+  {
+    "doc": "syn-sprzedaz-006",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "92823662994680443699577738"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego wskazany w umowie do płatności to 92823662994680443699577738.",
+    "answer_B": "Numeryr rachunku bankowego wskazanego w umowie to: 92823662994680443699577738.\n\nTę informację znajdziesz w ustaleniu numer 2, sekcji dotyczącej płatności, gdzie strony określają, że cena sprzedaży zostanie zapłacona przelewem na ten rachunek.",
+    "answer_C": "Numer rachunku bankowego wskazanego w umowie to: NR_RACHUNKU."
+  },
+  {
+    "doc": "syn-sprzedaz-006",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.1031,
+    "rougeL_AC": 0.2051,
+    "answer_A": "W przedziale 12 listopada 1962 Sprzedający Aniela Potoczna sprzedaje rzecz ruchoma do Kupującego Karola Bartłomiejczyka. Głównymi obowiązkami strony są płatność w wysokości 18500 zł i wydanie przedmiotu umowy na d日期：2023-9-17",
+    "answer_B": "Podstawą umowy między Anielą Potoczna (Sprzedającym) a Karolem Bartłomiejczykiem (Kupującym) jest sprzedaż określonego przechowanku, zdefiniowanego w załączniku do umowy. Sprzedajwczy wydaje przechowanki 6 maja 1968 roku w miejscowości Sosnowiec. Głównymi zobowiązaniem Sprzedającego są zapłata o kwotę 18 500 zł, a Kupującego - spełnienie warunków wpłaty płatności. Ponadto, Sprzedajwczy odpowiada za wady rzeczy według Kodeksu Cywilnego, podczas gdy Kupujący ma dostęp do kontaktu z odpowiedními kwestiami.",
+    "answer_C": "Podstawą umowy jest sprzedaż rzeczy ruchlinych opisanych w załączniku do umowy. Głównymi zobowiązaniem Sprzedającego jest złożenie i wydanie Przedmiotu umowy, natomiast Kupujący zobowiązuje się wpłacić cenę sprzedaży przez transfer pieniędzy na określony rachunek. Ponadto, oba strony zgodzili się stosować Kodeks Cywilny w przypadku nietypowych sytuacji."
+  },
+  {
+    "doc": "syn-o-dzielo-007",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Aurelia Grabara",
+      "Ksawery Engler"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie wystąpiły następujące osoby:\n\n1. Aurelia Grabara - Zamawiający\n2. Ksawery Engler - Wykonawca",
+    "answer_B": "W umowie występują następujące osoby:\n\n1. Aurelia Grabara - jest prowadzącącym/prowadzącą działalności gospodarczą.\n2. Ksawery Engler - zamieszkałym/zamieszkałą pod adresem ul. Rynek 99, 06-635 Bytom.\n\nNie wymieniono innych osób na liście występujących w umowie.",
+    "answer_C": "W wymienionych w umowie osobach wystąpiły:\n\n1. Zamawiający: [OSOBA]\n2. Wykonawca: [OSOBA]"
+  },
+  {
+    "doc": "syn-o-dzielo-007",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "98032647597"
+    ],
+    "score_A": 0.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Nie znalazłem żadnych numerów PESEL w treści podanej umowy cywilnoprawnej. W tym przypadku, tylko jedno prawidłowe dane osobiste wystąpiło - PESEL zamawiającego (Aurelii Grabary) to 332003711. Reszta danych osobowych pochodzi z obu stron umowy. Numer PESEL zamieszczonego na stronie Wykonawcę (Ksawery Englera) to 980326475, co jest prawidłowym numerem, ale nie jest to w treści umowy cywilnoprawnej wymienione.",
+    "answer_B": "W umowie występuje jeden numer PESEL, który należy do Ksawery Engler (Wykonawcy). Ten numer to 98032647597.",
+    "answer_C": "W podanym treściku umowy nie ma numerów PESEL, więc nie mogę ich podać. PESEL jest wymieniony w 2. Zamawiającym i 2. Wykonawcą, ale brak wartości numerycznej. Umowa zawiera również informację o PESEL osoby prowadzącej działalność gospodarczą (1. Zamawiającego), jednak nie dotyczy to numerycznego identyfikatora osoby fizycznej."
+  },
+  {
+    "doc": "syn-o-dzielo-007",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "26487347143455812236231665"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego wskazany w umowie do płatności to: 26487347143455812236231665.",
+    "answer_B": "Numer rachunku bankowego w skrypcie umowy to 26487347143455812236231665.",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie do płatności to NR_RACHUNKU."
+  },
+  {
+    "doc": "syn-o-dzielo-007",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.1667,
+    "rougeL_AC": 0.2197,
+    "answer_A": "W przedtermie umowy o dzieło między Aurelią Grabarą a Ksawerem Englera znajduje się streszczenie przedmiotu umowy i główne zobowiązania stron:\n\nUmowa dotyczy wykonania dla Aurelii Grabary przez Ksawera Englera projektu oraz dokumentacji technicznej. Zamawiający zobowiązuje Wykonawcę do zakończenia dzieła do 25 kwietnia 1986 roku, a za wykonalność Działa zapłaca 9 200 zł w ciągu siedmiu dni od podpisania protokołu odbioru. Wykonawca jest zobowiązany przekazać dzieło do Zamawiającego w terminie i na podstawie protokołu, uzyskując u niego wynagrodzenie 9 200 zł wpłaczonego na rachunek bankowy. Prawa majątkowe do Działa przeznaczane są za zamianę na wynagrodzenie. Umowa stosuje postanowienia Kodeksu Cywilnego, a dokumenty są podpisane w dwóch jednobrzmiących egzemplarzach.",
+    "answer_B": "Pojedynczy przedmiotem umowy było opracowanie projektu z dokumentacją techniczną. Głównymi założeniami były obowiązek wykonawcy na wprowadzenie do wykonywania dzieła w terminie 1 października 1986 oraz płatność wynagrodzenia przez zamawiającego w ciągu 7 dni od podpisania protokołu odbioru.",
+    "answer_C": "Przedmiotem umowy jest zrealizowanie projektu i dokumentacji technicznej, zwanej Dzielem, przez Wykonawcę dla Zamawiacza. Głównymi zobowiązaniami są: Zamawiający zobowiązany jest do zapłaty wynagrodzenia za wykonanie Dziejów w wysokości 9 200 zł, podczas gdy Wykonawca zobowiązuje się do dostarczenia Dziejów w terminie do dnia podanej w umowie i przekazania ich przez protokoł zdawczo-odbiorczy. Ponadto, po wpłata wynagrodzenia, Wykonawca przenosi na Zamawiającego autorskie prawa majątkowe do Dziejów."
+  },
+  {
+    "doc": "syn-o-dzielo-008",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Konrad Strzała",
+      "Karina Szyda"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występują następujące osoby:\n\n1. Konrad Strzała\n2. Karina Szyda\n\nTe dwie osoby są nazwane jako Zamawiający i Wykonawca, odpowiednio.",
+    "answer_B": "W następującej ilość osób wystąpiło w umowie:\n\n1. Konrad Strzała - Zamawiający (prowadzący działalność gospodarczą)\n2. Karina Szyda - Wykonawca\n\nNie wymieniono więcej osób w treści umowy.",
+    "answer_C": "W umowie wystąpiło dwie osoby:\n\n1. [OSOBA], prowadzącym/prowadzącą działalność gospodarczą, z siedzibą pod adresem [ADRES] i zapewniony e-mailem [EMAIL] oraz numerem telefonu [TELEFON].\n2. [OSOBA], zamieszkałym/zamieszkałą pod adresem [ADRES] i zapewniającym e-mail [EMAIL] oraz numerem telefonu [TELEFON]."
+  },
+  {
+    "doc": "syn-o-dzielo-008",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "08211360698"
+    ],
+    "score_A": 0.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie nie występuje żadne numery PESEL. Numery PESEL pojawiałyby się, gdyбы były one wymienione np. jako numer telefonu lub adres zamieszkania jednej z stron umowy. W transcripts podanego treśće są tylko identyfikatory osób, nic więcej.",
+    "answer_B": "W umowie występuje tylko jeden numer PESEL, który należy do \"Wykonawcy\":\n\nPESEL 08211360698\n\nTen numer PESEL należy do Karina Szyda (PESEL 08211360698).",
+    "answer_C": "W podanej umowie nie ma numerów PESEL wystąpić. Numer PESEL występuje zawsze na osobie, która jest wykonywacją umowy (Wykonawcą), ale w tej umowie ten numer nie jest podany."
+  },
+  {
+    "doc": "syn-o-dzielo-008",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "60564641708053100330923271"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie zostawił się tylko adres rekeningu bankowego dla Zamawiającego, a nie dla Wykonawcy. Numer rachunku bankowego podany w umowie to:\n\n60564641708053100330923271\n\nTen numer należy płacić do Zamawiającego, ponieważ ten wpis znajduje się w części dotyczącej zasady wydzielania rachunku bankowego dla Strony Zamawiającej.",
+    "answer_B": "Numer rachunku bankowego wskazany w umowie do płatności to: 60564641708053100330923271. \n\nPamiętaj, że ta informacja jest kryptograficzna i prawdopodobnie nie spełnia wymagań safeczności do odczytywania bezpośrednio. Czasami to rachunek bankowy może być zaktualizowany, więc najlepiej sprawdzić tę informację na stronie bankowej lub konsultować się z Wykonawcą.",
+    "answer_C": "Numer rachunku bankowego wskazanego w umowie do płatności to nr [NR_RACHUNKU]."
+  },
+  {
+    "doc": "syn-o-dzielo-008",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.1988,
+    "rougeL_AC": 0.2698,
+    "answer_A": "W przedmiocie umowy zamawiany jest opracowanie projektu i dokumentacji technicznej przez wykonawcę, z zapewnieniem terminowej transmisji tych dokumentów do zamawiającego. Głównymi zobowiązaniami są: wykonawca musi sformatyzować i przekazać Dzieło w określonym terminie, a zamawiany poniesie wynagrodzenie za wykonanie Działa poprzez transfer pieniężny. Zasada praw autorskich jest ujęta zgodnie ze specjalnymi warunkami umowy. Ostatecznie, wszelkie nieznane w umowie sprawy zostaną rozpatrywane w oparciu o prawa cywilne.",
+    "answer_B": "W przedmiocie tej umowy znajduje się dzieło polegające na opracowaniu projektu wraz z dokumentacją techniczną, które powinien być wykonalne przez Wykonawcę do dnia 15. i przekazane Zamawiającemu za wynagrodzenie w wysokości 9 200 zł. Głównymi zobowiązaniami są następujące:\n\n- Wykonawca zobowiązuje się wykonać Dzieło oraz dokonnąć jego przekazu odbiorcy przed terminem.\n- Zamawiający zobowiązuje się zapłacić wynagrodzenie w miejscu i zgodnie z ustabeniem, na rachunek bankowy Wykonawcy.\n\nOto główne zobowiązania stron oraz temat umowy w 2-3 zdaniach:\n\nUmowa dotyczy wykonywania przez Wykonawcę opracowania projektu wraz z dokumentacją techniczną, zapłaty wynagrodzenia za Dzieło i przekazu tego Dnia odbiorcy.",
+    "answer_C": "W przedmiocie umowy zamawiany powinien wydać wynagrodzenie za wykonanie projektu i dokumentacji technicznej przez wykonawcę, który zobowiązuje się je sformatować do przekazania w terminie określonym w umowie. Głównymi zobowiązaniem strony jest zapłata wynagrodzenia w 7 dni od podpisania protokołu odbioru Dziejów z przeniesieniem autorskich praw majątkowych na zamawiającego po wpłatce. Umowa toczy się według przepisów Kodeksu Cywilnego dotyczącego umowy o dzieło."
+  },
+  {
+    "doc": "syn-o-dzielo-009",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Urszula Trzcionka",
+      "Krystyna Grymuza"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występują następujące osoby:\n\n1. Urszula Trzcionka (Zamawiający)\n2. Krystyna Grymuza (Wykonawca)",
+    "answer_B": "W umowie występują następujące osoby:\n\n1. Urszula Trzcionka - Zamawiający (prowadząca działalność gospodarczą)\n2. Krystyna Grymuza - Wykonawca\n3. Marcin Uródzki (imieniem zamówiającego podane jest \"Zamawiającym\")\n4. Krystyna Grymuza (imieniem wykonawcy podane jest \"Wykonawcą\")\n5. Fszott (zwanym zwaną dalej \"Wykonawcem\" w art. 4)\n\nPodano również kilka innych imion i nazwisk, ale związane są one z adresem kontaktem, a nie bezpośrednio z umową:\n\n- Marcin Uródzki - adres e-mail zamawiającego\n- Fszott - numer telefonu zamawiającego\n- Krystyna Grymuza - adres e-mail i numer telefonu wykonawcy\n\nWymieniono również krajowe identyfikatory osobiste:\n\n- PESEL Zamawiającego (Urszula Trzcionka)\n- PESEL Wykonawcy (Krystyna Grymuza)\n- NIP Zamawiającego (5299124191)\n- REGON Zamawiającego (049663194)\n\nWszystkie te osoby występują w umowie, a jedynie imienia i nazwiska znanym są pod nazwami w umowie.",
+    "answer_C": "W tej umowie występują następujące osoby:\n\n1. [OSOBA], prowadzący działalność gospodarczą, NIP [NIP], REGON [REGON], z siedzibą pod adresem [ADRES], adres e-mail [EMAIL], telefon [TELEFON] - jako Zamawiający\n2. [OSOBA], PESEL [PESEL], zamieszkała/zamieszkały pod adresem [ADRES], adres e-mail [EMAIL], numer telefonu [TELEFON] - jako Wykonawca"
+  },
+  {
+    "doc": "syn-o-dzielo-009",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "48092134900"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie nie występuje żadne numery PESEL, tylko zawiera się numerek indywidualnego identyfikacyjnego (ID) osoby fizycznej - PESEL 48092134900 dla Wykonawcy Krystyny Grymuzy.",
+    "answer_B": "W umowie występuje jedno numery PESEL:\n\nPESEL 48092134900 - podane dla osoby o imieniu Krystyna Grymuza.\n\nPonieważ chodzi o numer PESEL, to jest jedynym numerem identyfikacyjnym występującym w umowie.",
+    "answer_C": "W podanej umowie nie ma wpisanych żadnych numerów PESEL. Nie zawiera ona informacji dotyczące identyfikacji osoby jako Zamawiającego ani Wykonawcy, tylko ich nazwisk i imion. Nie ma w nim numerek PESEL dla nikogo z obu stron umowy."
+  },
+  {
+    "doc": "syn-o-dzielo-009",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "53987769453147379965075273"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego wskazanego w umowie do płatności to 53987769453147379965075273.",
+    "answer_B": "W umowie jest zapisano, że Wynagrodzenie zostanie wypłacone przez przelew na rachunek bankowy Wykonawcy o numerze 53987769453147379965075273. Numer tego rachunku jest podany w umowie dla zapłaty wynagrodzenia za wykonane Dzieło.",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie do płatności to: NR_RACHUNKU."
+  },
+  {
+    "doc": "syn-o-dzielo-009",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.2055,
+    "rougeL_AC": 0.2087,
+    "answer_A": "W przedmiocie tej umowy Urszula Trzcionka (Zamawiający) zatrudnia Krystynę Grymuzę (Wykonawcę) do opracowania projektu wraz z dokumentacją techniczną, która zostanie przekazana w terminie do 21.05.2012. Głównym zobowiązaniem Wykonawcy jest wykonanie Działa i przekazienie go Zamawiającemu. Zamawiający zobowiązuje się zasłaniać Wynagrodzeniem Wnętrzne wynagrodzenie w wysokości 9,200 zł, zaplatając to na rachunek Wykonawcy do 7 dni od podpisania protokołu odbioru. Umowa jest obowiązkowa dla zastosowania Kodeksu cywilnego w przypadku nieporozumień między stronami.",
+    "answer_B": "Przedmiotem umowy między Marekiem Kościewskim (Zamawiającym) a Agnesią Grymuza (Wykonawcą) jest opracowanie projektu z dokumentacją techniczną, nazywane Działem. Stosunki stron dotyczą one wykonania tego dzieła w terminie do 10.10.2050 oraz płatności za wykonanie w wysokości 9200 zł. Wykonawca zobowiązany jest zapewnić odbiór Działa na podstawie protokołu zdawczo-odbiorczego, natomiast Zamawiający zobowiązany do zapłaty wynagrodzenia przez przepłynięcie. Prawa autorskie do Działu przeniesione są automatycznie po płatności wynagrodzenia. Umowę sporządzono w dwóch egzemplarzach.",
+    "answer_C": "W przedmiocie umowy zamawiany wykonać będzie projekt z dokumentacją techniczną, a wykonawca zobowiązuje się do jego wykonania i odbioru. Głównymi zobowiązaniem jest zapłata wynagrodzenia za wykonanie dzieła przez przekazienie dokumentów. Umowa obejmuje również transfer autorskich praw majątkowych do wykonanego dzieła po wpłatce."
+  },
+  {
+    "doc": "syn-najem-010",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Kamila Frania",
+      "Kajetan Wyciszkiewicz"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występują dwie osoby:\n\n1. Kamila Frania\n2. Kajetan Wyciszkiewicz",
+    "answer_B": "W umowie występują następujące osoby:\n\n1. Kamila Frania - ten jest Wynajmującym.\n2. Kajetan Wyciszkiewicz - ta jest Najemcą.\n\nNie wymieniono innych osób bezpośrednio w treści umowy. Można jednak wnioskować, że:\n\n- Do tej umowy może być również związane i uczestniczyć w niej Kamila Frania (Wynajmujący) i Kajetan Wyciszkiewicz (Najemca), ponieważ to imiona występują w treści.\n- Ale mogłyby być również inne osoby związane z lokalem mieszkalnym, którzy są częścią tej transakcji czy mają swoje obowiązki i prawa w kontekście umowy, jednak te informacje nie są przesłane bezpośrednio w treści dokumentu.",
+    "answer_C": "W tej umowie występują następujące osoby:\n\n1. Wynajmujący:\n   - [OSOBA], PESEL [PESEL], zamieszkała pod adresem [ADRES], adres e-mail [EMAIL], numer telefonu [TELEFON]\n\n2. Najemca:\n   - [OSOBA], PESEL [PESEL], zamieszkała pod adresem [ADRES], adres e-mail [EMAIL], numer telefonu [TELEFON]"
+  },
+  {
+    "doc": "syn-najem-010",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "06240324775",
+      "71052259544"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występuje dwa numery PESEL:\n\n1. Numery PESEL wynajmującego to 06240324775 i 71052259544.\n2. Numery PESEL najmującego to 71052259544.",
+    "answer_B": "Podane w umowie następujące są numery PESEL:\n\n1. Numery PESEL dla Wynajmującego (Wynajmujący): 06240324775\n2. Numery PESEL dla Najemcy (Najemca): 71052259544",
+    "answer_C": "Podane w umowie następujące są numery PESEL:\n\n1. [PESEL]\n2. [PESEL]\n\nPamiętaj, że miejsce oznaczenia brzmi \"występujące w umowie\" i nie jest to przypadek dodatkowego wstawienia tych numerów, ale wyraźne miejscowe odniesienie do wystąpiłnych w treści umowy."
+  },
+  {
+    "doc": "syn-najem-010",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "16823374989413435240824008"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku银行在合同中被指定用于支付租金的账户是16823374989413435240824008。",
+    "answer_B": "Numer rachunku bankowego wskazany w umowie do płatności czynszu jest następujący:\n\n16823374989413435240824008",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie do płatności jest [NR_RACHUNKU]."
+  },
+  {
+    "doc": "syn-najem-010",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.2048,
+    "rougeL_AC": 0.2,
+    "answer_A": "Streszczenie przedmiotu umowy:\n\nUmowa to jest umowa najmu lokalu mieszkalnego, gdzie Wynajmujący danej osoby oddaje Najmiećowi loków zdefiniowanego jako Lokal.\n\nGłówne zobowiązania stron:\n\n1. Najemca płaci czynsz najmu w wysokości 2800 zł za miesiąc na rachunek bankowy Wynajmującego.\n2. Wynajmujący zobowiązuje się do udostępnienia Najmiećowi Lokalu, a Najemca zobowiązany jest używać go zgodnie z przeznaczeniem i utrzymywać w stanie niewielkimi wyborcymi uprawdofinowaniłami.\n3. W przypadku nieudawanej przestrzegania umowy przez Najmieća, Wynajmujący ma prawo do zwolnienia się z umowy i odwołania się do Kodeksu Cywilnego.",
+    "answer_B": "Przedmiot tej umowy to wynajmowanie lokalu mieszkalnego położonego na ul. Narutowicza 34/21, 49-894 Katowice przez Kamila Frania do Kajetan Wyciszkiewicz. Wynajmujący zobowiązuje się oddać Najjemcy Lokal dla użytku w określonym przeznaczeniu. Najemca zobowiązany jest płacić czynsz najmu i uplaty eksploatacyjne, a także utrzymywać Lokal w należytym stanie. Płatność czynszu odbywa się za przekierowanie na bankowym rachunku Kamila Frania. Umowa jest unormowana odpowiednictwem do zasady 30 dni, a niezależnie od czynszu Najemca ponosi opłaty eksploatacyjne związane z korzystaniem ze swojego domu.",
+    "answer_C": "Przedmiotem umowy są transakcje najmu lokalu mieszkalnego o powierzchni 52,40 m² położonego pod [ADRES] w miejscowości [MIEJSCOWOSC]. Głównymi obowiązkami Najmującego są oddanie Lokalu do użytku i ochrona jego stanu. Najemca zobowiązany jest do regularnego płacenia czynszu w wysokości 2800 zł, zapisywania opłaty eksploatacyjnych i przekazania wpłaty za kaucję. Najemca musi używać Lokalu w skojarzonym z nim przeznaczeniu oraz kontaktować się w sprawach pilnych z Wynajmującym."
+  },
+  {
+    "doc": "syn-najem-011",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Olaf Łepek",
+      "Juliusz Fierek"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występują następujące osoby:\n\n1. Olaf Łepek\n2. Juliusz Fierek",
+    "answer_B": "Oto wszystkie osoby, które występują w umowie zgodnie z informacjami podanymi:\n\n1. Olaf Łepek (Wynajmujący)\n2. Juliusz Fierek (Najemca)\n\nTe są imiona i nazwiska występujących osób w dokumentie umowy.",
+    "answer_C": "W umowie wystąpiły następujące osoby:\n\n1. [OSOBA], PESEL [PESEL], zamieszkałym/zamieszkałą pod adresem [ADRES], adres e-mail [EMAIL], numer telefonu [TELEFON] - zwanym dalej Wynajmującym\n2. [OSOBA], PESEL [PESEL], zamieszkałym/zamieszkałą pod adresem [ADRES], adres e-mail [EMAIL], numer telefonu [TELEFON] - zwanym dalej Najemcą"
+  },
+  {
+    "doc": "syn-najem-011",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "76081645155",
+      "59101008732"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występuje dwa numery PESEL:\n\n1. PESEL 76081645155 - reprezentuje Olaf Łepek\n2. PESEL 59101008732 - reprezentuje Juliusz Fierek",
+    "answer_B": "Podano następujące numery PESEL w umowach między Wynajmującym i Najemcą:\n\n- 76081645155 (PESEL Olaf Łepek)\n- 59101008732 (PESEL Juliusz Fierek)",
+    "answer_C": "Podana w umowie są następujące numery PESEL:\n\n1. Wynajmującym: [PESEL]\n2. Najemcą: [PESEL]"
+  },
+  {
+    "doc": "syn-najem-011",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "39091334123281206797403447"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego wprowadzony w umowie do płatności najmu lokalu jest 39091334123281206797403447.",
+    "answer_B": "Numer rachunku bankowego wskazany w umowie do płatności czynszu najmu to 39091334123281206797403447.",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie do płatności to NR_RACHUNKU, po którym należy podawać transfery pieniędzy. Przekazałeś go w treści umowy."
+  },
+  {
+    "doc": "syn-najem-011",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.0552,
+    "rougeL_AC": 0.0706,
+    "answer_A": "Streszczenie przedmiotu umowy to umowa na najmu lokal mieszkalnego z有效期为1986年10月19日的期限，由Olaf Łepek (借款人)提供给Juliusz Fierek (租户)。\n\n借款人承担向租户收取每月2,800 zł的租金，并将租金汇入借款人指定银行账户的义务。此外，借款人有权利在提前一个月通知的情况下终止合同。借款人还承诺保留一个相当于1个月租金的押金作为保障。\n\n租户则需按约定使用房间并保持其良好状态，同时在紧急情况下通过联系借款人指定的电话号码或电子邮件与之沟通。\n\n主要条款包括租金支付、期限和双方义务的具体细节。",
+    "answer_B": "Umowa na lokum mieszkalny zatwierdzona w dniu dniu 21. zawiera przepisy dotyczące użytkowania mieszkań. Lokal położony pod ulicą Reja 763 w Lubliniec, na powierzchni 52,4 m², Łepek oddany do użytku przez Juliusz Łepek (Wynajmujący), który płaci Najmieccy za czynsz w wysokości 2800 zł miesięcznie ze swojego rachunku. Najemca posiada za zaszkodzenie w wysokości jednego miesiącowego czynszu, która Łepek wpłacona do rachunku Wynajmującego.\n\nWażnym elementem umowy Łepek tożsamość stron oraz obowiązki i prawa każdej z nich. Najemca zobowiązany Łepek używać lokum zgodnie z przeznaczeniem oraz utrzymywać go w należytym stanie, zaś Wynajmujący zobowiązuje się do zapłaty czynszu i opłat eksploatacyjnych. Umowa finałowo służy jako wymiar postępowania w przypadku niezgodności z umową, a Łepek zawarta w dwu jednobrzmiących egzemplarzach.",
+    "answer_C": "Przedmiotem umowy jest najmu lokalu mieszkalnego położonego pod adresem [ADRES] przez miesiąc od dnia [DATA] do dnia [DATA]. Najemca zobowiązuje się płacić czynsz w wysokości 2800 zł miesięcznie z góry na rachunek Wynajmującego. Z kolei Najemca zobowiązany jest używać Lokal bez pozwolenia Wymajnującego i pokazywać go w nieporwąkowym stanie, a Wynajmujący może wypowiedzieć umowę z zachowaniem okresu wypowiedzenia."
+  },
+  {
+    "doc": "syn-zlecenie-012",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Jakub Roskosz",
+      "Marcin Pokusa"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występują następujące osoby:\n\n1. Jakub Roskosz\n2. Marcin Pokusa",
+    "answer_B": "W umowie wystąpiły następujące osoby:\n\n1. Jakub Roskosz - Zleceniodawca, prowadzący działalność gospodarczą, z siedzibą w ul. Kowalska 35/61, 86-943 Starachowice.\n2. Marcin Pokusa - Zleceniobiorca zamieszkaną pod adresem ul. Skośna 648, 17-197 Szczecinek.\n\nNikt inny nie występuje w umowie bezpośrednio jako uczestnik umowy.",
+    "answer_C": "W tej umowie występują następujące osoby:\n\n1. [OSOBA], prowadzącym/prowadzącą działalność gospodarczą, NIP [NIP], REGON [REGON], z siedzibą pod adresem [ADRES], adres e-mail [EMAIL], telefon [TELEFON] - Zleceniodawca\n2. [OSOBA], PESEL [PESEL], zamieszkałym/zamieszkałą pod adresem [ADRES], adres e-mail [EMAIL], numer telefonu [TELEFON] - Zleceniobiorca\n\nNie można określić imion i nazwisk osob na podstawie uzupełnionych tylko częściowo danych w umowie. Dla uzyskania pełnej informacji o obydwu stronach wymagana jest dodatkowa aktywność badawcza."
+  },
+  {
+    "doc": "syn-zlecenie-012",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "81100902601"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występuje jeden numer PESEL:\n\n81100902601 - należyczy do Zleceniobiorcy, Marca Pokusa.",
+    "answer_B": "W umowie występuje tylko jeden numer PESEL:\n\n81100902601\n\nTen numer należy do Zleceniobiorcy - Marcin Pokusa.",
+    "answer_C": "W umowie nie występuje żadne numery PESEL. Numery PESEL pojawiają się tylko w tytułu umowy, ale nie są zawarte w treści umowy samotnie. Umowa dotyczy zlecenia analizowego i sprecyzowanych szczegółów bez podania numeru PESEL obydwu stron."
+  },
+  {
+    "doc": "syn-zlecenie-012",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "95296717565512567468071545"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego wskazany w umowie do płatności to 95296717565512567468071545.",
+    "answer_B": "Numer rachunku bankowego wskazany w umowie do płatności to 95296717565512567468071545. Strona Zleceniobiorcą (Marcin Pokusa) zobowiązana jest do wpłaty wynagrodzenia w kwocie 6,500 zł brutto w terminie 14 dni od dnia wykonania zlecenia na ten rachunek bankowy.",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie do płatności to NR_RACHUNKU."
+  },
+  {
+    "doc": "syn-zlecenie-012",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.2931,
+    "rougeL_AC": 0.2,
+    "answer_A": "W przedmiocie umowy obowiązuje się zlecanie i przyjmowanie do wykonania czynności związanych z przygotowaniem analizy oraz dokumentacji na określonych przez stroną termsach. Głównymi zobowiązaniem Zleceniobiorcy jest skuteczne wykonywanie zlecenia w przewidzianym terminie, a głównym obowiązkiem Zleceniodawcy - dostarczenie niezbędnych materiałów do wykonania zlecenia. Umowa to odpowiada postanowień Kodeksu Cywilnego dotyczące umowy zlecenia.",
+    "answer_B": "W przedmiocie umowy obowiązują się Strony do przeprowadzenia analizy i przygotowania dokumentacji, zgodnie ze_specyfikacją uzgodnioną między nimi. Głównymi zobowiązaniem Zleceniobiorcy jest wykonanie zlecenia w określonym terminie, za pomocą odpowiednio przekazanych materiałów przez Zleceniodawcę. Strony uznają możliwość przedłużania terminu w pisemnej formie. Zleceniodawca zobowiązana jest do zapłaty wynagrodzenia po wykonaniu zlecenia, a Zleceniobiorca do złożenia materiałów niezbędnych i spełnienia swoich obligations w okresie określonym w umowie.",
+    "answer_C": "Podstawowym przedmiotem umowy jest wykonanie przez Zleceniobiorcę analizy i dokumentacji na podstawie uzgodnionego zakresu. Głównymi obowiązkami są Zleceniodawcy przekazanie materiałów niezbędnych do wykonania oraz Zleceniobiorcy zleciać przygotowanie analizy i dokumentacji w określonym terminie i dostarczanie wynagrodzenia w terminny sposób."
+  },
+  {
+    "doc": "syn-najem-013",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Jakub Godzisz",
+      "Eliza Komperda"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W tej umowie występują następujące osoby:\n\n1. Jakub Godzisz\n2. Eliza Komperda\n\nTe są zarówno strony końcowe umowy, jak i jedynymi osobami wymienionymi w umowach cywilnoprawnych (w tym imieniem i nazwiskiem). Niestety, zgodnie z treścią, imiona ich rodziców lub innych osób nie występuje.",
+    "answer_B": "Osoby występujące w umowie to:\n\n1. Jakub Godzisz (Wynajmujący)\n2. Eliza Komperda (Najemca)\n\nJakub Godzisz ma dalsze aktywności:\n- PESEL: 92010753041\n- Adres zamieszkania: ul. Starowiejska 69, 78-671 Ostrołęka\n- E-mail: rbasaj@interia.pl\n- Numer telefonu: +48 870 348 247\n\nEliza Komperda ma dalsze aktywności:\n- PESEL: 43112081837\n- Adres zamieszkania: ul. Kosynierów 14, 66-680 Kłodzko\n- E-mail: mweśoly@ptok-wawrzyk.com\n- Numer telefonu: +48 648 086 131",
+    "answer_C": "W tej umowie występują następujące osoby:\n\n1. Wynajmujący:\n   - [OSOBA], zamieszkała/zamieszkały pod adresem [ADRES]\n2. Najemca:\n   - [OSOBA], zamieszkała/zamieszkały pod adresem [ADRES]"
+  },
+  {
+    "doc": "syn-najem-013",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "92010753041",
+      "43112081837"
+    ],
+    "score_A": 0.5,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Podana w umowie liczba PESEL występuje tylko jedania raz - 92010753041, dotyczącym Jakuba Godzisa. Nie ma innych numerów PESEL w dokumencie umowy.",
+    "answer_B": "W umowie występują następujące numery PESEL:\n\n1. PESEL 92010753041 - to PESEL Jakub Godzisz, który jest Wynajmującym.\n2. PESEL 43112081837 - to PESEL Elizy Komperdy, który jest Najemcą.",
+    "answer_C": "Podane w umowy nie ma żadnych numerów PESEL. Umowa zawiera tylko informacje o adresach, numerach telefonów i e-maili obywateli, ale brak ich identyfikatorów osobistych (PESEL)."
+  },
+  {
+    "doc": "syn-najem-013",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "29467737826398214658404499"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego wskazany w umowie do płatności jest 29467737826398214658404499.",
+    "answer_B": "Numer rachunku bankowego wskazany w umowie do płatności czynszu najmu to 29467737826398214658404499.",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie do płatności jest  NR_RACHUNKU."
+  },
+  {
+    "doc": "syn-najem-013",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.1875,
+    "rougeL_AC": 0.2299,
+    "answer_A": "Strech przedmiotu umowy to umowa na najmu lokalu mieszkalnego, położonego ul. Opolska 32, 52,40 m², pomiędzy Jakubem Godziszem (Wynajmującym) a Elizą Komperdą (Najemcą), z有效期至1990-12-17.\n\nGłówne zobowiązania to:\n- Najemca płaci 2800 zł m. stycznia do konca termu umowy.\n- Wynajmujący otrzymuje kaucję w wysokości miesiącznego czynszu.\n- Najemca musi używać Lokal zgodnie z jego przeznaczeniem, a wynajmujący jest odpowiedzialny za lokal w stanie dobrym.",
+    "answer_B": "Przedmiotem umowy jest tenatorski układ dotyczący lokalu mieszkalnego, położonego na ul. Bociania 66 w Tarnowie, o powierzchni użytkowej 52,40 m². Głównymi zobowiązaniem stron są zapłacenie czynszu najmu oraz obsługa lokalu w odpowiednim stanie. Wynajmujący zobowiązuje się do utrzymania lokalu w dobrym stanie i złożenia kaucji. Najemca dąży do używania lokalu według przeznaczenia i ponosi odpowiedzialność za opłaty eksploatacyjne związane z korzystaniem z lokalu.",
+    "answer_C": "Umowa na najmu lokalu mieszkalnego między [Osoba_Wynajmującym] a [Osoba_Najemcą], określona jest czasowo od dnia [Data_Dozwolone] do [Data_Ostateczna]. Wynajmujący oddaje Najmującemu lokal o powierzchni 52,40 m² z obiema sypialniami, kuchnią i łazienką. Najemca zobowiązuje się płacić miesięczny czynsz w wysokości 2800 zł na rachunek [Nr_Rachunku]. Najemca ponosi również opłaty eksploatacyjne związane z korzystaniem ze szpitala. Wynajmujący może otrzymać za kaucję roszczeń w wysokości jednego miesiąca czynszu, wpłaconej na ten sam rachunek. Najemca zobowiązany jest do użycia lokalu w określonym przeznaczeniu i utrzymania go w należytym stanie, podczas gdy Wynajmujący kontaktuje się z nie przez telefon lub e-mail [Nr_Telefoniczny] lub [Adres_Electroniczny]. W przypadkach nieugraniaczonych warunków stosowane są przepisy Kodeksu cywilnego."
+  },
+  {
+    "doc": "syn-najem-014",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Janina Kupidura",
+      "Szymon Kozdrój"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Osoby występujące w umowie:\n\n1. Janina Kupidura\n2. Szymon Kozdrój",
+    "answer_B": "W umowie występują następujące osoby:\n\n1. Janina Kupidura - Wynajmujący, który posiadał lokál mieszkalny.\n2. Szymon Kozdrój - Najemca, która wynajmuje Lokal od Janina Kupidura.\n\nJanina Kupidura jest zamieszkałą pod adresem ul. Szczęśliwa 936, 64-410 Tomaszów Mazowiecki i posiada PESEL 84061878185.\nSzymon Kozdrój jest zamieszkałym/zamieszkałą pod adresem ul. Tulipanowa 72, 60-684 Police i posiada PESEL 00322639061.\n\nWszystkie inne dane osobowe (adresy e-mail i telefonów) są wymienione w umowie.",
+    "answer_C": "W umowie występują następujące osoby:\n\n1. Wynajmujący:\n   - Osoba, PESEL niechcący podać, zamieszkała pod adresem [ADRES], używa adresu e-mail [EMAIL] i numer telefonu [TELEFON]\n\n2. Najemca:\n   - Osoba, PESEL niechcący podać, zamieszkała pod adresem [ADRES], używa adresu e-mail [EMAIL] i numer telefonu [TELEFON]"
+  },
+  {
+    "doc": "syn-najem-014",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "84061878185",
+      "00322639061"
+    ],
+    "score_A": 1.0,
+    "score_B": 0.5,
+    "score_C": 0.0,
+    "answer_A": "W umowie występuje dwa numery PESEL:\n\n1. PESEL 84061878185 - ten numer należy do Janiny Kupidury (Wynajmującego).\n2. PESEL 00322639061 - ten numer należy do Szymona Kozdrój (Najemcy).",
+    "answer_B": "Podstawiając się na podany w treści zadania tekst, odpowiedzią jest jedna liczba PESEL:\n\nPESEL 00322639061\n\nTa liczba pojawia się w umowie pomiędzy Najemnikiem (Szymon Kozdrój) i Wynajmującym (Janina Kupidura). Wiersz zawiera numer PESEL Najemcyny, ale nie numer PESEL Wynajmującego. Zgodnie z treścią zadania, numer PESEL Wynajmującego nie występuje w umowie i jest wykluczany z odpowiedzi.",
+    "answer_C": "Zgodnie z treścią umowy występuje dwa numery PESEL:\n\n1. PESEL dla Wynajmującego: [PESEL_Wynajmującego]\n2. PESEL dla Najemcą: [PESEL_Najemcą] \n\nNie mogę podać dokładnych numerów PESEL, ponieważ są to informacje prywatne i powinny być ukryte lub chronione w sposób odpowiadający wymogom przepisów prawnych dotyczące ochrony danych osoby osobistych."
+  },
+  {
+    "doc": "syn-najem-014",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "01217459615865780913431611"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego wskazany do płatności czynszu wynosi 01217459615865780913431611.",
+    "answer_B": "Numer rachunku bankowego wskazany w umowie dla przelewów z tytułu najmu to 01217459615865780913431611.",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie do płatności jest  NR_RACHUNKU."
+  },
+  {
+    "doc": "syn-najem-014",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.1928,
+    "rougeL_AC": 0.2074,
+    "answer_A": "Streszczenie umowy w dwóch - trzech zdaniach brzmi następująco:\n\nUmowa zawiera oświadczenie o najmu lokalu mieszkalnego od dnia 15.01.1972 do 14.11.2000 przez Janinę Kupidurę (Wynajmującą) do Szymona Kozdraja (Najemującego), określanej jako Lokal.\n\nGlównymi zobowiązaniami są płatać czynsz w wysokości 2800 zł za miesiąc z banka, używać Lokalu w określonym przeznaczeniu i utrzymywać go w stanie dobrym. Najemca powinien kontaktować się z Wynajmującym do spraw dotyczących najmu.\n\nGłówne zobowiązania stron są wyrażone w trzech - czterech ustaleń prawnych.",
+    "answer_B": "Przedmiot umowy to wynajmowanie lokalu mieszkalnego położonego na ul. Listopada 34/19 w Radomiu (Płońsk). Wynajmujący zobowiązuje się do oddania Najemcy tego lokala do użytku, a Najemca do przyjmujuć go do wykorzystania. Głównymi zobowiązaniami są wpłata czynszowej w wysokości 2800 zł miesięcznie na rachunek wynajmującego, oraz wpłata jednomiesięcznej kaucji jako zabezpieczenie roszczeń. Najemca zobowiązany jest do utrzymania lokalu w odpowiednim stanie, a Wynajmujący może wpływać na wypowiedź umowy z użyciem miesiącznego okresu. Umowa zgodnie zapisuje kodyfikację cywilną i sporządzona jest w dwóch jednobrzmiących egzemplarzach dla każdej strony.",
+    "answer_C": "Przedmiotem umowy jest najmu lokalu mieszkalnego o powierzchni 52,40 m² złożonego ze dwóch pokoi, kuchni i łazienki na adres [ADRES]. Głównymi zobowiązaniami są: Najemca używać lokalu w zależności od przeznaczenia oraz utrzymywać go w stanie niezawodnym, podczas gdy Wynajmujący odpowiada za płatność czynszu i opłat eksploatacyjnych. Niezaleceni są postanowienia Kodeksu Cywilnego dotyczące spraw uniezależnionych umowy."
+  },
+  {
+    "doc": "syn-najem-015",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Robert Nowotka",
+      "Eryk Tadla"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie wystąpiły następujące osoby:\n\n1. Robert Nowotka\n2. Eryk Tadla",
+    "answer_B": "W tym przepisie umowy następujące osoby występują:\n\n1. Robert Nowotka - Imię i Nazwisko Wynajmującego\n2. Eryk Tadla - Imię i Nazwisko Najemcą\n3. Wynajmujący (Robert Nowotka)\n4. Najemca (Eryk Tadla)",
+    "answer_C": "Umowa zawiera dwa osobowe tytuły:\n\n1. Wynajmujący: [OSOBA] - imię i nazwisko wynajmującego\n2. Najemca: [OSOBA] - imię i nazwisko najmuźćce\n\nWymienione są tylko osoby, bez dodatkowego wprowadzania ich pełnych imion i nazwisk. Ostatnie uchwytomu wymienienie pełnych imion jest nieco niepotrzebne w kontekście umowy cywilnoprawnej, gdy wystarcza jednoznaczne zdefiniowanie osoby z PESEL-em lub inaczej."
+  },
+  {
+    "doc": "syn-najem-015",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "81011036752",
+      "70081914628"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występuje dwa numery PESEL:\n\n1. 81011036752 - numer PESEL Roberta Nowotka\n2. 70081914628 - numer PESEL Eryka Tadla",
+    "answer_B": "W umowie występują następujące numery PESEL:\n\n1. 81011036752 - PESEL Robert Nowotka, która jest Wynajmującym.\n2. 70081914628 - PESEL Eryk Tadla, który jest Najemcą.\n\nTe są wszystkie numery PESEL występujące w umowie między Robert Nowotka a Eryk Tadla.",
+    "answer_C": "Podane są dwie liczby PESEL w umowie:\n\n1. PESEL [PESEL] - własność wynajmuje\n2. PESEL [PESEL] - własność wynajmuje do\n\nCzy jest to wszystkie numery PESEL występujące w dokumencie? Jeśli są dodatkowe, proszę o powiadomienie."
+  },
+  {
+    "doc": "syn-najem-015",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "55474367136959440640909743"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego wskazany w umowie do płatności jest 55474367136959440640909743.",
+    "answer_B": "Numer rachunku bankowego wskazany w umowie do płatności jest następujący:\n\n55474367136959440640909743\n\nTo jest numer rachunek na rachunek bankowy wynajmującego, który został wskazany w umowie do płatności czynszu.",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie to: [NR_RACHUNKU]."
+  },
+  {
+    "doc": "syn-najem-015",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.2336,
+    "rougeL_AC": 0.2362,
+    "answer_A": "Streszczenie przedmiotu umowy to umowa na najmu lokalu mieszkalnego położonego ul. Lelewela 09/67, 01-966 Skierniewice w ciągu lat od 12.10.1968 do 14.12.1989.\n\nGłówne zobowiązania to:\n- Wynajmujący (Robert Nowotka) odpowiada za oddanie Najmującemu (Eryk Tadla) Lokal z odpowiednim przeznaczeniem oraz utrzymaniem go w stanie sprzyjającym jego funkcjonowaniu.\n- Najemca (Eryk Tadla) zobowiązany jest płacić czynsz najmu w wysokości 2800 zł na rachunek wynajmującego, z zapobieganiem przez wpłatę kaucji równie wysokojcej.",
+    "answer_B": "Przedmiot tej umowy to wydarzenie transakcyjne dotyczące wynajmu lokalu mieszkalnego z powierzchnią użytkową 52,40 m² w Będzina. Wynajmujący przekazuje Lokal do użycia Najemcom, którzy zobowiązują się płacić co miesiąc czynsz w wysokości 2800 zł na rachunek podanego przez wynajmującego. Najemca odpowiada za utrzymanie lokalu w odpowiednim stanie i ponosi opłaty eksploatacje. Na koniec, nieuregulowane warunki umowy są ujęte w przepisach Kodeksu Cywilnego.",
+    "answer_C": "Przedmiot umowy to wynajem lokalu mieszkalnego o powierzchni 52,40 m² położonego na ul. [ADRES], do użytku przez Najemcę za czynsz w wysokości 2800 zł miesięcznie, zangastonowane przez Wynajmującą.\n\nGłówne zobowiązania: \n- Wynajmujący zobowiązuje się dostarczyć lokal do użytkowania oraz użycia, a Najemca — zachować lokal w odpowiednim stanie i zapłacć czynsz oraz opłaty eksploatacyjne."
+  },
+  {
+    "doc": "syn-o-dzielo-016",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Eryk Gamrat",
+      "Melania Gadzina"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występują następujące osoby:\n\n1. Eryk Gamrat - Zamawiający\n2. Melania Gadzina - Wykonawca",
+    "answer_B": "W umowie występują następujące osoby imieniowo:\n\n1. Eryk Gamrat - Zamawiający (Prowadzący działalność gospodarczą)\n2. Melania Gadzina - Wykonawca\n\nTe są wszystkie osoby, które wystąpiły w umowie między Ignacjem Wojnićcem a Jakiem Gadzina.",
+    "answer_C": "W umowie występują następujące osoby:\n\n1. Zamawiający: [OSOBA]\n2. Wykonawca: [OSOBA]"
+  },
+  {
+    "doc": "syn-o-dzielo-016",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "54080314429"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie nie występuje żadne numery PESEL. Numery PESEL występujące w umowie to:\n\n1. PESEL 54080314429 - należał do Wykonawcy (Melanie Gadzina)\n2. PESEL 9421047096 - należał do Zamawiającego (Eryk Gamrat)",
+    "answer_B": "W umowach przedstawionych w Twoim tekście nie występuje żaden numer PESEL. Najbliższy numer PESEL występujący jest to:\n\n54080314429\n\nOto numery PESEL występujące w umowie:\n\n- 54080314429 (zawiera ten sam numer jako numer PESEL)\n- 526757290 (wyrażony w notacji cyfrowej - to może być numer telefonu lub adres email, ale nie jest numelem PESEL)\n\nPamiętaj, że liczby w notacji cyfrowej nie są zawsze liczbami PESEL. W przypadku tego numeru, jest to prawdopodobnie numer telefonu.",
+    "answer_C": "Podano w umowie jeden numer PESEL:\n\n[PESEL] \n\nTen numer znajduje się w identyfikatorze Wykonawcy, a nie w identyfikatorze Zamawiającego. Nie ma tutaj żadnych innych numerów PESEL."
+  },
+  {
+    "doc": "syn-o-dzielo-016",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "40496513709859317461200471"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego, podany w umowie do płatności wynosi: 40496513709859317461200471.",
+    "answer_B": "Numer rachunku bankowego wskazany w umowie do płatności to 40496513709859317461200471.",
+    "answer_C": "Numer rachunku bankowego, wskazanego w umowie do płatności, to NR_RACHUNKU. Zgodnie z umową, wynagrodzenie otrzymane od Zamawiającego powinno być wypłacone przez Wykonawca na ten numer rachunku bankowy."
+  },
+  {
+    "doc": "syn-o-dzielo-016",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.1791,
+    "rougeL_AC": 0.2041,
+    "answer_A": "W przedmiocie umowy objęto się opracowaniem projektu z dokumentacją techniczną, co pozwoli uzyskać szczegółową informację dla projektowania lub inwestycji. Głównymi zobowiązami są: Wykonawca zobowiązany jest do wykonywania Działa w określonym terminie i wraz ze wszystką dostarczoną dokumentacją techniczną, zgodnie z założeniem, że posiada niezbędne kwalifikacje. Zamawiający zobowiązany jest do zapłaty wynagrodzenia w trzydziestu dniach od podpisania protokołu odbioru, oraz dostarczenia dokumentów na rzecz przepisów prawnych związanych z autoryzacji i przenoszeniu praw.",
+    "answer_B": "W przedmiocie umowy zamawiający zobowiązuje się zapłacić za wykonanie projektu i dokumentacji technicznej (Dzieło), a wykonawca obowiąkuje wykonać to Dzieło w terminie do 1985-03-12. Głównymi zobowiązaniem stron jest, że Zamawiający zapłaczy wynagrodzenie w wysokości 9200 zł, które zostanie wpłacone przez bankowy rachunek wykonawcy. Ponadto oba strony zgodzą się na przeniesienie przez wykonawcę do Zamawiającego autorstwa majątkowego nad Dzielem po zapłaceniu wynagrodzenia.",
+    "answer_C": "W przedmiocie umowy obowiązująca jest przyjęcie przez Wykonawcę projektu i dokumentacji techniczną, wykonanej na podstawie złożonego zamówienie przez Zamawiającego. Głównym zobowiązaniem Zamawiającego jest zapłata wynagrodzenia za wykonanie Działa w kwocie 9200 zł w terminie 7 dni od podpisania protokołu odbioru. Wykonawca obowiązuje się wykonać zgodnie z wymaganiami zamówienia i przekazać projekt i dokumentację techniczną na adres zamieszkany przez Zamawiającego, aż do dokonania protokołu zdawczo-odbiorczego. Dodatkowo, Wykonawca przenosi postkompletowane Dzieło na Zamawiającego w chwilę zapłaty wynagrodzenia."
+  },
+  {
+    "doc": "syn-o-dzielo-017",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Natasza Kostera",
+      "Jeremi Solarek"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W tej umowie wystąpiły następujące osoby:\n\n1. Natasza Kostera - Zamawiający z siedzibą w Szczecinie.\n2. Jeremi Solarek - Wykonawca z siedzibą w Łęgonie.",
+    "answer_B": "W powiązanej umowie występują następujące osoby:\n\n1. Natasza Kostera - Zamawiający, prowadzący działalność gospodarczą z siedzibą na ul. Stolarska 564, 97-975 Szczecinek.\n2. Jeremi Solarek - Wykonawca, zamieszkała pod adresem ul. Strumykowa 10, 97-032 Leszno.\n\nNie wymieniono osob w innych formach.",
+    "answer_C": "W umowie wystąpiły następujące osoby:\n\n1. [OSOBA], prowadzącym/prowadzącą działalność gospodarczą, NIP [NIP], REGON [REGON], z siedzibą pod adresem [ADRES], adres e-mail [EMAIL], telefon [TELEFON] (Zamawiający)\n2. [OSOBA], PESEL [PESEL], zamieszkałym/zamieszkałą pod adresem [ADRES], adres e-mail [EMAIL], numer telefonu [TELEFON] (Wykonawca)"
+  },
+  {
+    "doc": "syn-o-dzielo-017",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "98022221794"
+    ],
+    "score_A": 0.0,
+    "score_B": 0.0,
+    "score_C": 0.0,
+    "answer_A": "Podstawiając się tylko na treści podanej umowy cywilnoprawnej, odpowiedzią do pytań jest pusta lista numerów PESEL. Umowa nie zawiera żadnych danych PESEL.",
+    "answer_B": "W dokumentie nie występuje żaden numer PESEL. Nie można znaleźć ani adresu zamieszkania ani innej informacji, które mogłyby być związane z numerem indywidualnym emisji Polskiego Registera Numeracyjnego (PESEL). Umowa zawiera tylko informacje o osobach zwanych w umowie oraz details dotyczący konkretnego dzieła.",
+    "answer_C": "W składu umowy nie występuje żadna liczba PESEL - te dane znajdziesz poza dokumentem, najczęściej na stronie gabinetów rejestrowych regionalnych."
+  },
+  {
+    "doc": "syn-o-dzielo-017",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "57529042284210205395024026"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego wskazany do płatności to 57529042284210205395024026.",
+    "answer_B": "W umowie wierszu 2 pod numarem § 4 dotyczącym wynagrodzenia zamieściłem numer rachunku bankowego:\n\n\"Z tytułu wykonania Dzieła Zamawiający zapłaci Wykonawcy wynagrodzenie w kwocie 9 200,00 zł. Wynagrodzenie zostanie wypłacone przelewem na rachunek bankowy Wykonawcy nr 57529042284210205395024026 w terminie 7 dni od dnia podpisania protokołu odbioru.\"\n\nZatem numer rachunku bankowego do płatności to: 57529042284210205395024026",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie to NR_RACHUNKU, pojawiający się w punkcie 2 § 4 umowy. Wykonawca składał go podczas napisania tego dokumentu jako część wymaganych informacji finansowych."
+  },
+  {
+    "doc": "syn-o-dzielo-017",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.2243,
+    "rougeL_AC": 0.1915,
+    "answer_A": "W przedmiotowej części umowy o dzieło przedstawiono, że zamawiający (Natasza Kostera) płaci za wykonanie projektu z dokumentacją techniczną przez wykonańca (Jeremi Solarek). Głównymi zobowiązaniem stron są termin wykonania i odbioru dzieła, wynagrodzenie oraz przeniesienie autorskich praw na zamawiającego po jego zapłaty. Umowa zawiera również szczegóły dotyczące odbioru dokumentów i przetwierdzenia w postaci protokołu zdawczo-odbiorczego.",
+    "answer_B": "W przedmiocie umowy umawiano się na opracowanie projektu z dokumentacją techniczną. Zamawiający zobowiązuje się zapłacić wynagrodzenie w wysokości 9200 zł, za wykonanie Działa złożonego przez Wykonawcę do 4.1989. Ponadto, otrzymujący wynagrodzenie przenosi na Zamawiającego autorskie prawa majątkowe do projektu. Umowa stosuje się w przypadkach niespełnienia umowy zasady dotyczącego umowy o dzieło.",
+    "answer_C": "W przedmiocie umowy zamawiany wykonać będzie projekt i dokumentację techniczną, zaś wykonawca zobowiązuje się do jego wykonania na określonej przez zamawiającego data. Głównymi obowiązkami obu stron są zapłata wynagrodzenia oraz przekazanie dokumentów odtworzonych autorskich prawa małżownicznych do zamawianego dzieła."
+  },
+  {
+    "doc": "syn-najem-018",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Sara Kidawa",
+      "Marika Bela"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Osoby występujące w umowie to:\n\n1. Sara Kidawa - wynajmuje lokál\n2. Marika Bela - najmuje się do Lokalu",
+    "answer_B": "Bądźmy ostrożni i precyzyjni w wymienianiu wszystkich osób występujących w umowie:\n\n1. Sara Kidawa - Wynajmujący (Swarzędz)\n2. Marika Bela - Najemca (Swarzędz)\n3. Zastega - Imię, wykorzystane przez Sara Kidawa\n4. Djargilo - Imię, wykorzystane przez Apolinę Lesnę\n5. Wynajmujący: Sara Kidawa - Wynajmujący (Swarzędz)\n6. Najemca: Marika Bela - Najemca (Swarzędz)\n\nW tym momencie wymieniłem wszystkie imiona i nazwiska, które występują w dokumentacji lub są nazywane w nim.",
+    "answer_C": "W tej umowie występują następujące osoby:\n\n1. [Osoba], PESEL [PESEL], zamieszkała/zamieszkały pod adresem [ADRES], adres e-mail [EMAIL], numer telefonu [TELEFON] (Najmujący)\n2. [Osoba], PESEL [PESEL], zamieszkała/zamieszkały pod adresem [ADRES], adres e-mail [EMAIL], numer telefonu [TELEFON] (Najemca)"
+  },
+  {
+    "doc": "syn-najem-018",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "86091911160",
+      "53082393164"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występuje dwie liczby PESEL:\n\n1. 86091911160 - zawierała się w danych Wynajmującego (Sara Kidawa)\n2. 53082393164 - zawierała się w danych Najemcą (Marika Bela)",
+    "answer_B": "Podane w umowie następujące są numery PESEL:\n\n1. PESEL 86091911160 - Sara Kidawa (Wynajmujący)\n2. PESEL 53082393164 - Marika Bela (Najemca)",
+    "answer_C": "Podanego tekstu umowy nie zawiera bezpośrednio żadnych numerów PESEL lub innych personalizowanych danych osoby wykazanej. Umowa ta jest przykładem standardowej umowy najmu lokalu mieszkalnego i nie zawiera szczegółów osobistych, takich jak PESEL.\n\nZakładając jednak na mocy tego tekstu, że numer PESEL występuje w oryginalnej umowie, możesz znaleźć go w podannym doświadczeniu. W praktyce jednak, takie szczegóły są często ukryte lub przypisywane indywidualnie po contract signingu.\n\nJeśli chcesz uzyskać konkretne informacje na ten temat, najlepiej skontaktować się z stronami kontraktowymi umowy."
+  },
+  {
+    "doc": "syn-najem-018",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "28478961183673657661565452"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego wskazany do płatności czynszu to 28478961183673657661565452.",
+    "answer_B": "Numer rachunku bankowego, wskazanego w umowie do płatności czynszów, to 28478961183673657661565452.",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie do płatności jest  NR_RACHUNKU."
+  },
+  {
+    "doc": "syn-najem-018",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.2642,
+    "rougeL_AC": 0.2585,
+    "answer_A": "Przedmiot umowy to najmu lokalu mieszkalnego położonego ul. Lipowa 716 w miejscu Lubliniec przez okres 2 lat od 18 listopada 2008 do 20 września 1982. Głównymi zobowiązaniemi są:\n\n- Najemca płacić miesięczny czynsz 2,800 zł poprzez przelew na rachunek wynajmującego,\n- Najemca utrzymywać lokál w odpowiednim stanie i odpowiadać za bieżące opłaty eksploatacyjne,\n- Wynajmujący odbierać kaucję 2,800 zł na rachunek Najemcys= wg umowy cywilnego przepisów.",
+    "answer_B": "Przedmiot umowy to wynajem lokalu mieszkalnego o powierzchni 52,40 m² położonego na ul. Polna 28/27 w Piasecznie do dni dnia 18.-dnia 20.. Wynajmujący zobowiązuje się dostarczyć Najemcy lokal do użytku, za czym Najemca zobowiązany jest zapłaczać miesięczny czynsz w wysokości 2800 zł na koncie bankowym Wynajmującego. Najemca ponosi również eksploatacyjne oplaty związane z korzystaniem ze standardami Lokalu. Najemca zobowiązuje się do utrzymania lokalu w odpowiednim stanie, a Wynajmujący może wypowiedzieć umowę z zachowaniem okresu wypowiedzenia miesięcznego. Umowa nakazuje użycie lokalu w sposób odpowiadający przeznaczeniu oraz określa postacie praw i obowiązków stron.",
+    "answer_C": "Przedmiot umowy to wynajmu lokalu mieszkalnego położonego pod adresem [ADRES], o powierzchni użytkowej 52,40 m², przez miesiąc od dnia [DATA] do [DATA]. Głównymi obowiązkami Najemcy są płacenie czynszu w wysokości 2800 zł za miesiąc oraz utrzymywanie lokalu w odpowiednim stanie. Wynajmujący oczekuje z powrotem Lokal na koniec umowy i jest zwierzchnikiem lokalnego przepisów cywilnych dla spraw nieilegalskich. Najemca zobowiązany jest do używania Lokalu zgodnie z jego przeznaczeniem, a w przypadkach wymagających kontakcyjności kontaktować się za pośrednictwem telefonu lub e-mail wynajmującego."
+  },
+  {
+    "doc": "syn-o-dzielo-019",
+    "q": "osoby",
+    "kind": "factual",
+    "expected": [
+      "Przemysław Latuszek",
+      "Marcel Rembacz"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W tej umowie wystąpiły następujące osoby:\n\n1. Przemysław Latuszek\n2. Marcel Rembacz\n\nPrzemysław Latuszek występuje jako Zamawiający, a Marcel Rembacz jako Wykonawca.",
+    "answer_B": "W umowie występują następujące osoby z imieniami i nazwiskami:\n\n1. Przemysław Latuszek (Zamawiający)\n2. Marcel Rembacz (Wykonawca)\n\nKażda z tych osob jest pełnoprawna partie umowy, a jej adresy zamieszkania oraz krajowe numer PESEL są również wymienione w umowie.",
+    "answer_C": "W umowie występują następujące osoby:\n\n1. Zamawiający: [OSOBA]\n2. Wykonawca: [OSOBA]"
+  },
+  {
+    "doc": "syn-o-dzielo-019",
+    "q": "pesel",
+    "kind": "factual",
+    "expected": [
+      "87022528581"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "W umowie występuje tylko jeden numer PESEL, a to jest numer PESEL zamieszkującego/dziedzącego (PESEL Zamawiającego): 87022528581. Numer PESEL Wykonawciego nie służy do identyfikacji osoby w tej umowie.",
+    "answer_B": "W umowie występuje tylko jeden numer PESEL, który należy do Wykonawcy (Marcel Rembacz):\n\nPESEL 87022528581\n\nTa liczba pojawia się w punkcie §3, ustalającym warunki wpłaty wynagrodzenia.",
+    "answer_C": "W podanej umowie nie ma wpisanych żadnych numerów PESEL. Umowa zawiera tylko nazwiska osób występujących w umowie, a nie ich numerów PESEL."
+  },
+  {
+    "doc": "syn-o-dzielo-019",
+    "q": "rachunek",
+    "kind": "factual",
+    "expected": [
+      "66455022961201836675254599"
+    ],
+    "score_A": 1.0,
+    "score_B": 1.0,
+    "score_C": 0.0,
+    "answer_A": "Numer rachunku bankowego podany w umowie dla wpłaty wynagrodzenia wynosi 66455022961201836675254599.",
+    "answer_B": "Numer rachunku bankowego wskazany w umowie do płatności to: 66455022961201836675254599.",
+    "answer_C": "Numer rachunku bankowego wskazany w umowie wynosi nr [NR_RACHUNKU]."
+  },
+  {
+    "doc": "syn-o-dzielo-019",
+    "q": "streszczenie",
+    "kind": "reasoning",
+    "rougeL_AB": 0.2878,
+    "rougeL_AC": 0.3421,
+    "answer_A": "W przedmiocie umowy obowiązującej pomiędzy Zamawiającym a Wykonawcą umowa dotyczy opracowania projektu wraz z dokumentacją techniczną i jego wykonania zgodnie z terminem 09.12.1956. Zamawiający zobowiązany jest do zapłaty wynagrodzenia wynoszącego 9,200 zł, za które otrzyma autorskie prawa do wykonałowego Dziewnia. Ponadto obowiązkuje się Wykonawca do transmetowania na Zamawiającego wynagrodzenia w terminie 7 dni od podpisania protokołu odbioru, pozwoliły go oni mieć prawa autorskie do Dziewnia.",
+    "answer_B": "Umowa dotyczy wykonania projektu gospodarcznego, wraz z dokumentacją techniczną, o wartości wynagrodzenia wynoszącym 9 200 zł. Zamawiający zobowiązuje się zapłacić wynagrodzenie na rachunek Wykonawcy do 7 dni od podpisania protokołu odbioru Działa. W转向令, Wykonawca zobowiązany jest wykonać i przekazać Dzieło do Zamawiającego w terminie do 12.11.1976, na podstawie protokołu zdawczo-odbiorczego. Przygotowane są również postanowienia dotyczące przenoszenia przez Wykonawcę autorskich praw do Działa do Zamawiającego w chwili zapłaty wynagrodzenia.",
+    "answer_C": "W przedmiocie umowy, Zamawiający polega na zamawieniu wykonania Dzieła przez Wykonawcę, które obejmuje opracowanie projektu wraz z dokumentacją techniczną. Głównymi założenia są termin realizacji Dziejów i zapłata wynagrodzenia w wysokości 9200 zł.\n\nStrony zobowiązują się do wykonania Dzieła według wymówionych przez umowę warunków, ponadto Zamawiający zobowiązany jest do zapłaty za wynagrodzenie w terminie 7 dni od podpisania protokołu odbioru. Wykonawca zasugerował autorskie prawa majątkowe do Dziejów dla Zamawiającego po wpłata wynagrodzenia. Umowa kończy się zgodami na użycie przepisów Kodeksu cywilnego w przypadku nieunikatowego wymiaru."
+  }
+]
