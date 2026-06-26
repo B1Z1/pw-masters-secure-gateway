@@ -1,0 +1,41 @@
+UMOWA ZLECENIA
+
+zawarta w dniu {{DATE_TIME:zawarcie}} w miejscowości {{LOCATION:miasto_zawarcia}} pomiędzy:
+
+1. {{PERSON:zleceniodawca}}, prowadzącym/prowadzącą działalność gospodarczą, NIP {{NIP:zleceniodawca}}, REGON {{REGON:zleceniodawca}}, z siedzibą pod adresem {{ADDRESS:zleceniodawca}}, adres e-mail {{EMAIL_ADDRESS:zleceniodawca}}, telefon {{PHONE_NUMBER:zleceniodawca}}, zwanym/zwaną dalej „Zleceniodawcą",
+
+a
+
+2. {{PERSON:zleceniobiorca}}, PESEL {{PESEL:zleceniobiorca}}, zamieszkałym/zamieszkałą pod adresem {{ADDRESS:zleceniobiorca}}, adres e-mail {{EMAIL_ADDRESS:zleceniobiorca}}, numer telefonu {{PHONE_NUMBER:zleceniobiorca}}, zwanym/zwaną dalej „Zleceniobiorcą".
+
+§ 1
+Przedmiot umowy
+
+1. Zleceniodawca zleca, a Zleceniobiorca przyjmuje do wykonania czynności polegające na przygotowaniu analizy oraz dokumentacji w zakresie uzgodnionym przez Strony.
+2. Zleceniobiorca zobowiązuje się wykonać zlecenie z należytą starannością.
+
+§ 2
+Termin wykonania
+
+1. Zleceniobiorca zobowiązuje się wykonać zlecenie w terminie do dnia {{DATE_TIME:termin}}.
+2. Strony dopuszczają możliwość przedłużenia terminu w drodze pisemnego aneksu.
+
+§ 3
+Wynagrodzenie
+
+1. Z tytułu wykonania zlecenia Zleceniodawca zapłaci Zleceniobiorcy wynagrodzenie w kwocie 6 500,00 zł brutto.
+2. Wynagrodzenie zostanie wypłacone przelewem na rachunek bankowy Zleceniobiorcy nr {{BANK_ACCOUNT:zleceniobiorca}} w terminie 14 dni od dnia wykonania zlecenia.
+
+§ 4
+Obowiązki Stron
+
+1. Zleceniodawca zobowiązuje się przekazać Zleceniobiorcy materiały niezbędne do wykonania zlecenia.
+2. W sprawach bieżących Strony kontaktują się pod adresem e-mail {{EMAIL_ADDRESS:zleceniodawca}} oraz numerem telefonu {{PHONE_NUMBER:zleceniobiorca}}.
+
+§ 5
+Postanowienia końcowe
+
+1. W sprawach nieuregulowanych niniejszą umową zastosowanie mają przepisy Kodeksu cywilnego dotyczące umowy zlecenia.
+2. Umowę sporządzono w dwóch jednobrzmiących egzemplarzach, po jednym dla każdej ze Stron.
+
+Zleceniodawca: {{PERSON:zleceniodawca}}                          Zleceniobiorca: {{PERSON:zleceniobiorca}}

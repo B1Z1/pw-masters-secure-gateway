@@ -110,3 +110,24 @@ async def test_health_check_delegates_to_default_model_provider():
     assert build_counts["ollama/"] == 1
     assert build_counts["gpt-"] == 0
     assert build_counts["claude-"] == 0
+
+
+async def test_echo_prefix_routes_to_echo_provider():
+    """EPIC 8: the additive ``echo/`` route makes the deterministic EchoProvider
+    reachable over HTTP (model "echo/echo") without touching existing routing."""
+    from gateway_api.llm_providers import get_llm_provider
+
+    get_llm_provider.cache_clear()
+    router = get_llm_provider()
+    try:
+        result = await router.complete(_MESSAGES, model="echo/echo")
+        assert result.provider == "echo"
+        assert result.finish_reason == "stop"
+        assert result.content == "cześć"  # echoes the last user message
+
+        # Existing prefixes + the unknown-model gate are unaffected.
+        with pytest.raises(LLMProviderError) as caught:
+            await router.complete(_MESSAGES, model="mistral-7b")
+        assert caught.value.kind == "unknown_model"
+    finally:
+        get_llm_provider.cache_clear()

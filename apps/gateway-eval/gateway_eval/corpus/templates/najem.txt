@@ -1,0 +1,49 @@
+UMOWA NAJMU LOKALU MIESZKALNEGO
+
+zawarta w dniu {{DATE_TIME:zawarcie}} w miejscowości {{LOCATION:miasto_zawarcia}} pomiędzy:
+
+1. {{PERSON:wynajmujacy}}, PESEL {{PESEL:wynajmujacy}}, zamieszkałym/zamieszkałą pod adresem {{ADDRESS:wynajmujacy}}, posługującym się adresem e-mail {{EMAIL_ADDRESS:wynajmujacy}} oraz numerem telefonu {{PHONE_NUMBER:wynajmujacy}}, zwanym/zwaną dalej „Wynajmującym",
+
+a
+
+2. {{PERSON:najemca}}, PESEL {{PESEL:najemca}}, zamieszkałym/zamieszkałą pod adresem {{ADDRESS:najemca}}, adres e-mail {{EMAIL_ADDRESS:najemca}}, numer telefonu {{PHONE_NUMBER:najemca}}, zwanym/zwaną dalej „Najemcą",
+
+zwanymi dalej łącznie „Stronami".
+
+§ 1
+Przedmiot umowy
+
+1. Wynajmujący oświadcza, że jest właścicielem lokalu mieszkalnego położonego pod adresem {{ADDRESS:lokal}} w miejscowości {{LOCATION:miasto_lokalu}}, o powierzchni użytkowej 52,40 m2, składającego się z dwóch pokoi, kuchni oraz łazienki, zwanego dalej „Lokalem".
+2. Wynajmujący oddaje Najemcy Lokal do używania, a Najemca Lokal do używania przyjmuje.
+
+§ 2
+Czas trwania umowy
+
+1. Umowa zostaje zawarta na czas oznaczony od dnia {{DATE_TIME:poczatek}} do dnia {{DATE_TIME:koniec}}.
+2. Każda ze Stron może wypowiedzieć niniejszą umowę z zachowaniem miesięcznego okresu wypowiedzenia.
+
+§ 3
+Czynsz i opłaty
+
+1. Z tytułu najmu Lokalu Najemca zobowiązuje się płacić Wynajmującemu czynsz najmu w wysokości 2 800,00 zł miesięcznie.
+2. Czynsz płatny jest z góry, przelewem na rachunek bankowy Wynajmującego prowadzony pod numerem {{BANK_ACCOUNT:wynajmujacy}}.
+3. Niezależnie od czynszu Najemca ponosi opłaty eksploatacyjne związane z bieżącym korzystaniem z Lokalu.
+
+§ 4
+Kaucja
+
+1. Tytułem zabezpieczenia roszczeń Wynajmującego Najemca wpłaca kaucję w wysokości jednomiesięcznego czynszu na rachunek nr {{BANK_ACCOUNT:wynajmujacy}}.
+
+§ 5
+Prawa i obowiązki Stron
+
+1. Najemca zobowiązuje się używać Lokal zgodnie z jego przeznaczeniem i utrzymywać go w należytym stanie.
+2. W sprawach pilnych Najemca kontaktuje się z Wynajmującym telefonicznie pod numerem {{PHONE_NUMBER:wynajmujacy}} lub na adres e-mail {{EMAIL_ADDRESS:wynajmujacy}}.
+
+§ 6
+Postanowienia końcowe
+
+1. W sprawach nieuregulowanych niniejszą umową zastosowanie mają przepisy Kodeksu cywilnego.
+2. Umowę sporządzono w dwóch jednobrzmiących egzemplarzach, po jednym dla każdej ze Stron.
+
+Wynajmujący: {{PERSON:wynajmujacy}}                              Najemca: {{PERSON:najemca}}

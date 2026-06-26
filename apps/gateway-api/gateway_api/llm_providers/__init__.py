@@ -48,6 +48,10 @@ def get_llm_provider() -> LLMProvider:
             "ollama/": lambda: OllamaProvider(
                 settings.ollama_base_url, settings.ollama_timeout
             ),
+            # Additive, opt-in deterministic provider for the EPIC 8 evaluation harness
+            # (Constitution IV — a new provider via the adapter pattern, no pipeline
+            # change). Reachable only when a request asks for model "echo/...".
+            "echo/": lambda: EchoProvider(),
         },
         default_model=settings.default_model,
     )

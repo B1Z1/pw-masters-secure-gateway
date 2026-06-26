@@ -9,5 +9,5 @@ Built as a master's thesis project. Use case: analysis of Polish civil law contr
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan
-at specs/007-api-gateway-finalization/plan.md
+at specs/008-gateway-eval-harness/plan.md
 <!-- SPECKIT END -->

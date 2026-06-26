@@ -1,0 +1,41 @@
+UMOWA O DZIEŁO
+
+zawarta w dniu {{DATE_TIME:zawarcie}} w miejscowości {{LOCATION:miasto_zawarcia}} pomiędzy:
+
+1. {{PERSON:zamawiajacy}}, prowadzącym/prowadzącą działalność gospodarczą, NIP {{NIP:zamawiajacy}}, REGON {{REGON:zamawiajacy}}, z siedzibą pod adresem {{ADDRESS:zamawiajacy}}, adres e-mail {{EMAIL_ADDRESS:zamawiajacy}}, telefon {{PHONE_NUMBER:zamawiajacy}}, zwanym/zwaną dalej „Zamawiającym",
+
+a
+
+2. {{PERSON:wykonawca}}, PESEL {{PESEL:wykonawca}}, zamieszkałym/zamieszkałą pod adresem {{ADDRESS:wykonawca}}, adres e-mail {{EMAIL_ADDRESS:wykonawca}}, numer telefonu {{PHONE_NUMBER:wykonawca}}, zwanym/zwaną dalej „Wykonawcą".
+
+§ 1
+Przedmiot umowy
+
+1. Zamawiający zamawia, a Wykonawca zobowiązuje się wykonać dzieło polegające na opracowaniu projektu wraz z dokumentacją techniczną, zwane dalej „Dziełem".
+2. Wykonawca oświadcza, że posiada kwalifikacje niezbędne do wykonania Dzieła.
+
+§ 2
+Termin i odbiór
+
+1. Wykonawca zobowiązuje się wykonać Dzieło i przekazać je Zamawiającemu w terminie do dnia {{DATE_TIME:termin}}.
+2. Odbiór Dzieła nastąpi na podstawie protokołu zdawczo-odbiorczego.
+
+§ 3
+Wynagrodzenie
+
+1. Z tytułu wykonania Dzieła Zamawiający zapłaci Wykonawcy wynagrodzenie w kwocie 9 200,00 zł.
+2. Wynagrodzenie zostanie wypłacone przelewem na rachunek bankowy Wykonawcy nr {{BANK_ACCOUNT:wykonawca}} w terminie 7 dni od dnia podpisania protokołu odbioru.
+
+§ 4
+Prawa autorskie
+
+1. Z chwilą zapłaty wynagrodzenia Wykonawca przenosi na Zamawiającego autorskie prawa majątkowe do Dzieła.
+2. W sprawach związanych z realizacją Strony kontaktują się pod adresem e-mail {{EMAIL_ADDRESS:wykonawca}} lub numerem telefonu {{PHONE_NUMBER:zamawiajacy}}.
+
+§ 5
+Postanowienia końcowe
+
+1. W sprawach nieuregulowanych niniejszą umową zastosowanie mają przepisy Kodeksu cywilnego dotyczące umowy o dzieło.
+2. Umowę sporządzono w dwóch jednobrzmiących egzemplarzach, po jednym dla każdej ze Stron.
+
+Zamawiający: {{PERSON:zamawiajacy}}                              Wykonawca: {{PERSON:wykonawca}}

@@ -66,3 +66,10 @@ docs/*
 .claude/skills/thesis-write-style
 .claude/skills/thesis-write-style-workspace
 .claude/skills/research-papers
+
+# Evaluation harness — real corpus contains real PII (RODO/GDPR): never commit (EPIC 8, D6).
+# Ignore the directory contents but keep the dir on clone via the .gitkeep negation.
+apps/gateway-eval/gateway_eval/corpus/data/real/*
+!apps/gateway-eval/gateway_eval/corpus/data/real/.gitkeep
+# Machine-readable per-document results may embed originals — treat as sensitive.
+apps/gateway-eval/eval-results/

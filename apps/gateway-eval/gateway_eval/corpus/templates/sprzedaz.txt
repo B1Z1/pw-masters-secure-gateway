@@ -1,0 +1,41 @@
+UMOWA SPRZEDAŻY
+
+zawarta w dniu {{DATE_TIME:zawarcie}} w miejscowości {{LOCATION:miasto_zawarcia}} pomiędzy:
+
+1. {{PERSON:sprzedajacy}}, PESEL {{PESEL:sprzedajacy}}, NIP {{NIP:sprzedajacy}}, zamieszkałym/zamieszkałą pod adresem {{ADDRESS:sprzedajacy}}, adres e-mail {{EMAIL_ADDRESS:sprzedajacy}}, numer telefonu {{PHONE_NUMBER:sprzedajacy}}, zwanym/zwaną dalej „Sprzedającym",
+
+a
+
+2. {{PERSON:kupujacy}}, PESEL {{PESEL:kupujacy}}, zamieszkałym/zamieszkałą pod adresem {{ADDRESS:kupujacy}}, adres e-mail {{EMAIL_ADDRESS:kupujacy}}, numer telefonu {{PHONE_NUMBER:kupujacy}}, zwanym/zwaną dalej „Kupującym".
+
+§ 1
+Przedmiot umowy
+
+1. Sprzedający sprzedaje, a Kupujący kupuje rzecz ruchomą bliżej opisaną w załączniku do niniejszej umowy, zwaną dalej „Przedmiotem umowy".
+2. Sprzedający oświadcza, że Przedmiot umowy stanowi jego wyłączną własność i jest wolny od wad prawnych.
+
+§ 2
+Cena i płatność
+
+1. Strony ustalają cenę sprzedaży na kwotę 18 500,00 zł.
+2. Kupujący zapłaci cenę przelewem na rachunek bankowy Sprzedającego nr {{BANK_ACCOUNT:sprzedajacy}} w terminie do dnia {{DATE_TIME:zaplata}}.
+
+§ 3
+Wydanie rzeczy
+
+1. Wydanie Przedmiotu umowy nastąpi w dniu {{DATE_TIME:wydanie}} w miejscowości {{LOCATION:miasto_wydania}}.
+2. Z chwilą wydania na Kupującego przechodzą korzyści i ciężary związane z Przedmiotem umowy.
+
+§ 4
+Rękojmia i kontakt
+
+1. Sprzedający odpowiada wobec Kupującego z tytułu rękojmi za wady Przedmiotu umowy na zasadach określonych w Kodeksie cywilnym.
+2. W sprawach reklamacyjnych Kupujący kontaktuje się ze Sprzedającym pod adresem e-mail {{EMAIL_ADDRESS:sprzedajacy}} lub numerem telefonu {{PHONE_NUMBER:sprzedajacy}}.
+
+§ 5
+Postanowienia końcowe
+
+1. W sprawach nieuregulowanych niniejszą umową zastosowanie mają przepisy Kodeksu cywilnego.
+2. Umowę sporządzono w dwóch jednobrzmiących egzemplarzach, po jednym dla każdej ze Stron.
+
+Sprzedający: {{PERSON:sprzedajacy}}                              Kupujący: {{PERSON:kupujacy}}
