@@ -41,7 +41,7 @@ to jest oddzieleniu logiki czystej od warstwy odpowiedzialnej za wejście i~wyj�
 realizujące logikę czystą, czyli wykrywanie danych, generowanie wartości zastępczych oraz obliczanie
 sum kontrolnych, nie sięgają bezpośrednio do zasobów zewnętrznych, takich jak magazyn danych czy
 interfejsy dostawców. Komunikację z~tymi zasobami skupiono w~osobnej warstwie wejścia-wyjścia.
-Podział ten przedstawiono na rysunku @rys:organizacja-kodu.
+Podział ten pokazano na rysunku @rys:organizacja-kodu.
 
 #figure(
   diagram(

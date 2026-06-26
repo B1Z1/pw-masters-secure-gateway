@@ -43,7 +43,7 @@ osiągalny wyłącznie wewnątrz tej sieci, dzięki czemu zaszyfrowany magazyn m
 spoza infrastruktury. Na zewnątrz wystawiony jest jedynie port usługi gatewaya. Sam model językowy
 nie należy do podstawowego zestawu, zgodnie z~przyjętą niezależnością od dostawcy
 (zob. @sec:impl-api): model lokalny można dołączyć jako opcjonalny dodatek. Strukturę wdrożenia
-przedstawiono na rysunku @rys:wdrozenie.
+zaprezentowano na rysunku @rys:wdrozenie.
 
 #figure(
   diagram(
@@ -75,11 +75,11 @@ sesji jest niedostępny, przy czym do czasu jego przywrócenia każde żądanie 
 się odpowiedzią o~kodzie 503 (zob. @sec:stos-technologiczny). Stan systemu można sprawdzić endpointem
 `/health`, który zawsze zwraca kod 200 i~raportuje dostępność poszczególnych zależności, w~tym
 magazynu sesji oraz modelu rozpoznającego encje. Gdy którakolwiek z~nich jest niedostępna, ogólny
-stan opisywany jest jako obniżony. Endpoint ten przedstawiono na rysunku @rys:health.
+stan opisywany jest jako obniżony. Endpoint ten pokazano na rysunku @rys:health.
 
 #codefig(
   "listings/health.py",
-  [Endpoint `/health` zawsze zwraca kod 200 i~raportuje status zależności; stan ogólny jest obniżony, gdy którakolwiek z~nich jest niedostępna.],
+  [Endpoint `/health` zawsze zwraca kod 200 i~raportuje status zależności, a~stan ogólny jest obniżony, gdy którakolwiek z~nich jest niedostępna.],
   [Endpoint kontroli stanu],
 ) <rys:health>
 

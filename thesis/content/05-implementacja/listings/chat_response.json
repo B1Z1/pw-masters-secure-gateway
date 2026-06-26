@@ -1,0 +1,33 @@
+{
+  "id": "chatcmpl-3f9a1c",
+  "object": "chat.completion",
+  "model": "ollama/qwen2.5:3b",
+  "session_id": "8c1d4e2a",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Najemca: Andrzej Kamiński, PESEL 85110724390, Kraków."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "anonymization_meta": {
+    "entities_detected": { "PERSON": 1, "PESEL": 1, "LOCATION": 1 },
+    "total_entities": 3,
+    "provider": "ollama",
+    "timing_ms": { "ner_analysis": 41.2, "llm_request": 812.5, "total": 861.4 }
+  },
+  "input_anonymization": {
+    "pseudonymized_content": "Najemca: Marek Lewandowski, PESEL 87041233130, Gdańsk.",
+    "replacements": [
+      { "entity_type": "PERSON",
+        "original": "Andrzej Kamiński", "fake": "Marek Lewandowski" },
+      { "entity_type": "PESEL",
+        "original": "85110724390", "fake": "87041233130" },
+      { "entity_type": "LOCATION",
+        "original": "Kraków", "fake": "Gdańsk" }
+    ]
+  }
+}

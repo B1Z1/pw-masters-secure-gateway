@@ -12,12 +12,11 @@ Zainicjowany ziarnem działa deterministycznie, co wykorzystują testy, a~bez zi
 typowi encji odpowiada osobny builder, do którego generator kieruje żądanie.
 
 Dla identyfikatorów o~ustalonej strukturze, takich jak PESEL, NIP, REGON czy numer rachunku
-bankowego, wartość zastępcza musi mieć poprawną sumę kontrolną, inaczej zdradziłaby swoją sztuczność
-(zob. @sec:dane-zastepcze). Osiągnięto to przez ponowne wykorzystanie tej samej logiki sum
+bankowego, wartość zastępcza musi mieć poprawną sumę kontrolną, inaczej zdradziłaby swoją sztuczność. Osiągnięto to przez ponowne wykorzystanie tej samej logiki sum
 kontrolnych, która służy do wykrywania (zob. @sec:impl-wykrywanie), więc wygenerowany numer
 przechodzi dokładnie tę samą weryfikację. Generator zachowuje przy tym istotne własności oryginału:
 dla numeru PESEL odtwarza zakodowaną w~nim płeć @peselgov, a~dla numeru REGON jego wariant długości.
-Builder numeru PESEL przedstawiono na rysunku @rys:build-pesel.
+Builder numeru PESEL pokazano na rysunku @rys:build-pesel.
 
 #figure(
   rect(
@@ -88,9 +87,9 @@ tablicach końcówek, bez zewnętrznego analizatora morfologicznego, zgodnie z~z
 i~jawnego dokumentowania ograniczeń (zob. @sec:wymagania). Mechanizm ten działa wyłącznie w~kierunku
 generowania: z~formy podstawowej oraz rozpoznanego wzorca wytwarza formy we wszystkich przypadkach,
 podczas gdy kierunek odwrotny, czyli sprowadzenie dowolnej formy do postaci podstawowej, pozostaje
-zadaniem modelu statystycznego z~etapu wykrywania (zob. @sec:impl-wykrywanie). Analogicznie traktowane
+zadaniem modelu statystycznego z~etapu wykrywania. Analogicznie traktowane
 są nazwy miejscowości, które podlegają odmianie, podczas gdy pełny adres pozostaje nierozdzielną
-całością. Builder miejscowości przedstawiono na rysunku @rys:build-location.
+całością. Builder miejscowości zaprezentowano na rysunku @rys:build-location.
 
 #figure(
   rect(

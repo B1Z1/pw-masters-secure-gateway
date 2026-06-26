@@ -69,7 +69,7 @@ HMAC-SHA256 z~typu encji oraz znormalizowanej postaci oryginału. HMAC jest kluc
 przeznaczoną do uwierzytelniania wiadomości @rfc2104, a~w~tym zastosowaniu jego istotną własnością
 jest jednokierunkowość: z~nazwy pola nie sposób odtworzyć oryginału, a~mimo to ten sam oryginał zawsze
 daje tę samą nazwę, co umożliwia jego odszukanie. Sposób wyznaczania klucza oraz nazwy pola
-przedstawiono na rysunku @rys:hmac.
+zilustrowano na rysunku @rys:hmac.
 
 #codefig(
   "listings/hmac_index.py",
@@ -97,7 +97,7 @@ oryginału mogłyby wygenerować dwa różne zamienniki i~naruszyć spójność.
 podstawienia wykonywana jest pod blokadą właściwą dla danej sesji, dzięki czemu żądania tej samej
 sesji są szeregowane, a~różne sesje nadal przebiegają równolegle. Rozwiązanie działa w~obrębie
 pojedynczego procesu, co odnotowano jako ograniczenie (zob. @sec:wymagania). Wejściowy punkt
-podstawienia wraz z~blokadą przedstawiono na rysunku @rys:get-or-create.
+podstawienia wraz z~blokadą pokazano na rysunku @rys:get-or-create.
 
 #codefig(
   "listings/get_or_create.py",

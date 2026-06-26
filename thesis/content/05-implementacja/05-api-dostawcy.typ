@@ -143,6 +143,32 @@ zachowuje identyfikator sesji, aby klient mógł kontynuować rozmowę po ustąp
   ),
 ) <tab:bledy>
 
+Dla zilustrowania całego obiegu rozważmy pojedyncze żądanie zawierające dane osobowe. Odpowiedź
+endpointu, w~formacie zgodnym z~API OpenAI i~rozszerzoną o~informacje specyficzne dla systemu,
+przedstawiono na rysunku @rys:przyklad. Pole `choices` zawiera odpowiedź modelu z~przywróconymi
+danymi oryginalnymi, pole `anonymization_meta` podsumowuje liczbę wykrytych encji oraz czasy etapów,
+natomiast pole `input_anonymization` pokazuje, co~w~istocie wytwarza pseudonimizacja: tekst faktycznie
+wysłany do modelu, zawierający wyłącznie dane syntetyczne, wraz z~listą dokonanych zamian (każda z~nich
+niesie również przesunięcia w~tekście oryginalnym). Dane oryginalne, widoczne w~polach `choices` oraz
+`replacements`, trafiają wyłącznie do zaufanego klienta, podczas gdy do modelu wysłano jedynie
+pseudonimizowaną treść.
+
+#figure(
+  rect(
+    width: 100%,
+    fill: luma(248),
+    stroke: 0.5pt + gray.lighten(30%),
+    radius: 3pt,
+    inset: (x: 8pt, y: 7pt),
+    text(size: 0.8em, align(left, raw(block: true, lang: "json", read("listings/chat_response.json")))),
+  ),
+  caption: flex-caption(
+    [Przykładowa odpowiedź endpointu `/v1/chat/completions`: dane oryginalne w~`choices`, a~w~`input_anonymization` tekst wysłany do modelu i~zamiany (skrócony przykład, dane fikcyjne).],
+    [Przykładowa odpowiedź endpointu czatu],
+  ),
+  kind: image,
+) <rys:przyklad>
+
 Warstwa API wraz z~routerem dopełnia obraz działającego systemu: od odebrania żądania, przez
 pseudonimizację i~komunikację z~wybranym dostawcą, po przywrócenie danych w~odpowiedzi. Pozostaje
 omówić sposób konfiguracji, uruchomienia oraz obserwowania tak złożonego systemu, czemu poświęcono
