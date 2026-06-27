@@ -2,13 +2,13 @@
 
 == Skuteczność wykrywania i pseudonimizacji <sec:eval-detekcja>
 
-Skuteczność wykrywania ocenia się trzema standardowymi miarami. Precyzja to udział trafnych wskazań
+Skuteczność wykrywania ocenia się trzema standardowymi miarami @Sokolova2009. Precyzja to udział trafnych wskazań
 wśród wszystkich wskazań bramy, a~czułość to udział wykrytych danych wśród wszystkich danych osobowych
 obecnych w~dokumencie. Miarą łączną jest F1, czyli średnia harmoniczna precyzji i~czułości. Wartości
 agreguje się na dwa sposoby: mikro, sumując trafienia i~pomyłki po wszystkich instancjach, oraz makro,
 uśredniając wynik po typach encji z~równą wagą każdego z~nich.
 
-Sposób zliczania trafień zależy od przyjętej polityki dopasowania granic. W~wariancie pokrycia
+Sposób zliczania trafień zależy od przyjętej polityki dopasowania granic @Pilan2022. W~wariancie pokrycia
 wskazanie uznaje się za trafne, gdy nachodzi na encję wzorcową, natomiast w~wariancie dokładnym
 wymagane jest zgodne wyznaczenie obu jej granic. Jako podstawową przyjęto politykę pokrycia, ponieważ
 zadaniem systemu jest zamaskowanie danej, a~do tego wystarcza objęcie jej wskazaniem. Wariant dokładny
@@ -58,7 +58,7 @@ systemu.
 Pierwsze dotyczy numerów telefonów i~pokazuje, jak ewaluacja prowadzi wprost do poprawy. W~pierwszym
 przebiegu trzy numery ze~specjalnych zakresów (702, 802, 809) przetrwały w~tekście wychodzącym
 w~oryginale, co~stanowi wyciek danych poza granicę zaufania (zob. @sec:wymagania). Przyczyną był tryb
-walidacji w~rozpoznawaczu telefonów biblioteki Presidio (parametr `leniency`), który odrzucał numery
+walidacji w~rozpoznawaczu telefonów biblioteki Presidio @presidio (parametr `leniency`), który odrzucał numery
 formalnie możliwe, lecz nieprzypisane, więc nie były one wykrywane ani podstawiane. Po złagodzeniu
 walidacji wykrywane są wszystkie numery, a~precyzja pozostaje równa 1,0, co~przedstawia tabela
 @tab:eval-telefon. Była to usterka konfiguracji, usunięta strojeniem istniejącego komponentu.

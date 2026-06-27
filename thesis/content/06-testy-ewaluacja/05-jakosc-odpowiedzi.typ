@@ -12,7 +12,7 @@ Badanie oparto na trzech ramionach, uruchamianych dla tych samych umów i~pytań
 modelu tekst oryginalny i~stanowi punkt odniesienia jakości. Ramię B to badane podejście, w~którym
 tekst przechodzi przez bramę: dane są podstawiane realistycznym zamiennikiem, model odpowiada,
 a~odpowiedź zostaje odpseudonimizowana. Ramię D zachowuje pełny, odwracalny obieg ramienia B, lecz
-zamiast realistycznych wartości używa abstrakcyjnych, rozróżnialnych tokenów w~rodzaju `[OSOBA_1]`
+zamiast realistycznych wartości używa abstrakcyjnych, rozróżnialnych tokenów @Lison2021 w~rodzaju `[OSOBA_1]`
 czy `[PESEL_1]`, odmaskowywanych w~odpowiedzi. Zestawienie B i~D izoluje więc czysty efekt realizmu,
 ponieważ oba ramiona mają identyczny mechanizm odwracania, a~różni je wyłącznie postać zamiennika.
 
@@ -21,7 +21,7 @@ z~przyjętym dla całej ewaluacji trybem bez kontaktu z~siecią. Ponieważ korpu
 sam pomiar dało się następnie powtórzyć na modelach znacznie silniejszych, co~pozwoliło sprawdzić, na
 ile wnioski zależą od siły modelu. Jakość mierzono dwojako. Faktografię, czyli obecność prawdziwych
 wartości z~wzorca w~odpowiedzi, to jest osób, numerów PESEL oraz rachunków, oceniano obiektywnie przez
-porównanie z~wzorcem. Rozumowanie, w~zadaniu streszczenia umowy, mierzono miarą ROUGE-L względem
+porównanie z~wzorcem. Rozumowanie, w~zadaniu streszczenia umowy, mierzono miarą ROUGE-L @Lin2004 względem
 odpowiedzi na oryginale. Przezroczystość zbadano na osobnej próbie 20 umów, a~pełne porównanie trzech ramion na większej
 próbie 50 umów.
 
@@ -110,7 +110,7 @@ danych zastępczych (zob. @sec:dane-zastepcze).
 Oś rozumowania pozostała nierozstrzygnięta, gdyż użyta do niej miara ROUGE-L okazała się
 nieadekwatna: dawała około 0,20 niezależnie od ramienia, mierząc pokrycie leksykalne streszczeń
 zdominowane przez wspólne słownictwo umów, a~nie przez dane osobowe. Jej rzetelna ocena wymagałaby
-miary semantycznej albo osobnego modelu w~roli sędziego, co~wykracza poza zakres prototypu.
+miary semantycznej albo osobnego modelu w~roli sędziego @Zheng2023, co~wykracza poza zakres prototypu.
 
 Wyniki tej osi mają charakter prototypowy: próby oparto na korpusie syntetycznym, a~zadania były
 faktograficzne, w~których silne modele osiągają sufit możliwości, przez co test różnicuje przede
