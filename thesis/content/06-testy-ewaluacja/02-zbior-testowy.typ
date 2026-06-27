@@ -2,10 +2,9 @@
 
 == Zbiór testowy <sec:eval-korpus>
 
-Wiarygodny pomiar wymaga dokumentów, w~których z~góry wiadomo, co~jest daną osobową i~gdzie dokładnie
-się ona znajduje. Ręczne anotowanie rzeczywistych umów jest pod tym względem pracochłonne i~podatne
-na błędy, zwłaszcza w~określaniu dokładnych granic encji. Z~tego powodu korpus testowy zbudowano
-w~sposób syntetyczny. Punktem wyjścia są szablony czterech rodzajów umów cywilnoprawnych, w~których
+Wiarygodny pomiar wymaga dokumentów, w~których z~góry znane są wszystkie dane osobowe i~ich dokładne
+położenie. Ręczne anotowanie rzeczywistych umów jest pod tym względem pracochłonne i~podatne na błędy
+w~granicach encji, dlatego korpus testowy zbudowano syntetycznie. Punktem wyjścia są szablony czterech rodzajów umów cywilnoprawnych, w~których
 miejsca na dane osobowe oznaczono slotami o~określonym typie i~roli. Slot wypełnia się następnie
 wartością fikcyjną, zapisując jednocześnie jej dokładne położenie oraz typ. Dzięki temu wzorzec
 odniesienia powstaje automatycznie, bez ręcznej anotacji i~bez ryzyka pomyłki w~offsetach.
@@ -54,7 +53,7 @@ Ponieważ wszystkie dane są fikcyjne, przykłady można przytaczać w~pracy wpr
 czyichkolwiek informacji. Z~tego względu wszystkie przykłady w~kolejnych podrozdziałach posługują się
 wartościami syntetycznymi. Korpus może zostać uzupełniony o~ręcznie anotowane umowy rzeczywiste, te
 jednak pozostają lokalne i~nie wchodzą do publikowanych wyników, zgodnie z~wymaganiem prywatności
-(zob. @sec:wymagania). Warto dodać, że model wykrywający nie był trenowany na tym korpusie, jest to
-ogólny model języka polskiego, nie zachodzi więc nakładanie się zbioru uczącego i~testowego. Na tak
+(zob. @sec:wymagania). Model wykrywający nie był przy tym trenowany na tym korpusie, jest to ogólny
+model języka polskiego, nie zachodzi więc nakładanie się zbioru uczącego i~testowego. Na tak
 przygotowanym materiale przeprowadzono ocenę skuteczności wykrywania, omówioną w~następnym
 podrozdziale.

@@ -16,7 +16,7 @@ nie pojawiłaby się ani w~predykcjach, ani we~wzorcu, a~zatem jej wyciek pozost
 
 Pomiar prowadzony jest w~dwóch etapach. Etap pierwszy pomija model generatywny i~wywołuje wprost
 operacje wykrywania, podstawienia oraz przywracania, dostarczając zasadniczych miar poprawności:
-trafności wykrywania, wyniku audytu wycieków, wierności odtworzenia oraz czasu przetwarzania. Etap
+trafności wykrywania, wyniku audytu wycieków oraz wierności odtworzenia. Etap
 drugi obejmuje pełny obieg konwersacyjny, w~którym dostawcę modelu zastępuje deterministyczna atrapa
 zwracająca otrzymaną treść bez zmian (zob. @sec:impl-testy, @rys:echo). Potwierdza on szczelność
 i~odwracalność zintegrowanego potoku, nie wiążąc pomiaru z~jakością konkretnego modelu.
@@ -44,8 +44,6 @@ kątem ocalałych oryginałów oraz zgodność wartości przywróconych z~pierwo
   ),
 ) <rys:eval-harness>
 
-Tak zorganizowana ewaluacja obejmuje dwie osie: poprawność pseudonimizacji, omawianą w~niniejszym
-i~kolejnych podrozdziałach, oraz wpływ na jakość odpowiedzi modelu, badany osobno (zob.
-@sec:eval-jakosc). Całość przebiega w~trybie offline, bez kontaktu z~usługami zewnętrznymi, zgodnie
-z~wymaganiem prywatności (zob. @sec:wymagania), a~na zewnątrz trafiają wyłącznie zagregowane miary.
-Tryb ten oraz obiektywny wzorzec umożliwia korpus syntetyczny, opisany w~następnym podrozdziale.
+Całość przebiega w~trybie offline, bez kontaktu z~usługami zewnętrznymi, tak aby żaden dokument nie
+opuszczał maszyny, zgodnie z~wymaganiem prywatności (zob. @sec:wymagania). Umożliwia to korpus
+syntetyczny, opisany w~następnym podrozdziale, a~na zewnątrz trafiają wyłącznie zagregowane miary.

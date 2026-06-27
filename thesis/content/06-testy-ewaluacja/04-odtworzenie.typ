@@ -12,7 +12,7 @@ Rozkład wyników w~podziale na daty i~pozostałe typy przedstawiono w~tabeli @t
 Niemal wszystkie niepowodzenia skupiają się w~datach. Spośród 1005 instancji pozostałych typów
 dokładnie odtworzono 1003, a~tylko dwie wróciły w~innej formie lub nie wróciły wcale. Daty zachowują
 się odwrotnie: żadnej ze~145 nie odtworzono dokładnie, 131 pominięto, a~14 wróciło jedynie jako
-fragment.
+fragment, na przykład data „27.05.2003" wraca jako „2003".
 
 #figure(
   table(
