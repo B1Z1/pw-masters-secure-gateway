@@ -43,7 +43,7 @@ od zapytania użytkownika po przywróconą odpowiedź, przedstawiono na rysunku 
 
 Przepływ rozpoczyna się od żądania skierowanego przez klienta do gatewaya. Żądanie zawiera treść
 zapytania wraz z~ewentualnymi dołączonymi dokumentami, w~których mogą znajdować się dane osobowe.
-Po jego odebraniu potok anonimizacji uruchamia moduł wykrywania, który lokalizuje w~tekście
+Po jego odebraniu potok pseudonimizacji uruchamia moduł wykrywania, który lokalizuje w~tekście
 fragmenty stanowiące dane osobowe. Następnie dla każdego wykrytego fragmentu potok zwraca się do
 magazynu mapowań o~odpowiadającą mu wartość syntetyczną. Jeśli dana wystąpiła już wcześniej w~tej
 samej sesji, magazyn udostępnia zapamiętany zamiennik, w~przeciwnym razie zleca jego wygenerowanie

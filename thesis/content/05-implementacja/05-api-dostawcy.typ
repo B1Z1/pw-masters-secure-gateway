@@ -27,7 +27,7 @@ niedostępny, żądanie kończy się odpowiedzią o~kodzie 503, zanim dojdzie do
 z~modelem.
 
 Obsługa żądania przebiega według ustalonej sekwencji etapów, przedstawionej na rysunku
-@rys:cykl-zadania. Po przejściu bramy oraz walidacji potok anonimizacji pseudonimizuje całą historię
+@rys:cykl-zadania. Po przejściu bramy oraz walidacji potok pseudonimizacji przetwarza całą historię
 rozmowy, a~nie tylko ostatnie zapytanie. Jest to istotne, ponieważ w~trybie konwersacyjnym do modelu
 w~każdej turze trafia pełna historia, a~pominięcie wcześniejszych wiadomości pozwoliłoby danym
 przywróconym w~poprzedniej turze ponownie opuścić granicę zaufania (zob. @sec:przeplyw). Tak

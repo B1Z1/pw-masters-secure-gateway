@@ -17,7 +17,7 @@ porty, czyli jednolite interfejsy, a~konkretne zależności zewnętrzne realizuj
 sposób wysłania zapytania i~odebrania odpowiedzi, niezależny od tego, z~którym modelem prowadzona
 jest komunikacja. Każdy obsługiwany dostawca, zarówno model uruchamiany lokalnie, jak i~dostawcy
 hostowani, otrzymuje własny adapter, który tłumaczy ten jednolity interfejs na konkretne wywołania
-danego API. Dzięki temu reszta systemu, w~tym potok anonimizacji, nie zależy od żadnego konkretnego
+danego API. Dzięki temu reszta systemu, w~tym potok pseudonimizacji, nie zależy od żadnego konkretnego
 dostawcy, a~dodanie nowego sprowadza się do dostarczenia kolejnego adaptera oraz uzupełnienia
 konfiguracji. Jest to bezpośrednie zastosowanie omówionej wcześniej zasady ukrywania informacji
 i~modułowości (zob. @sec:architektura).

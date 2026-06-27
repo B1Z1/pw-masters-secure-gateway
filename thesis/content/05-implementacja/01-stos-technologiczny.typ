@@ -50,7 +50,7 @@ Podział ten pokazano na rysunku @rys:organizacja-kodu.
     node-corner-radius: 3pt,
     node-inset: 7pt,
     node((1, 0), [Warstwa API\ #text(size: 0.72em, fill: gray.darken(40%))[FastAPI: routery, walidacja, _middleware_]], name: <api>),
-    node((1, 1), [Potok anonimizacji\ #text(size: 0.72em, fill: gray.darken(40%))[orkiestracja]], name: <pipe>),
+    node((1, 1), [Potok pseudonimizacji\ #text(size: 0.72em, fill: gray.darken(40%))[orkiestracja]], name: <pipe>),
     node((0, 2), [Logika czysta\ #text(size: 0.72em, fill: gray.darken(40%))[wykrywanie · generowanie\ · sumy kontrolne]], name: <core>),
     node((2, 2), [Warstwa wejścia-wyjścia\ #text(size: 0.72em, fill: gray.darken(40%))[magazyn mapowań · dostawcy]], name: <io>),
     node((2, 3), [Redis · API dostawców\ #text(size: 0.72em, fill: gray.darken(40%))[zasoby zewnętrzne]], name: <ext>),

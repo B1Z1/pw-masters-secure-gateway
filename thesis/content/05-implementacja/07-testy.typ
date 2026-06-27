@@ -35,7 +35,7 @@ takiej podmiany wynika wprost z~przyjętego podziału na logikę czystą i~warst
 Testy zorganizowano według komponentów systemu, co przedstawiono w~tabeli @tab:testy. Logika czysta,
 to jest wykrywanie, generowanie danych zastępczych oraz obliczanie sum kontrolnych i~odmiana, testowana
 jest w~izolacji, bez ładowania modelu językowego ani uruchamiania bazy danych. Komponenty wymagające
-stanu, takie jak magazyn mapowań czy potok anonimizacji, korzystają z~magazynu działającego
+stanu, takie jak magazyn mapowań czy potok pseudonimizacji, korzystają z~magazynu działającego
 w~pamięci, a~warstwa dostawców z~imitacji ich bibliotek. Determinizm tam, gdzie generowane są wartości
 losowe, zapewnia inicjowanie generatora ustalonym ziarnem.
 

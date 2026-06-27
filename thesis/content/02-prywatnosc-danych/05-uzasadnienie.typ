@@ -21,6 +21,9 @@ realistycznymi danymi syntetycznymi przed wysłaniem do modelu, a~następnie prz
 wartości w~wygenerowanej odpowiedzi. Dzięki temu poza granicę zaufania trafia wyłącznie tekst
 pozbawiony rzeczywistych danych identyfikujących, podczas gdy odwzorowanie między wartościami
 oryginalnymi a~zastępczymi pozostaje wewnątrz systemu kontrolowanego przez organizację.
+Technicznie jest to pseudonimizacja, czyli odwracalne podstawienie, którego odwzorowanie nie
+opuszcza organizacji, a~z~perspektywy dostawcy otrzymującego wyłącznie dane syntetyczne jej efektem
+pozostaje anonimizacja (oba pojęcia rozróżniono w~rozdziale @ch:anonimizacja).
 Działanie takiej warstwy przedstawiono na rysunku @rys:gateway.
 
 #figure(

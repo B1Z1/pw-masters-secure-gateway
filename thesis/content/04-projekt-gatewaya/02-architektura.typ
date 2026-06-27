@@ -37,7 +37,7 @@ opuszczają strony wewnętrznej.
     node-corner-radius: 3pt,
     node-inset: 7pt,
     node((1, 0), [Klient\ #text(size: 0.72em, fill: gray.darken(40%))[konsument API]], name: <klient>),
-    node((1, 1), [Potok anonimizacji\ #text(size: 0.72em, fill: gray.darken(40%))[orkiestracja]], name: <potok>),
+    node((1, 1), [Potok pseudonimizacji\ #text(size: 0.72em, fill: gray.darken(40%))[orkiestracja]], name: <potok>),
     node((0, 2), [Wykrywanie\ danych osobowych], name: <detect>),
     node((2, 2), [Magazyn mapowań\ #text(size: 0.72em, fill: gray.darken(40%))[szyfrowany]], name: <vault>),
     node((2, 3), [Generowanie\ danych zastępczych], name: <gen>),
@@ -64,7 +64,7 @@ opuszczają strony wewnętrznej.
 W~ramach gatewaya wyróżniono pięć głównych komponentów, przy czym podstawą podziału jest zasada,
 zgodnie z~którą każdy z~nich odpowiada za jedną, jasno określoną funkcję:
 
-- *Potok anonimizacji* — komponent orkiestrujący, spinający pozostałe elementy: dla żądania
+- *Potok pseudonimizacji* — komponent orkiestrujący, spinający pozostałe elementy: dla żądania
   przychodzącego uruchamia wykrywanie oraz podstawianie danych, a~dla odpowiedzi modelu ich
   przywracanie. Sam nie komunikuje się z~modelem ani nie przechowuje danych, lecz koordynuje
   przepływ.
