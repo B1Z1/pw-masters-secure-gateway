@@ -25,7 +25,7 @@
     `false`. variable to false.
 
   **/
-  let draft = true
+  let draft = false
   let in-print = false
   set-margin-note-defaults(hidden: not draft)
 
@@ -153,19 +153,19 @@
   // You can put your acknowledgements (pol. podziękowania) here.
   // Below is an example containing acknowledgements for the PLGrid grant.
   // Comment out if not needed.
-  acknowledgements[
-    We gratefully acknowledge Poland's high-performance Infrastructure PLGrid
-    #text(fill: red)[(wybierz właściwy ośrodek z listy: ACK Cyfronet AGH, PCSS, CI TASK,
-      WCSS)] for providing computer facilities and support within computational grant no
-    #text(fill: red)[(numer grantu)]
-    #todo[Numer grantu i typ ośrodka]
-  ]
+//   acknowledgements[
+//     We gratefully acknowledge Poland's high-performance Infrastructure PLGrid
+//     #text(fill: red)[(wybierz właściwy ośrodek z listy: ACK Cyfronet AGH, PCSS, CI TASK,
+//       WCSS)] for providing computer facilities and support within computational grant no
+//     #text(fill: red)[(numer grantu)]
+//     #todo[Numer grantu i typ ośrodka]
+//   ]
 
   // --- Bibliography ---
   bibliography("items.bib", style: "ieee")
 
   // List of Acronyms - comment out, if not needed (no abbreviations were used).
-  glossary-outline(glossary)
+//   glossary-outline(glossary)
 
   // List of figures - comment out, if not needed.
   figure-outline(lang.thesis)

@@ -10,16 +10,12 @@
 - **REGON**: recall=1.0, fn=0, fp=0 (support 23)
 - **BANK_ACCOUNT**: recall=1.0, fn=0, fp=0 (support 76)
 - **EMAIL_ADDRESS**: recall=1.0, fn=0, fp=0 (support 168)
-- **PHONE_NUMBER**: recall=0.9702, fn=5, fp=0 (support 168)
+- **PHONE_NUMBER**: recall=1.0, fn=0, fp=0 (support 168)
 - **DATE_TIME**: recall=1.0, fn=0, fp=145 (support 145)
 
 ## False negatives (missed PII — the priority failure)
 
-- syn-najem-000 [PHONE_NUMBER]: +48 702 654 235
-- syn-o-dzielo-030 [PHONE_NUMBER]: +48 802 838 578
-- syn-o-dzielo-030 [PHONE_NUMBER]: +48 802 838 578
-- syn-najem-041 [PHONE_NUMBER]: +48 809 379 660
-- syn-najem-041 [PHONE_NUMBER]: +48 809 379 660
+- none
 
 ## False positives (spurious / unmapped detections)
 
@@ -213,7 +209,7 @@
 - syn-o-dzielo-001 [PHONE_NUMBER] exact: +48 642 388 496 → +48 642 388 496
 - syn-o-dzielo-001 [PERSON] exact: Anna Maria Skałka → Anna Maria Skałka
 - syn-o-dzielo-001 [PERSON] exact: Kornelia Kycia → Kornelia Kycia
-- syn-sprzedaz-002 [DATE_TIME] correct_inflection: 01.10.2000 → 2000
+- syn-sprzedaz-002 [DATE_TIME] missed: 01.10.2000 → -
 - syn-sprzedaz-002 [LOCATION] exact: Wągrowiec → Wągrowiec
 - syn-sprzedaz-002 [PERSON] exact: Natasza Smykała → Natasza Smykała
 - syn-sprzedaz-002 [PESEL] exact: 42021289947 → 42021289947
@@ -275,7 +271,7 @@
 - syn-najem-004 [EMAIL_ADDRESS] exact: lidiasalach@listwan-amanowicz.pl → lidiasalach@listwan-amanowicz.pl
 - syn-najem-004 [PERSON] exact: Antoni Karłowicz → Antoni Karłowicz
 - syn-najem-004 [PERSON] exact: Sara Skoneczna → Sara Skoneczna
-- syn-najem-005 [DATE_TIME] missed: 27.05.2003 → -
+- syn-najem-005 [DATE_TIME] correct_inflection: 27.05.2003 → 2003
 - syn-najem-005 [LOCATION] exact: Lublin → Lublin
 - syn-najem-005 [PERSON] exact: Leon Matyka → Leon Matyka
 - syn-najem-005 [PESEL] exact: 82032126839 → 82032126839
@@ -297,12 +293,12 @@
 - syn-najem-005 [EMAIL_ADDRESS] exact: lidiasmyl@o2.pl → lidiasmyl@o2.pl
 - syn-najem-005 [PERSON] exact: Leon Matyka → Leon Matyka
 - syn-najem-005 [PERSON] exact: Patryk Kroczak → Patryk Kroczak
-- syn-sprzedaz-006 [DATE_TIME] correct_inflection: 12.11.1962 → 1962
+- syn-sprzedaz-006 [DATE_TIME] correct_inflection: 12.11.1962 → 196211
 - syn-sprzedaz-006 [LOCATION] exact: Malbork → Malbork
 - syn-sprzedaz-006 [PERSON] exact: Aniela Potoczna → Aniela Potoczna
 - syn-sprzedaz-006 [PESEL] exact: 43020918287 → 43020918287
 - syn-sprzedaz-006 [NIP] exact: 4019655692 → 4019655692
-- syn-sprzedaz-006 [ADDRESS] exact: ul. Bałtycka 08, 02-993 Ruda Śląska → ul. Bałtycka 08, 02-993 Ruda Śląska
+- syn-sprzedaz-006 [ADDRESS] correct_inflection: ul. Bałtycka 08, 02-993 Ruda Śląska → Bałtycka
 - syn-sprzedaz-006 [EMAIL_ADDRESS] exact: kalinasmykla@spoldzielnia.com → kalinasmykla@spoldzielnia.com
 - syn-sprzedaz-006 [PHONE_NUMBER] exact: +48 569 340 608 → +48 569 340 608
 - syn-sprzedaz-006 [PERSON] exact: Karol Bartłomiejczyk → Karol Bartłomiejczyk
@@ -337,7 +333,7 @@
 - syn-o-dzielo-007 [PHONE_NUMBER] exact: +48 601 632 870 → +48 601 632 870
 - syn-o-dzielo-007 [PERSON] exact: Aurelia Grabara → Aurelia Grabara
 - syn-o-dzielo-007 [PERSON] exact: Ksawery Engler → Ksawery Engler
-- syn-o-dzielo-008 [DATE_TIME] correct_inflection: 14.01.1998 → 199801
+- syn-o-dzielo-008 [DATE_TIME] missed: 14.01.1998 → -
 - syn-o-dzielo-008 [LOCATION] exact: Łomża → Łomża
 - syn-o-dzielo-008 [PERSON] exact: Konrad Strzała → Konrad Strzała
 - syn-o-dzielo-008 [NIP] exact: 6690967058 → 6690967058
@@ -445,21 +441,21 @@
 - syn-najem-013 [ADDRESS] exact: ul. Starowiejska 69, 78-671 Ostrołęka → ul. Starowiejska 69, 78-671 Ostrołęka
 - syn-najem-013 [EMAIL_ADDRESS] exact: rbasaj@interia.pl → rbasaj@interia.pl
 - syn-najem-013 [PHONE_NUMBER] exact: +48 870 348 247 → +48 870 348 247
-- syn-najem-013 [PERSON] correct_inflection: Eliza Komperda → Komperda
+- syn-najem-013 [PERSON] exact: Eliza Komperda → Eliza Komperda
 - syn-najem-013 [PESEL] exact: 43112081837 → 43112081837
 - syn-najem-013 [ADDRESS] exact: ul. Kosynierów 14, 66-680 Kłodzko → ul. Kosynierów 14, 66-680 Kłodzko
 - syn-najem-013 [EMAIL_ADDRESS] exact: budychmarek@hotmail.com → budychmarek@hotmail.com
 - syn-najem-013 [PHONE_NUMBER] exact: +48 648 086 131 → +48 648 086 131
 - syn-najem-013 [ADDRESS] exact: ul. Opolska 32, 04-048 Tomaszów Mazowiecki → ul. Opolska 32, 04-048 Tomaszów Mazowiecki
 - syn-najem-013 [LOCATION] exact: Chrzanów → Chrzanów
-- syn-najem-013 [DATE_TIME] missed: 21.03.1982 → -
+- syn-najem-013 [DATE_TIME] correct_inflection: 21.03.1982 → 1982
 - syn-najem-013 [DATE_TIME] missed: 17.12.1990 → -
 - syn-najem-013 [BANK_ACCOUNT] exact: 29467737826398214658404499 → 29467737826398214658404499
 - syn-najem-013 [BANK_ACCOUNT] exact: 29467737826398214658404499 → 29467737826398214658404499
 - syn-najem-013 [PHONE_NUMBER] exact: +48 870 348 247 → +48 870 348 247
 - syn-najem-013 [EMAIL_ADDRESS] exact: rbasaj@interia.pl → rbasaj@interia.pl
 - syn-najem-013 [PERSON] exact: Jakub Godzisz → Jakub Godzisz
-- syn-najem-013 [PERSON] correct_inflection: Eliza Komperda → Komperda
+- syn-najem-013 [PERSON] exact: Eliza Komperda → Eliza Komperda
 - syn-najem-014 [DATE_TIME] missed: 28.03.2007 → -
 - syn-najem-014 [LOCATION] exact: Września → Września
 - syn-najem-014 [PERSON] exact: Janina Kupidura → Janina Kupidura
@@ -474,8 +470,8 @@
 - syn-najem-014 [PHONE_NUMBER] exact: +48 670 289 517 → +48 670 289 517
 - syn-najem-014 [ADDRESS] exact: ul. Górska 72/77, 34-770 Leszno → ul. Górska 72/77, 34-770 Leszno
 - syn-najem-014 [LOCATION] exact: Płońsk → Płońsk
-- syn-najem-014 [DATE_TIME] correct_inflection: 15.01.1972 → 197211
-- syn-najem-014 [DATE_TIME] missed: 14.11.2000 → -
+- syn-najem-014 [DATE_TIME] missed: 15.01.1972 → -
+- syn-najem-014 [DATE_TIME] correct_inflection: 14.11.2000 → 200011
 - syn-najem-014 [BANK_ACCOUNT] exact: 01217459615865780913431611 → 01217459615865780913431611
 - syn-najem-014 [BANK_ACCOUNT] exact: 01217459615865780913431611 → 01217459615865780913431611
 - syn-najem-014 [PHONE_NUMBER] exact: +48 875 339 636 → +48 875 339 636
@@ -496,15 +492,15 @@
 - syn-najem-015 [PHONE_NUMBER] exact: +48 847 407 482 → +48 847 407 482
 - syn-najem-015 [ADDRESS] exact: ul. Lelewela 09/67, 01-966 Skierniewice → ul. Lelewela 09/67, 01-966 Skierniewice
 - syn-najem-015 [LOCATION] exact: Będzin → Będzin
-- syn-najem-015 [DATE_TIME] correct_inflection: 12.10.1968 → 196812
-- syn-najem-015 [DATE_TIME] missed: 14.12.1989 → -
+- syn-najem-015 [DATE_TIME] missed: 12.10.1968 → -
+- syn-najem-015 [DATE_TIME] correct_inflection: 14.12.1989 → 1989
 - syn-najem-015 [BANK_ACCOUNT] exact: 55474367136959440640909743 → 55474367136959440640909743
 - syn-najem-015 [BANK_ACCOUNT] exact: 55474367136959440640909743 → 55474367136959440640909743
 - syn-najem-015 [PHONE_NUMBER] exact: +48 823 869 222 → +48 823 869 222
 - syn-najem-015 [EMAIL_ADDRESS] exact: jozef58@nazimek.net → jozef58@nazimek.net
 - syn-najem-015 [PERSON] exact: Robert Nowotka → Robert Nowotka
 - syn-najem-015 [PERSON] exact: Eryk Tadla → Eryk Tadla
-- syn-o-dzielo-016 [DATE_TIME] missed: 08.11.1999 → -
+- syn-o-dzielo-016 [DATE_TIME] correct_inflection: 08.11.1999 → 1999
 - syn-o-dzielo-016 [LOCATION] exact: Ostrów Mazowiecka → Ostrów Mazowiecka
 - syn-o-dzielo-016 [PERSON] exact: Eryk Gamrat → Eryk Gamrat
 - syn-o-dzielo-016 [NIP] exact: 9421047096 → 9421047096
@@ -542,7 +538,7 @@
 - syn-o-dzielo-017 [PHONE_NUMBER] exact: +48 651 585 064 → +48 651 585 064
 - syn-o-dzielo-017 [PERSON] exact: Natasza Kostera → Natasza Kostera
 - syn-o-dzielo-017 [PERSON] exact: Jeremi Solarek → Jeremi Solarek
-- syn-najem-018 [DATE_TIME] correct_inflection: 24.02.1986 → 198612
+- syn-najem-018 [DATE_TIME] missed: 24.02.1986 → -
 - syn-najem-018 [LOCATION] exact: Swarzędz → Swarzędz
 - syn-najem-018 [PERSON] exact: Sara Kidawa → Sara Kidawa
 - syn-najem-018 [PESEL] exact: 86091911160 → 86091911160
@@ -564,7 +560,7 @@
 - syn-najem-018 [EMAIL_ADDRESS] exact: dominik90@ppuh.pl → dominik90@ppuh.pl
 - syn-najem-018 [PERSON] exact: Sara Kidawa → Sara Kidawa
 - syn-najem-018 [PERSON] exact: Marika Bela → Marika Bela
-- syn-o-dzielo-019 [DATE_TIME] correct_inflection: 03.02.2008 → 2008
+- syn-o-dzielo-019 [DATE_TIME] missed: 03.02.2008 → -
 - syn-o-dzielo-019 [LOCATION] exact: Grudziądz → Grudziądz
 - syn-o-dzielo-019 [PERSON] exact: Przemysław Latuszek → Przemysław Latuszek
 - syn-o-dzielo-019 [NIP] exact: 1615280983 → 1615280983
@@ -596,13 +592,13 @@
 - syn-zlecenie-020 [ADDRESS] exact: ul. Widok 34/95, 61-567 Police → ul. Widok 34/95, 61-567 Police
 - syn-zlecenie-020 [EMAIL_ADDRESS] exact: jkarkocha@gmail.com → jkarkocha@gmail.com
 - syn-zlecenie-020 [PHONE_NUMBER] exact: +48 710 762 268 → +48 710 762 268
-- syn-zlecenie-020 [DATE_TIME] correct_inflection: 17.09.2002 → 200209
+- syn-zlecenie-020 [DATE_TIME] missed: 17.09.2002 → -
 - syn-zlecenie-020 [BANK_ACCOUNT] exact: 57516060715969664160529751 → 57516060715969664160529751
 - syn-zlecenie-020 [EMAIL_ADDRESS] exact: tbandyk@fundacja.com → tbandyk@fundacja.com
 - syn-zlecenie-020 [PHONE_NUMBER] exact: +48 710 762 268 → +48 710 762 268
 - syn-zlecenie-020 [PERSON] exact: Jan Kocurek → Jan Kocurek
 - syn-zlecenie-020 [PERSON] exact: Tymon Wójcikiewicz → Tymon Wójcikiewicz
-- syn-o-dzielo-021 [DATE_TIME] missed: 08.07.1980 → -
+- syn-o-dzielo-021 [DATE_TIME] correct_inflection: 08.07.1980 → 1980
 - syn-o-dzielo-021 [LOCATION] exact: Sanok → Sanok
 - syn-o-dzielo-021 [PERSON] exact: Róża Podeszwa → Róża Podeszwa
 - syn-o-dzielo-021 [NIP] exact: 8164535219 → 8164535219
@@ -702,7 +698,7 @@
 - syn-o-dzielo-025 [PHONE_NUMBER] exact: +48 554 868 740 → +48 554 868 740
 - syn-o-dzielo-025 [PERSON] exact: Kornelia Jędryczka → Kornelia Jędryczka
 - syn-o-dzielo-025 [PERSON] exact: Jakub Szok → Jakub Szok
-- syn-zlecenie-026 [DATE_TIME] missed: 09.11.2002 → -
+- syn-zlecenie-026 [DATE_TIME] correct_inflection: 09.11.2002 → 2002
 - syn-zlecenie-026 [LOCATION] exact: Żywiec → Żywiec
 - syn-zlecenie-026 [PERSON] exact: Wiktor Nowrot → Wiktor Nowrot
 - syn-zlecenie-026 [NIP] exact: 1658202978 → 1658202978
@@ -742,8 +738,8 @@
 - syn-sprzedaz-027 [PHONE_NUMBER] exact: +48 869 125 177 → +48 869 125 177
 - syn-sprzedaz-027 [PERSON] exact: Jacek Dzierżak → Jacek Dzierżak
 - syn-sprzedaz-027 [PERSON] exact: Anita Miksza → Anita Miksza
-- syn-sprzedaz-028 [DATE_TIME] missed: 07.10.1986 → -
-- syn-sprzedaz-028 [LOCATION] missed: Gdynia → -
+- syn-sprzedaz-028 [DATE_TIME] correct_inflection: 07.10.1986 → 1986
+- syn-sprzedaz-028 [LOCATION] exact: Gdynia → Gdynia
 - syn-sprzedaz-028 [PERSON] exact: Natasza Szymała → Natasza Szymała
 - syn-sprzedaz-028 [PESEL] exact: 03311829650 → 03311829650
 - syn-sprzedaz-028 [NIP] exact: 7364710276 → 7364710276
@@ -776,7 +772,7 @@
 - syn-o-dzielo-029 [ADDRESS] exact: ul. Szarych Szeregów 72, 89-307 Bydgoszcz → ul. Szarych Szeregów 72, 89-307 Bydgoszcz
 - syn-o-dzielo-029 [EMAIL_ADDRESS] exact: adam45@fundacja.net → adam45@fundacja.net
 - syn-o-dzielo-029 [PHONE_NUMBER] exact: +48 887 298 259 → +48 887 298 259
-- syn-o-dzielo-029 [DATE_TIME] correct_inflection: 13.10.1975 → 197509
+- syn-o-dzielo-029 [DATE_TIME] missed: 13.10.1975 → -
 - syn-o-dzielo-029 [BANK_ACCOUNT] exact: 43495888794705516940974993 → 43495888794705516940974993
 - syn-o-dzielo-029 [EMAIL_ADDRESS] exact: adam45@fundacja.net → adam45@fundacja.net
 - syn-o-dzielo-029 [PHONE_NUMBER] exact: +48 565 585 239 → +48 565 585 239
@@ -928,7 +924,7 @@
 - syn-sprzedaz-036 [PHONE_NUMBER] exact: +48 747 772 522 → +48 747 772 522
 - syn-sprzedaz-036 [PERSON] exact: Maurycy Stanuch → Maurycy Stanuch
 - syn-sprzedaz-036 [PERSON] exact: Marika Dycha → Marika Dycha
-- syn-sprzedaz-037 [DATE_TIME] correct_inflection: 09.07.1977 → 197707
+- syn-sprzedaz-037 [DATE_TIME] missed: 09.07.1977 → -
 - syn-sprzedaz-037 [LOCATION] exact: Oława → Oława
 - syn-sprzedaz-037 [PERSON] exact: Antoni Smagała → Antoni Smagała
 - syn-sprzedaz-037 [PESEL] exact: 91081924923 → 91081924923
@@ -964,7 +960,7 @@
 - syn-sprzedaz-038 [PHONE_NUMBER] exact: +48 888 861 015 → +48 888 861 015
 - syn-sprzedaz-038 [BANK_ACCOUNT] exact: 61819956046618398262244472 → 61819956046618398262244472
 - syn-sprzedaz-038 [DATE_TIME] missed: 14.05.1959 → -
-- syn-sprzedaz-038 [DATE_TIME] missed: 16.02.1985 → -
+- syn-sprzedaz-038 [DATE_TIME] correct_inflection: 16.02.1985 → 1985
 - syn-sprzedaz-038 [LOCATION] exact: Kościan → Kościan
 - syn-sprzedaz-038 [EMAIL_ADDRESS] exact: nataniel02@interia.pl → nataniel02@interia.pl
 - syn-sprzedaz-038 [PHONE_NUMBER] exact: +48 665 511 047 → +48 665 511 047
@@ -1005,7 +1001,7 @@
 - syn-zlecenie-040 [ADDRESS] exact: ul. Modrzewiowa 969, 52-727 Marki → ul. Modrzewiowa 969, 52-727 Marki
 - syn-zlecenie-040 [EMAIL_ADDRESS] exact: oliwier60@gmail.com → oliwier60@gmail.com
 - syn-zlecenie-040 [PHONE_NUMBER] exact: +48 650 714 611 → +48 650 714 611
-- syn-zlecenie-040 [DATE_TIME] missed: 12.05.2000 → -
+- syn-zlecenie-040 [DATE_TIME] correct_inflection: 12.05.2000 → 2000
 - syn-zlecenie-040 [BANK_ACCOUNT] exact: 95573875717751401051238282 → 95573875717751401051238282
 - syn-zlecenie-040 [EMAIL_ADDRESS] exact: malonmaciej@o2.pl → malonmaciej@o2.pl
 - syn-zlecenie-040 [PHONE_NUMBER] exact: +48 650 714 611 → +48 650 714 611
@@ -1095,7 +1091,7 @@
 - syn-sprzedaz-044 [PHONE_NUMBER] exact: +48 724 154 152 → +48 724 154 152
 - syn-sprzedaz-044 [PERSON] exact: Marianna Korzekwa → Marianna Korzekwa
 - syn-sprzedaz-044 [PERSON] exact: Józef Sypek → Józef Sypek
-- syn-sprzedaz-045 [DATE_TIME] correct_inflection: 21.12.2002 → 2002
+- syn-sprzedaz-045 [DATE_TIME] missed: 21.12.2002 → -
 - syn-sprzedaz-045 [LOCATION] exact: Pruszków → Pruszków
 - syn-sprzedaz-045 [PERSON] exact: Franciszek Jędraszczyk → Franciszek Jędraszczyk
 - syn-sprzedaz-045 [PESEL] exact: 96040391808 → 96040391808
@@ -1150,7 +1146,7 @@
 - syn-najem-047 [ADDRESS] exact: ul. Środkowa 03, 54-655 Brodnica → ul. Środkowa 03, 54-655 Brodnica
 - syn-najem-047 [LOCATION] exact: Knurów → Knurów
 - syn-najem-047 [DATE_TIME] missed: 12.04.1979 → -
-- syn-najem-047 [DATE_TIME] missed: 26.05.1986 → -
+- syn-najem-047 [DATE_TIME] correct_inflection: 26.05.1986 → 198608
 - syn-najem-047 [BANK_ACCOUNT] exact: 72937597383206038505064138 → 72937597383206038505064138
 - syn-najem-047 [BANK_ACCOUNT] exact: 72937597383206038505064138 → 72937597383206038505064138
 - syn-najem-047 [PHONE_NUMBER] exact: +48 835 365 419 → +48 835 365 419
@@ -1212,7 +1208,7 @@
 - syn-sprzedaz-050 [EMAIL_ADDRESS] exact: kwintaarkadiusz@hotmail.com → kwintaarkadiusz@hotmail.com
 - syn-sprzedaz-050 [PHONE_NUMBER] exact: +48 559 929 378 → +48 559 929 378
 - syn-sprzedaz-050 [BANK_ACCOUNT] exact: 60427010393087059325250029 → 60427010393087059325250029
-- syn-sprzedaz-050 [DATE_TIME] correct_inflection: 25.02.1999 → 1999
+- syn-sprzedaz-050 [DATE_TIME] missed: 25.02.1999 → -
 - syn-sprzedaz-050 [DATE_TIME] missed: 03.06.1994 → -
 - syn-sprzedaz-050 [LOCATION] exact: Pruszków → Pruszków
 - syn-sprzedaz-050 [EMAIL_ADDRESS] exact: zbalawender@yahoo.com → zbalawender@yahoo.com
@@ -1260,7 +1256,7 @@
 - syn-o-dzielo-052 [PHONE_NUMBER] exact: +48 799 706 296 → +48 799 706 296
 - syn-o-dzielo-052 [PERSON] exact: Damian Gramza → Damian Gramza
 - syn-o-dzielo-052 [PERSON] exact: Artur Neska → Artur Neska
-- syn-najem-053 [DATE_TIME] missed: 13.03.2008 → -
+- syn-najem-053 [DATE_TIME] correct_inflection: 13.03.2008 → 2008
 - syn-najem-053 [LOCATION] exact: Lubliniec → Lubliniec
 - syn-najem-053 [PERSON] exact: Kalina Leśna → Kalina Leśna
 - syn-najem-053 [PESEL] exact: 87031504545 → 87031504545
@@ -1295,7 +1291,7 @@
 - syn-zlecenie-054 [ADDRESS] exact: ul. Traugutta 42/49, 69-096 Jasło → ul. Traugutta 42/49, 69-096 Jasło
 - syn-zlecenie-054 [EMAIL_ADDRESS] exact: alanlatko@fpuh.com → alanlatko@fpuh.com
 - syn-zlecenie-054 [PHONE_NUMBER] exact: +48 565 307 450 → +48 565 307 450
-- syn-zlecenie-054 [DATE_TIME] missed: 10.05.1980 → -
+- syn-zlecenie-054 [DATE_TIME] correct_inflection: 10.05.1980 → 198005
 - syn-zlecenie-054 [BANK_ACCOUNT] exact: 59713247546913736785082148 → 59713247546913736785082148
 - syn-zlecenie-054 [EMAIL_ADDRESS] exact: leon25@futyma-madziar.com → leon25@futyma-madziar.com
 - syn-zlecenie-054 [PHONE_NUMBER] exact: +48 565 307 450 → +48 565 307 450
@@ -1325,9 +1321,6 @@
 
 ## PII leaks (must be zero)
 
-- syn-najem-000 [PHONE_NUMBER] (exact_id): +48 702 654 235 surfaced as +48 702 654 235
 - syn-sprzedaz-006 [PERSON] (stem): Aniela Potoczna surfaced as Potoczna
 - syn-najem-013 [PERSON] (stem): Jakub Godzisz surfaced as Godzisz
-- syn-o-dzielo-030 [PHONE_NUMBER] (exact_id): +48 802 838 578 surfaced as +48 802 838 578
-- syn-najem-041 [PHONE_NUMBER] (exact_id): +48 809 379 660 surfaced as +48 809 379 660
 
