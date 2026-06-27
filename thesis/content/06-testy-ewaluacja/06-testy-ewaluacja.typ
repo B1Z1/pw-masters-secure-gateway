@@ -17,14 +17,11 @@ i~pseudonimizacji wraz z~analizą najczęstszych błędów, a~następnie zbadano
 czyli wierność odtwarzania danych pierwotnych.
 
 Druga część rozdziału przenosi uwagę z~poprawności na użyteczność. Porównano w~niej odpowiedzi modelu
-udzielane na danych oryginalnych oraz pseudonimizowanych, co pozwoliło rozstrzygnąć, czy realizm
-danych zastępczych ma znaczenie dla jakości analizy. Rozdział zamyka ocena wydajności potoku oraz
-weryfikacja bezpieczeństwa przetwarzania, sprawdzająca, czy poza granicę zaufania nie wydostają się
-dane w~postaci oryginalnej.
+udzielane na danych oryginalnych oraz pseudonimizowanych, sprawdzając, czy realizm danych zastępczych
+ma znaczenie dla jakości analizy oraz czy wniosek ten utrzymuje się na modelach znacznie silniejszych.
 
 #include "01-metodyka.typ"
 #include "02-zbior-testowy.typ"
 #include "03-wykrywanie.typ"
 #include "04-odtworzenie.typ"
 #include "05-jakosc-odpowiedzi.typ"
-#include "06-wydajnosc-bezpieczenstwo.typ"
