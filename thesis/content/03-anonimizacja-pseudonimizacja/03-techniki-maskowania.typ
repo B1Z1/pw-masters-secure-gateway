@@ -65,9 +65,9 @@ kontekstowej i~może prowadzić do gorszej odpowiedzi.
 
 Z~tego względu projektowany system opiera się na podstawianiu realistycznych danych
 syntetycznych. Dane syntetyczne to wartości generowane sztucznie, które naśladują dane
-rzeczywiste, zachowując ich własności, a~jednocześnie ograniczają ryzyko związane z~prywatnością
-@Shi2025. W~rozważanym przypadku nie chodzi o~tworzenie całych zbiorów za pomocą złożonych modeli
-generatywnych, lecz o~najprostszą postać tego podejścia: zastąpienie konkretnego nazwiska innym,
+rzeczywiste, zachowując ich własności, a~jednocześnie ograniczają ryzyko związane z~prywatnością. W~rozważanym przypadku nie chodzi
+o~tworzenie całych syntetycznych zbiorów danych za pomocą złożonych modeli generatywnych @Shi2025,
+lecz o~najprostszą postać tego podejścia: zastąpienie konkretnego nazwiska innym,
 prawdopodobnym nazwiskiem, numeru PESEL innym numerem o~poprawnej strukturze, a~adresu innym,
 zgodnym z~formatem adresem. Dzięki temu dokument przekazany do modelu pozostaje poprawny
 składniowo i~zachowuje swój kontekst, mimo że nie zawiera już rzeczywistych danych osobowych.

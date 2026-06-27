@@ -11,7 +11,7 @@ za pomocą zewnętrznych bibliotek przetwarzania języka, domyślnie spaCy @spac
 komercyjnej podobną funkcję pełnią usługi chmurowe klasy DLP (ang. _Data Loss Prevention_),
 takie jak Google Cloud Sensitive Data Protection, udostępniające rozbudowany zbiór wykrywanych
 typów danych @gcpdlp. W~środowisku akademickim wiele prac nad deidentyfikacją tekstu skupiało
-się z~kolei na danych medycznych @Garfinkel2015.
+się z~kolei na danych medycznych @Carrell2013.
 
 Narzędzia te, choć dojrzałe i~szeroko stosowane, ujawniają ograniczenia w~zastosowaniu do
 polskich umów cywilnoprawnych. Pierwszym z~nich jest niepełne pokrycie polskich identyfikatorów.

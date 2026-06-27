@@ -97,8 +97,8 @@ projektowanego systemu kluczowe są trzy: bezpieczeństwo, utrzymywalność oraz
 @iso25010 @Karnouskos2018.
 
 Najważniejszą charakterystyką jest bezpieczeństwo, rozumiane jako ochrona informacji i~danych
-w~taki sposób, by dostęp do nich miały wyłącznie podmioty o~odpowiednich uprawnieniach
-@Karnouskos2018. W~projektowanym systemie wymaganie to przyjmuje postać zasady prywatności w~fazie
+w~taki sposób, by dostęp do nich miały wyłącznie podmioty o~odpowiednich uprawnieniach.
+W~projektowanym systemie wymaganie to przyjmuje postać zasady prywatności w~fazie
 projektowania (ang. _privacy by design_), zgodnie z~którą ochrona prywatności jest wymaganiem
 systemowym, traktowanym na równi z~każdym wymaganiem funkcjonalnym. Z~zasady tej wynika
 kilka konkretnych ograniczeń projektowych. Po pierwsze, realizowana jest strategia minimalizacji
@@ -109,8 +109,8 @@ zaszyfrowanej. Po trzecie, w~dziennikach systemu nie zapisuje się rzeczywistych
 Po czwarte, jak wspomniano przy wymaganiach funkcjonalnych, każde żądanie przechodzi przez etap
 pseudonimizacji @Hoepman2014.
 
-Drugą istotną charakterystyką jest utrzymywalność, której podcharakterystyką jest modularność
-@Karnouskos2018. System projektowany jest jako zbiór wymiennych komponentów o~jasno wydzielonych
+Drugą istotną charakterystyką jest utrzymywalność, której podcharakterystyką jest modularność.
+System projektowany jest jako zbiór wymiennych komponentów o~jasno wydzielonych
 odpowiedzialnościach, co pozwala rozwijać i~testować je niezależnie. W~szczególności warstwa
 komunikacji z~dostawcami modeli opiera się na jednolitym interfejsie oraz wymiennych adapterach, tak
 aby obsługa kolejnego dostawcy nie wymuszała zmian w~logice pseudonimizacji (zob. @sec:dostawcy-llm).
@@ -119,7 +119,7 @@ też oddzielenie logiki czystej, niezależnej od zasobów zewnętrznych, od wars
 wejście i~wyjście.
 
 Trzecią charakterystyką jest wydajność, rozumiana jako sprawność działania względem zużywanych
-zasobów @Karnouskos2018. Z~natury zadania wynika tu istotne ograniczenie: ponieważ przywrócenie
+zasobów. Z~natury zadania wynika tu istotne ograniczenie: ponieważ przywrócenie
 danych wymaga kompletnej odpowiedzi modelu, system działa synchronicznie i~nie przesyła odpowiedzi
 strumieniowo. Do tej grupy należą również akceptowalny narzut czasowy wprowadzany przez
 pseudonimizację oraz jednokrotne, a~nie powtarzane przy każdym żądaniu, ładowanie modelu

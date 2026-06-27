@@ -31,7 +31,7 @@ ustrukturyzowane identyfikatory, pozwala objąć ochroną szerszy zakres danych.
 
 Skuteczność rozpoznawania encji silnie zależy od języka przetwarzanego tekstu, a~język polski
 stawia przed nią szczególne trudności. W~przeciwieństwie do izolującego języka angielskiego polski
-jest językiem fleksyjnym @Mroczkowski2021, co oznacza, że to samo imię lub nazwisko przyjmuje
+jest językiem fleksyjnym @Przepiorkowski2012, co oznacza, że to samo imię lub nazwisko przyjmuje
 wiele form w~zależności od przypadka gramatycznego. Przykład takiej odmiany przedstawiono
 w~tabeli @tab:deklinacja. Dla systemu wykrywającego dane osobowe wynika z~tego, że jeden byt może
 wystąpić w~dokumencie pod kilkoma różnymi postaciami powierzchniowymi, które trzeba rozpoznać jako
