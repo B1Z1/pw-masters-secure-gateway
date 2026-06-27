@@ -67,9 +67,8 @@ Komunikacja jest synchroniczna, gdyż przywrócenie wymaga kompletnej odpowiedzi
   ),
 ) <rys:cykl-zadania>
 
-Komunikację z~dostawcami zaprojektowano zgodnie z~wzorcem portów i~adapterów (zob. @sec:dostawcy-llm),
-w~którym rdzeń aplikacji zależy wyłącznie od jednolitego interfejsu, a~konkretne zależności realizują
-wymienne adaptery @Nunkesser2022. Wprowadzony port dostawcy określa jedną operację, to jest wysłanie
+Komunikację z~dostawcami zaimplementowano zgodnie z~zaprojektowanym wcześniej wzorcem portów
+i~adapterów (zob. @sec:dostawcy-llm). Wprowadzony port dostawcy określa jedną operację, to jest wysłanie
 tablicy komunikatów i~odebranie odpowiedzi, oraz ujednoliconą reprezentację wyniku i~błędu. Port ten
 przedstawiono na rysunku @rys:port.
 
@@ -79,9 +78,8 @@ przedstawiono na rysunku @rys:port.
   [Port dostawcy modeli językowych],
 ) <rys:port>
 
-Ani potok, ani endpoint nie zależą od żadnego konkretnego dostawcy, lecz wyłącznie od tego portu,
-dlatego dodanie kolejnego dostawcy sprowadza się do dostarczenia nowego adaptera. Każdy adapter
-tłumaczy jednolity interfejs na wywołania konkretnego API. Dla modelu uruchamianego lokalnie adapter
+Każdy adapter tłumaczy jednolity interfejs na wywołania konkretnego API. Dla modelu uruchamianego
+lokalnie adapter
 wysyła żądanie REST za pomocą biblioteki httpx, natomiast dla dostawców hostowanych korzysta z~ich
 oficjalnych bibliotek klienckich. Część dostawców wymaga przy tym przekształcenia komunikatów:
 adapter Anthropic wydziela treść systemową do osobnego pola oraz scala sąsiednie komunikaty tej samej
@@ -93,8 +91,8 @@ roli, co przedstawiono na rysunku @rys:adapter.
   [Konwersja komunikatów w~adapterze Anthropic],
 ) <rys:adapter>
 
-Ponieważ system obsługuje wielu dostawców jednocześnie, o~wyborze właściwego dla danego żądania
-decyduje router modeli (zob. @sec:dostawcy-llm) @Wu2026. Wyboru dokonuje się na podstawie prefiksu
+O~wyborze właściwego dostawcy dla danego żądania decyduje router modeli (zob. @sec:dostawcy-llm).
+Wyboru dokonuje się na podstawie prefiksu
 identyfikatora modelu: nazwy zaczynające się od `gpt-` kierowane są do dostawcy OpenAI, od `claude-`
 do dostawcy Anthropic, a~od `ollama/` do modelu lokalnego, przy czym ten ostatni prefiks jest usuwany
 przed przekazaniem nazwy dalej. Rejestrację adapterów wraz z~przypisaniem prefiksów przedstawiono na
@@ -112,14 +110,13 @@ rysunku @rys:wiring, a~samą logikę wyboru na rysunku @rys:router.
   [Wybór dostawcy na podstawie prefiksu],
 ) <rys:router>
 
-Co istotne, router sam udostępnia ten sam port dostawcy, więc z~punktu widzenia endpointu jest
-nieodróżnialny od pojedynczego adaptera. Nierozpoznany prefiks traktowany jest jako błąd po stronie
+Nierozpoznany prefiks traktowany jest jako błąd po stronie
 klienta i~kończy się odpowiedzią o~kodzie 400, jeszcze zanim dojdzie do wywołania któregokolwiek
 adaptera. Adaptery budowane są leniwie i~zapamiętywane, dzięki czemu brak klucza dostępowego danego
 dostawcy ujawnia się dopiero przy pierwszym jego użyciu, a~nie podczas uruchamiania usługi.
 
-Komunikacja z~zewnętrznym dostawcą jest z~natury zawodna, dlatego typowe sytuacje błędne odwzorowano
-na ujednoliconą reprezentację błędu, niosącą rodzaj awarii. Rodzaje te tłumaczone są centralnie na
+Zapowiedzianą w~projekcie wspólną obsługę błędów (zob. @sec:dostawcy-llm) zrealizowano, odwzorowując
+typowe sytuacje błędne na ujednoliconą reprezentację błędu, niosącą rodzaj awarii. Rodzaje te tłumaczone są centralnie na
 kody odpowiedzi HTTP, co przedstawiono w~tabeli @tab:bledy. Niezależnie od rodzaju błędu odpowiedź
 zachowuje identyfikator sesji, aby klient mógł kontynuować rozmowę po ustąpieniu problemu.
 
