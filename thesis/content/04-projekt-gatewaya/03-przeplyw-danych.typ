@@ -60,7 +60,7 @@ zapamiętanie nie ujawnia informacji o~rzeczywistych osobach.
 
 Odpowiedź wygenerowana przez model odnosi się do danych syntetycznych, które ten otrzymał,
 a~zatem również ona zawiera wartości zastępcze, a~nie oryginalne. Po jej odebraniu potok
-anonimizacji uruchamia proces odwrotny. Na podstawie odwzorowania przechowywanego w~magazynie
+pseudonimizacji uruchamia proces odwrotny. Na podstawie odwzorowania przechowywanego w~magazynie
 odnajduje w~odpowiedzi wartości syntetyczne i~zastępuje je pierwotnymi danymi. Dopiero tak
 przywrócona odpowiedź trafia do klienta, który otrzymuje wynik odnoszący się do rzeczywistych osób
 i~dokumentów, nie wiedząc, że w~komunikacji z~modelem posłużono się danymi zastępczymi.

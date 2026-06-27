@@ -29,8 +29,8 @@ Realizm pojedynczego zamiennika nie wystarcza jednak, jeśli ta sama dana zostan
 zastąpiona różnymi wartościami. Dana jest skutecznie ukryta tylko wtedy, gdy zamaskowano wszystkie
 jej wystąpienia w~dokumencie @Pilan2022. Z~tego powodu kluczowym elementem strategii jest spójność:
 każde wystąpienie tej samej danej w~obrębie sesji otrzymuje ten sam zamiennik. Wymaganie to obejmuje
-również koreferencję, czyli rozpoznanie, że różne wzmianki odnoszą się do tego samego bytu.
-W~dokumencie prawnym ta sama osoba bywa przywoływana raz pełnym imieniem i~nazwiskiem, a~innym razem
+również koreferencję (zob. @sec:wymagania): w~dokumencie prawnym ta sama osoba bywa przywoływana raz
+pełnym imieniem i~nazwiskiem, a~innym razem
 samym nazwiskiem, i~oba odwołania powinny prowadzić do tego samego zamiennika. Brak takiej spójności
 nie tylko osłabiałby ochronę, lecz także wprowadzał model w~błąd, sugerując istnienie wielu różnych
 osób tam, gdzie występuje jedna.
